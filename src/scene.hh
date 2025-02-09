@@ -19,6 +19,8 @@ struct Pen {
 
 class Scene {
 public:
+    std::array<uint8_t, 3> bg = { 0, 0, 0 };
+
     struct Image {
         ResourceId  resource;
         int         x, y;

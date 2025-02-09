@@ -92,7 +92,18 @@ target_include_directories(${PROJECT_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}}/.
             ${CMAKE_CURRENT_SOURCE_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/imgui
-        PRIVATE
             ${SDL2_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${LUA_INCLUDE_DIRS})
+target_link_directories(${PROJECT_NAME} PUBLIC ${SDL2_TTF_LIBRARY_DIRS} ${SDL2_IMAGE_LIBRARY_DIRS} ${LUA_LIBRARY_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${LUA_LIBRARIES})
 
-b_embed(${PROJECT_NAME} EMPTY)
+b_embed(${PROJECT_NAME} EMPTY)  # this is just for generating the headers
+
+#
+# sample executable
+#
+
+add_executable(pastel2d-example EXCLUDE_FROM_ALL example/main.cc)
+target_link_libraries(pastel2d-example PRIVATE pastel2d)
+
+b_embed(pastel2d-example example/example.png)
+b_embed(pastel2d-example example/example.tileset.lua)

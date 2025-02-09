@@ -89,7 +89,7 @@ void Graphics::render() const
     Scene scene = create_scene();
 
     // background
-    SDL_SetRenderDrawColor(ren_, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(ren_, scene.bg[0], scene.bg[1], scene.bg[2], SDL_ALPHA_OPAQUE);
     SDL_RenderClear(ren_);
 
     render_scene(scene);
