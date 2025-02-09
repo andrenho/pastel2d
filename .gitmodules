@@ -1,0 +1,9 @@
+[submodule "contrib/imgui"]
+	path = contrib/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "contrib/ImGuiFileDialog"]
+	path = contrib/ImGuiFileDialog
+	url = https://github.com/aiekick/ImGuiFileDialog.git
+[submodule "contrib/embed"]
+	path = contrib/embed
+	url = https://github.com/batterycenter/embed
