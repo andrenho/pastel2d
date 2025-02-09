@@ -1,9 +1,11 @@
+#include <imgui.h>
+
 #include "pastel2d.hh"
 
 class MyGraphics : public ps::Graphics {
 public:
     MyGraphics()
-        : Graphics("pastel2d-example", 800, 600)
+        : Graphics("pastel2d-example", 1024, 800)
     {
         res_.add_texture_and_tiles<"example/example.png", "example/example.tileset.lua">();
     }
@@ -23,6 +25,11 @@ protected:
             dir_x = -dir_x;
         if (y_ < 0 || y_ > 200)
             dir_y = -dir_y;
+    }
+
+    void draw_gui() const override
+    {
+        ImGui::ShowDemoWindow();
     }
 
     ps::Scene create_scene() const override
