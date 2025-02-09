@@ -8,6 +8,7 @@ public:
         : Graphics("pastel2d-example", 1024, 800)
     {
         res_.add_texture_and_tiles<"example/example.png", "example/example.tileset.lua">();
+        res_.add_font<"example/OpenSans-Medium.ttf">("font", 16);
     }
 
 protected:

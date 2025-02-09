@@ -6,7 +6,8 @@
 using namespace std::string_literals;
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <lua.hpp>
 
 namespace ps {
@@ -137,6 +138,18 @@ void ResourceManager::add_cursor(std::string const& name, SDL_Cursor* cursor)
     resources_str_.emplace(name, cursor);
 }
 
+void ResourceManager::add_font(std::string const& name, std::vector<uint8_t> const& data, int font_size)
+{
+    check_overwrite(name);
+    resources_str_.emplace(name, TTF_OpenFontRW(SDL_RWFromMem((void *) data.data(), data.size()), 1, font_size));
+}
+
+resource_idx_t ResourceManager::add_font(std::vector<uint8_t> const& data, int font_size)
+{
+    resources_idx_.emplace_back(TTF_OpenFontRW(SDL_RWFromMem((void *) data.data(), data.size()), 1, font_size));
+    return resources_idx_.size() - 1;
+}
+
 void ResourceManager::cleanup()
 {
     std::vector<Resource> resources { resources_idx_.begin(), resources_idx_.end() };
@@ -149,6 +162,8 @@ void ResourceManager::cleanup()
             SDL_DestroyTexture(*t);
         else if (auto c = std::get_if<SDL_Cursor*>(&res); c)
             SDL_FreeCursor(*c);
+        else if (auto f = std::get_if<TTF_Font*>(&res); f)
+            TTF_CloseFont(*f);
     }
     resources_str_.clear();
 }

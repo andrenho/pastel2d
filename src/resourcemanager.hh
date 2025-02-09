@@ -13,6 +13,7 @@
 struct SDL_Texture;
 struct SDL_Renderer;
 struct SDL_Cursor;
+struct _TTF_Font;
 
 namespace ps {
 
@@ -22,7 +23,7 @@ struct Tile {
 };
 
 using resource_idx_t = size_t;
-using Resource = std::variant<SDL_Texture*, Tile, SDL_Cursor*>;
+using Resource = std::variant<SDL_Texture*, Tile, SDL_Cursor*, _TTF_Font*>;
 using ResourceId = std::variant<std::string, resource_idx_t>;
 
 class ResourceManager : public NonCopyable {
@@ -67,6 +68,14 @@ public:
     resource_idx_t add_cursor(SDL_Cursor* cursor);
     void           add_cursor(std::string const& name, SDL_Cursor* cursor);
 
+    void           add_font(std::string const& name, std::vector<uint8_t> const& data, int font_size);
+    resource_idx_t add_font(std::vector<uint8_t> const& data, int font_size);
+
+    template <b::embed_string_literal font_file>
+    void           add_font(std::string const& name, int font_size) { add_font(name, b::embed<font_file>().vec(), font_size); }
+    template <b::embed_string_literal font_file>
+    resource_idx_t add_font(int font_size) { return add_font(b::embed<font_file>().vec(), font_size); }
+
     // create a resource_idx_t out of a name
     resource_idx_t create_idx(std::string const& name, bool remove_name=false);
     void           create_idx(std::vector<NameIdx> const& name_idx, bool remove_names=false);
@@ -78,8 +87,9 @@ public:
 
     [[nodiscard]] Resource     get(ResourceId const& r) const;
     [[nodiscard]] SDL_Texture* texture(ResourceId const& r) const { return convert_resource<SDL_Texture*>(get(r)); }
-    [[nodiscard]] Tile         tile(ResourceId const& r) const { return convert_resource<Tile>(get(r)); }
-    [[nodiscard]] SDL_Cursor*  cursor(ResourceId const& r) const {  return convert_resource<SDL_Cursor*>(get(r)); }
+    [[nodiscard]] Tile         tile(ResourceId const& r) const    { return convert_resource<Tile>(get(r)); }
+    [[nodiscard]] SDL_Cursor*  cursor(ResourceId const& r) const  { return convert_resource<SDL_Cursor*>(get(r)); }
+    [[nodiscard]] _TTF_Font*   font(ResourceId const& r) const    { return convert_resource<_TTF_Font*>(get(r)); }
 
 private:
     SDL_Texture* create_texture(std::vector<uint8_t> const& data);

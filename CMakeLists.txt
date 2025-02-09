@@ -107,3 +107,4 @@ target_link_libraries(pastel2d-example PRIVATE pastel2d)
 
 b_embed(pastel2d-example example/example.png)
 b_embed(pastel2d-example example/example.tileset.lua)
+b_embed(pastel2d-example example/OpenSans-Medium.ttf)
