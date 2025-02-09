@@ -1,9 +1,14 @@
 #ifndef SCENE_HH
 #define SCENE_HH
 
+#include <chrono>
 #include <optional>
 #include <queue>
 #include <utility>
+#include <variant>
+
+#include "util/time.hh"
+
 
 namespace ps {
 
@@ -27,11 +32,26 @@ public:
         Pen         pen;
     };
 
+    struct Text {
+        ResourceId  resource;
+        std::string text;
+        int         x, y;
+        Pen         pen;
+        Duration    cache_duration;
+    };
+
+    using Artifact = std::variant<Image, Text>;
+
     void add(ResourceId const& resource, int x, int y, Pen pen={}) {
         pen.zoom *= current_zoom_;
         x = x * current_zoom_ + relative_x_;
         y = y * current_zoom_ + relative_y_;
-        images_.emplace_back(resource, x, y, std::move(pen));
+        artifacts_.emplace_back(Image { resource, x, y, std::move(pen) });
+    }
+
+    void add_text(ResourceId const& font, std::string const& text, int x, int y, Pen pen={}, Duration cache_duration=0ms)
+    {
+        artifacts_.emplace_back(Text { font, text, x, y, pen, cache_duration });
     }
 
     void set_current_zoom(float zoom) { current_zoom_ = zoom; }
@@ -41,10 +61,10 @@ public:
         relative_y_ = y;
     }
 
-    [[nodiscard]] std::deque<Image> const& images() const { return images_; }
+    [[nodiscard]] std::deque<Artifact> const& artifacts() const { return artifacts_; }
 
 private:
-    std::deque<Image> images_;
+    std::deque<Artifact> artifacts_;
     float current_zoom_ = 1.f;
     int relative_x_ = 0.f;
     int relative_y_ = 0.f;

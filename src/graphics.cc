@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
 #include "backends/imgui_impl_sdlrenderer2.h"
+#include "util/visitor.hh"
 
 using namespace std::string_literals;
 
@@ -106,8 +107,12 @@ void Graphics::render() const
 
 void Graphics::render_scene(Scene const& scene) const
 {
-    for (auto const& image: scene.images())
-        render_image(image);
+    for (auto const& artifact: scene.artifacts()) {
+        std::visit(overloaded {
+            [&](Scene::Image const& image) { render_image(image); },
+            [&](Scene::Text const& text) {  },
+        }, artifact);
+    }
 }
 
 void Graphics::render_image(Scene::Image const& image) const
@@ -128,32 +133,38 @@ void Graphics::render_image(Scene::Image const& image) const
         throw std::runtime_error("Invalid resource.");
     }
 
-    float zoom = image.pen.zoom;
+    render_texture(texture, origin, image.pen, image.x, image.y);
+}
+
+void Graphics::render_texture(SDL_Texture* texture, SDL_Rect const& origin, Pen const& pen, int x, int y) const
+{
+    float zoom = pen.zoom;
     SDL_Rect dest = {
-        .x = (int) (image.x / image.pen.zoom),
-        .y = (int) (image.y / image.pen.zoom),
+        .x = (int) (x / pen.zoom),
+        .y = (int) (y / pen.zoom),
         .w = origin.w,
         .h = origin.h
     };
-    if (image.pen.full_screen == Pen::FullScreen::Stretch) {
+    if (pen.full_screen == Pen::FullScreen::Stretch) {
         int scr_w, scr_h;
         SDL_GetWindowSize(window_, &scr_w, &scr_h);
         dest = { .x = 0, .y = 0, .w = scr_w, .h = scr_h };
         zoom = 1;
     }
 
-    SDL_SetTextureAlphaMod(texture, 255 * image.pen.opacity);
+    SDL_SetTextureAlphaMod(texture, 255 * pen.opacity);
 
     SDL_Point center = { dest.w / 2, dest.h / 2 };
-    if (image.pen.rotation_center) {
-        center.x = image.pen.rotation_center->first;
-        center.y = image.pen.rotation_center->second;
+    if (pen.rotation_center) {
+        center.x = pen.rotation_center->first;
+        center.y = pen.rotation_center->second;
     }
 
     SDL_RenderSetScale(ren_, zoom, zoom);
-    SDL_RenderCopyEx(ren_, texture, &origin, &dest, image.pen.rotation, &center, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(ren_, texture, &origin, &dest, pen.rotation, &center, SDL_FLIP_NONE);
     SDL_RenderSetScale(ren_, 1.f, 1.f);
 }
+
 
 void Graphics::init_imgui()
 {

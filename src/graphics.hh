@@ -8,13 +8,11 @@
 #include "resourcemanager.hh"
 #include "scene.hh"
 #include "SDL2/SDL.h"
+#include "util/time.hh"
 
 struct ImGuiIO;
 
 namespace ps {
-
-using hr = std::chrono::high_resolution_clock;
-using Duration = decltype(hr::now() - hr::now());
 
 class Graphics : public NonCopyable {
 public:
@@ -50,11 +48,12 @@ private:
     void render() const;
     void render_scene(Scene const& scene) const;
     void render_image(Scene::Image const& image) const;
+    void render_texture(SDL_Texture* texture, SDL_Rect const& origin, Pen const& pen, int x, int y) const;
 
     std::string     window_title_;
 
     decltype(hr::now()) last_frame_ = hr::now();
-    Duration            frame_time_ = std::chrono::milliseconds(0);
+    Duration            frame_time_ = 0ms;
     size_t              frame_count_ = 0;
     size_t              total_frames_ = 0;
 };

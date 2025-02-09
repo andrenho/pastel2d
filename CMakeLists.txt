@@ -55,6 +55,8 @@ set(PASTEL2D_SRC
         src/resourcemanager.cc
         src/util/noncopyable.hh
         src/pastel2d.hh
+        src/util/visitor.hh
+        src/util/time.hh
 )
 
 set(IMGUI_SRC
