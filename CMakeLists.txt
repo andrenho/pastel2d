@@ -16,9 +16,6 @@ project(pastel2d
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 23)
-set_property(GLOBAL PROPERTY CXX_EXTENSIONS OFF)
-set_property(GLOBAL PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-set_property(GLOBAL PROPERTY LINK_WHAT_YOU_USE TRUE)
 
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -45,7 +42,6 @@ pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
 pkg_search_module(LUA REQUIRED luajit)
 
 add_subdirectory(contrib/embed)
-
 
 #
 # library
@@ -74,7 +70,7 @@ set(IMGUI_SRC
         contrib/ImGuiFileDialog/ImGuiFileDialogConfig.h
 )
 
-add_library(${CMAKE_PROJECT_NAME} STATIC
+add_library(${PROJECT_NAME} STATIC
         ${PASTEL2D_SRC}
         ${IMGUI_SRC})
 
@@ -90,9 +86,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_options(-Ofast -flto)
 endif()
 
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE ${warnings})
-target_include_directories(${CMAKE_PROJECT_NAME} SYSTEM PRIVATE . src contrib/imgui ${SDL2_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${LUA_INCLUDE_DIRS})
-target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_TTF_LIBRARY_DIRS} ${SDL2_IMAGE_LIBRARY_DIRS} ${LUA_LIBRARY_DIRS})
-target_link_libraries(${CMAKE_PROJECT_NAME} LINK_PUBLIC ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${LUA_LIBRARIES})
+target_compile_options(${PROJECT_NAME} PRIVATE ${warnings})
+target_include_directories(${PROJECT_NAME}
+        SYSTEM PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}}/.
+            ${CMAKE_CURRENT_SOURCE_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/imgui
+        PRIVATE
+            ${SDL2_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${LUA_INCLUDE_DIRS})
 
-b_embed(${CMAKE_PROJECT_NAME} EMPTY)
+b_embed(${PROJECT_NAME} EMPTY)
