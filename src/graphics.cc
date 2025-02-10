@@ -77,7 +77,7 @@ void Graphics::step()
     update(new_frame - last_frame_);
 
     // expire text cache
-    std::erase_if(text_cache_, [](auto const& item) { return hr::now() > item.second.expiration; });
+    text_cache_.expire_cache();
 
     // render
     render();
@@ -147,20 +147,7 @@ void Graphics::render_image(Scene::Image const& image) const
 
 void Graphics::render_text(Scene::Text const& text) const
 {
-    TTF_Font* font = res_.font(text.resource);
-
-    auto it = text_cache_.find({ font, text.text, text.color });
-    SDL_Texture* texture;
-    if (it == text_cache_.end()) {
-        SDL_Surface* sf = TTF_RenderUTF8_Blended(font, text.text.c_str(), text.color);
-        texture = SDL_CreateTextureFromSurface(ren_, sf);
-        SDL_FreeSurface(sf);
-        Time time = hr::now() + text.cache_duration + (1ms * (rand() % 1000));
-        std::cout << text.text << "\n";
-        text_cache_[{ font, text.text, text.color }] = TextCache { texture, time };
-    } else {
-        texture = it->second.texture;
-    }
+    SDL_Texture* texture = text_cache_.get(text, res_, ren_);
 
     int tw, th;
     SDL_QueryTexture(texture, nullptr, nullptr, &tw, &th);
@@ -216,24 +203,6 @@ void Graphics::finalize_imgui()
     ImGui_ImplSDLRenderer2_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
-}
-
-bool operator<(const Graphics::TextCacheKey& lhs, const Graphics::TextCacheKey& rhs) {
-    // First compare pointers
-    if (lhs.font != rhs.font) {
-        return lhs.font < rhs.font;
-    }
-
-    // If pointers are equal, compare strings
-    if (lhs.text != rhs.text) {
-        return lhs.text < rhs.text;
-    }
-
-    // If strings are equal, compare colors
-    if (lhs.color.r != rhs.color.r) return lhs.color.r < rhs.color.r;
-    if (lhs.color.g != rhs.color.g) return lhs.color.g < rhs.color.g;
-    if (lhs.color.b != rhs.color.b) return lhs.color.b < rhs.color.b;
-    return lhs.color.a < rhs.color.a;
 }
 
 } // ps

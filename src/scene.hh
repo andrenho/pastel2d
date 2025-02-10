@@ -8,6 +8,7 @@
 #include <utility>
 #include <variant>
 
+#include "resourcemanager.hh"
 #include "util/time.hh"
 
 namespace ps {

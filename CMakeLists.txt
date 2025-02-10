@@ -70,6 +70,8 @@ set(IMGUI_SRC
         contrib/ImGuiFileDialog/ImGuiFileDialog.h
         contrib/ImGuiFileDialog/ImGuiFileDialog.cpp
         contrib/ImGuiFileDialog/ImGuiFileDialogConfig.h
+        src/textcache.cc
+        src/textcache.hh
 )
 
 add_library(${PROJECT_NAME} STATIC

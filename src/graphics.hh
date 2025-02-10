@@ -10,6 +10,7 @@
 #include "util/noncopyable.hh"
 #include "resourcemanager.hh"
 #include "scene.hh"
+#include "textcache.hh"
 #include "util/time.hh"
 
 struct ImGuiIO;
@@ -27,12 +28,6 @@ public:
     [[nodiscard]] SDL_Renderer*          ren() const { return ren_; }
     [[nodiscard]] ResourceManager const& res() const { return res_; }
     [[nodiscard]] ResourceManager&       res()       { return res_; }
-
-    struct TextCacheKey {
-        _TTF_Font*  font;
-        std::string text;
-        SDL_Color   color;
-    };
 
 protected:
     Graphics(std::string const& window_title, int window_width, int window_height, SDL_WindowFlags flags=(SDL_WindowFlags) 0);
@@ -60,12 +55,7 @@ private:
     void render_texture(SDL_Texture* texture, SDL_Rect const& origin, Pen const& pen, int x, int y) const;
 
     std::string     window_title_;
-
-    struct TextCache {
-        SDL_Texture* texture;
-        Time         expiration;
-    };
-    mutable std::map<TextCacheKey, TextCache> text_cache_;
+    TextCache       text_cache_;
 
     decltype(hr::now()) last_frame_ = hr::now();
     Duration            frame_time_ = 0ms;
