@@ -10,10 +10,8 @@
 #include "battery/embed.hpp"
 #include "util/noncopyable.hh"
 
-struct SDL_Texture;
-struct SDL_Renderer;
-struct SDL_Cursor;
-struct _TTF_Font;
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 
 namespace ps {
 
@@ -23,7 +21,7 @@ struct Tile {
 };
 
 using resource_idx_t = size_t;
-using Resource = std::variant<SDL_Texture*, Tile, SDL_Cursor*, _TTF_Font*>;
+using Resource = std::variant<SDL_Texture*, Tile, SDL_Cursor*, TTF_Font*>;
 using ResourceId = std::variant<std::string, resource_idx_t>;
 
 class ResourceManager : public NonCopyable {
@@ -89,7 +87,7 @@ public:
     [[nodiscard]] SDL_Texture* texture(ResourceId const& r) const { return convert_resource<SDL_Texture*>(get(r)); }
     [[nodiscard]] Tile         tile(ResourceId const& r) const    { return convert_resource<Tile>(get(r)); }
     [[nodiscard]] SDL_Cursor*  cursor(ResourceId const& r) const  { return convert_resource<SDL_Cursor*>(get(r)); }
-    [[nodiscard]] _TTF_Font*   font(ResourceId const& r) const    { return convert_resource<_TTF_Font*>(get(r)); }
+    [[nodiscard]] TTF_Font*   font(ResourceId const& r) const     { return convert_resource<TTF_Font*>(get(r)); }
 
 private:
     SDL_Texture* create_texture(std::vector<uint8_t> const& data);
