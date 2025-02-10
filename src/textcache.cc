@@ -26,9 +26,12 @@ SDL_Texture* TextCache::get(Scene::Text const& text, ResourceManager const& res,
 
 void TextCache::expire_cache()
 {
-    std::erase_if(cache_, [](auto const& item) {
-        return hr::now() > item.second.expiration;
-    });
+    for (auto it = cache_.begin(); it != cache_.end(); ) {
+        if (hr::now() > it->second.expiration)
+            it = cache_.erase(it);
+        else
+            ++it;
+    }
 }
 
 bool TextCache::CacheKey::operator==(CacheKey const& key) const
