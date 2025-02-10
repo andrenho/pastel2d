@@ -141,12 +141,12 @@ void ResourceManager::add_cursor(std::string const& name, SDL_Cursor* cursor)
 void ResourceManager::add_font(std::string const& name, std::vector<uint8_t> const& data, int font_size)
 {
     check_overwrite(name);
-    resources_str_.emplace(name, TTF_OpenFontRW(SDL_RWFromMem((void *) data.data(), data.size()), 1, font_size));
+    resources_str_.emplace(name, TTF_OpenFontRW(SDL_RWFromMem((void *) data.data(), data.size()), 0, font_size));
 }
 
 resource_idx_t ResourceManager::add_font(std::vector<uint8_t> const& data, int font_size)
 {
-    resources_idx_.emplace_back(TTF_OpenFontRW(SDL_RWFromMem((void *) data.data(), data.size()), 1, font_size));
+    resources_idx_.emplace_back(TTF_OpenFontRW(SDL_RWFromMem((void *) data.data(), data.size()), 0, font_size));
     return resources_idx_.size() - 1;
 }
 
