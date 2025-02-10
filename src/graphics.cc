@@ -1,5 +1,9 @@
 #include "graphics.hh"
 
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
@@ -15,6 +19,8 @@ namespace ps {
 Graphics::Graphics(std::string const& window_title, int window_width, int window_height, SDL_WindowFlags flags)
     : window_title_(window_title)
 {
+    srand(time(nullptr));
+
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
@@ -70,6 +76,9 @@ void Graphics::step()
     // update
     update(new_frame - last_frame_);
 
+    // expire text cache
+    std::erase_if(text_cache_, [](auto const& item) { return hr::now() > item.second.expiration; });
+
     // render
     render();
 
@@ -110,7 +119,7 @@ void Graphics::render_scene(Scene const& scene) const
     for (auto const& artifact: scene.artifacts()) {
         std::visit(overloaded {
             [&](Scene::Image const& image) { render_image(image); },
-            [&](Scene::Text const& text) {  },
+            [&](Scene::Text const& text) { render_text(text); },
         }, artifact);
     }
 }
@@ -120,7 +129,7 @@ void Graphics::render_image(Scene::Image const& image) const
     SDL_Texture* texture = nullptr;
     SDL_Rect origin;
 
-    auto resource = res().get(image.resource);
+    auto resource = res_.get(image.resource);
 
     if (auto tx = std::get_if<SDL_Texture*>(&resource)) {
         texture = *tx;
@@ -134,6 +143,29 @@ void Graphics::render_image(Scene::Image const& image) const
     }
 
     render_texture(texture, origin, image.pen, image.x, image.y);
+}
+
+void Graphics::render_text(Scene::Text const& text) const
+{
+    TTF_Font* font = res_.font(text.resource);
+
+    auto it = text_cache_.find({ font, text.text, text.color });
+    SDL_Texture* texture;
+    if (it == text_cache_.end()) {
+        SDL_Surface* sf = TTF_RenderUTF8_Blended(font, text.text.c_str(), text.color);
+        texture = SDL_CreateTextureFromSurface(ren_, sf);
+        SDL_FreeSurface(sf);
+        Time time = hr::now() + text.cache_duration + (1ms * (rand() % 1000));
+        std::cout << text.text << "\n";
+        text_cache_[{ font, text.text, text.color }] = TextCache { texture, time };
+    } else {
+        texture = it->second.texture;
+    }
+
+    int tw, th;
+    SDL_QueryTexture(texture, nullptr, nullptr, &tw, &th);
+
+    render_texture(texture, { 0, 0, tw, th }, text.pen, text.x, text.y);
 }
 
 void Graphics::render_texture(SDL_Texture* texture, SDL_Rect const& origin, Pen const& pen, int x, int y) const
@@ -184,6 +216,24 @@ void Graphics::finalize_imgui()
     ImGui_ImplSDLRenderer2_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
+}
+
+bool operator<(const Graphics::TextCacheKey& lhs, const Graphics::TextCacheKey& rhs) {
+    // First compare pointers
+    if (lhs.font != rhs.font) {
+        return lhs.font < rhs.font;
+    }
+
+    // If pointers are equal, compare strings
+    if (lhs.text != rhs.text) {
+        return lhs.text < rhs.text;
+    }
+
+    // If strings are equal, compare colors
+    if (lhs.color.r != rhs.color.r) return lhs.color.r < rhs.color.r;
+    if (lhs.color.g != rhs.color.g) return lhs.color.g < rhs.color.g;
+    if (lhs.color.b != rhs.color.b) return lhs.color.b < rhs.color.b;
+    return lhs.color.a < rhs.color.a;
 }
 
 } // ps

@@ -4,11 +4,11 @@
 #include <chrono>
 #include <optional>
 #include <queue>
+#include <SDL_pixels.h>
 #include <utility>
 #include <variant>
 
 #include "util/time.hh"
-
 
 namespace ps {
 
@@ -36,6 +36,7 @@ public:
         ResourceId  resource;
         std::string text;
         int         x, y;
+        SDL_Color   color;
         Pen         pen;
         Duration    cache_duration;
     };
@@ -49,9 +50,9 @@ public:
         artifacts_.emplace_back(Image { resource, x, y, std::move(pen) });
     }
 
-    void add_text(ResourceId const& font, std::string const& text, int x, int y, Pen pen={}, Duration cache_duration=0ms)
+    void add_text(ResourceId const& font, std::string const& text, int x, int y, SDL_Color const& color, Pen pen={}, Duration cache_duration=30ms)
     {
-        artifacts_.emplace_back(Text { font, text, x, y, pen, cache_duration });
+        artifacts_.emplace_back(Text { font, text, x, y, color, pen, cache_duration });
     }
 
     void set_current_zoom(float zoom) { current_zoom_ = zoom; }
