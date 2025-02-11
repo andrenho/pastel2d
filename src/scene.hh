@@ -51,7 +51,7 @@ public:
         artifacts_.emplace_back(Image { resource, x, y, std::move(pen) });
     }
 
-    void add_text(ResourceId const& font, std::string const& text, int x, int y, SDL_Color const& color, Pen pen={}, Duration cache_duration=30ms)
+    void add_text(ResourceId const& font, std::string const& text, int x, int y, SDL_Color const& color, Pen pen={}, Duration cache_duration=15s)
     {
         artifacts_.emplace_back(Text { font, text, x, y, color, pen, cache_duration });
     }
