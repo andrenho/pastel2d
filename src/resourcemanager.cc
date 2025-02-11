@@ -145,7 +145,7 @@ SDL_Texture* ResourceManager::create_manipulation(ResourceId const& origin, Imag
         [&](auto) { throw std::runtime_error("Unsupported resource type"); }
     }, get(origin));
 
-    return manipulation.manipulate(texture, rect);
+    return manipulation.manipulate(texture, rect, ren_);
 }
 
 resource_idx_t ResourceManager::add_manipulation(ResourceId const& origin, ImageManipulation const& manipulation)
