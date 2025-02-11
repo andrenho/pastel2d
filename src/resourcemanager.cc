@@ -45,7 +45,7 @@ resource_idx_t ResourceManager::add_tile(ResourceId const& parent, int tile_size
     return resources_idx_.size() - 1;
 }
 
-void ResourceManager::add_tile(ResourceId const& parent, std::string const& name, int x, int y, int w, int h, int tile_size)
+void ResourceManager::add_tile(std::string const& name, ResourceId const& parent, int x, int y, int w, int h, int tile_size)
 {
     check_overwrite(name);
 
@@ -61,7 +61,7 @@ void ResourceManager::add_tile(ResourceId const& parent, std::string const& name
 void ResourceManager::add_tiles(ResourceId const& parent_resource, std::vector<TileDefName> const& tiles, int tile_size)
 {
     for (auto const& tile: tiles)
-        add_tile(parent_resource, tile.name, tile.x, tile.y, tile.w, tile.h, tile_size);
+        add_tile(tile.name, parent_resource, tile.x, tile.y, tile.w, tile.h, tile_size);
 }
 
 void ResourceManager::add_tiles(ResourceId const& parent_resource, std::vector<TileDefIdx> const& tiles, int tile_size)

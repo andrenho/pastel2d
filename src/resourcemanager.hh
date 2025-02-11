@@ -53,7 +53,8 @@ public:
     resource_idx_t add_texture(ImageManipulation const& manipulation={}) { return add_texture(b::embed<img_file>().vec(), manipulation); }
 
     resource_idx_t add_tile(ResourceId const& parent, int tile_size, int x, int y, int w=1, int h=1);
-    void           add_tile(ResourceId const& parent, std::string const& name, int x, int y, int w, int h, int tile_size);
+    void           add_tile(std::string const& name, ResourceId const& parent, int x, int y, int w, int h, int tile_size);
+
     void           add_tiles(ResourceId const& parent, std::vector<TileDefName> const& tiles, int tile_size);
     void           add_tiles(ResourceId const& parent, std::vector<TileDefIdx> const& tiles, int tile_size);
     void           add_tiles(ResourceId const& parent, std::string const& lua_script);
