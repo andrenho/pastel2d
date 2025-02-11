@@ -66,13 +66,13 @@ public:
     resource_idx_t add_cursor(SDL_Cursor* cursor);
     void           add_cursor(std::string const& name, SDL_Cursor* cursor);
 
-    void           add_font(std::string const& name, std::vector<uint8_t> const& data, int font_size);
-    resource_idx_t add_font(std::vector<uint8_t> const& data, int font_size);
+    void           add_font(std::string const& name, void* data, size_t sz, int font_size);
+    resource_idx_t add_font(void* data, size_t sz, int font_size);
 
     template <b::embed_string_literal font_file>
-    void           add_font(std::string const& name, int font_size) { add_font(name, b::embed<font_file>().vec(), font_size); }
+    void           add_font(std::string const& name, int font_size) { add_font(name, (void *) b::embed<font_file>().data(), b::embed<font_file>().size(), font_size); }
     template <b::embed_string_literal font_file>
-    resource_idx_t add_font(int font_size) { return add_font(b::embed<font_file>().vec(), font_size); }
+    resource_idx_t add_font(int font_size) { return add_font((void *) b::embed<font_file>().data(), b::embed<font_file>().size(), font_size); }
 
     // create a resource_idx_t out of a name
     resource_idx_t create_idx(std::string const& name, bool remove_name=false);
