@@ -19,33 +19,24 @@ ResourceManager::~ResourceManager()
     cleanup();
 }
 
-SDL_Texture* ResourceManager::create_texture(std::vector<uint8_t> const& data)
+SDL_Texture* ResourceManager::create_texture(std::vector<uint8_t> const& data, ImageManipulation const& manipulation)
 {
     SDL_Surface* sf = IMG_Load_RW(SDL_RWFromMem((void *) data.data(), (int) data.size()), 1);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(ren_, sf);
+    SDL_Texture* texture = manipulation.create_texture(ren_, sf);
     SDL_FreeSurface(sf);
     return texture;
 }
 
-resource_idx_t ResourceManager::add_texture(std::vector<uint8_t> const& data)
+resource_idx_t ResourceManager::add_texture(std::vector<uint8_t> const& data, ImageManipulation const& manipulation)
 {
-    resources_idx_.emplace_back(create_texture(data));
+    resources_idx_.emplace_back(create_texture(data, manipulation));
     return resources_idx_.size() - 1;
 }
 
-void ResourceManager::check_overwrite(std::string const& name)
-{
-    if (!allow_overwrites_) {
-        auto it = resources_str_.find(name);
-        if (it != resources_str_.end())
-            throw std::runtime_error("There's already a resource called `" + name + "`");
-    }
-}
-
-void ResourceManager::add_texture(std::string const& name, std::vector<uint8_t> const& data)
+void ResourceManager::add_texture(std::string const& name, std::vector<uint8_t> const& data, ImageManipulation const& manipulation)
 {
     check_overwrite(name);
-    resources_str_.emplace(name, create_texture(data));
+    resources_str_.emplace(name, create_texture(data, manipulation));
 }
 
 resource_idx_t ResourceManager::add_tile(ResourceId const& parent, int tile_size, int x, int y, int w, int h)
@@ -128,37 +119,6 @@ void ResourceManager::add_tiles(ResourceId const& parent, std::string const& lua
     add_tiles(parent, tiles, tile_size);
 }
 
-SDL_Texture* ResourceManager::create_manipulation(ResourceId const& origin, ImageManipulation const& manipulation) const
-{
-    SDL_Texture* texture;
-    SDL_Rect rect { 0, 0, 0, 0 };
-
-    std::visit(overloaded {
-        [&](SDL_Texture* tx) {
-            texture = tx;
-            SDL_QueryTexture(texture, nullptr, nullptr, &rect.w, &rect.h);
-        },
-        [&](Tile const& tile) {
-            texture = tile.texture;
-            rect = { tile.x, tile.y, tile.w, tile.h };
-        },
-        [&](auto) { throw std::runtime_error("Unsupported resource type"); }
-    }, get(origin));
-
-    return manipulation.manipulate(texture, rect, ren_);
-}
-
-resource_idx_t ResourceManager::add_manipulation(ResourceId const& origin, ImageManipulation const& manipulation)
-{
-    resources_idx_.emplace_back(create_manipulation(origin, manipulation));
-    return resources_idx_.size() - 1;
-}
-
-void ResourceManager::add_manipulation(std::string const& name, ResourceId const& origin, ImageManipulation const& manipulation)
-{
-    resources_str_.emplace(name, create_manipulation(origin, manipulation));
-}
-
 resource_idx_t ResourceManager::add_cursor(SDL_Cursor* cursor)
 {
     resources_idx_.emplace_back(cursor);
@@ -232,6 +192,15 @@ void ResourceManager::create_idx(std::vector<NameIdx> const& name_idx, bool remo
 {
     for (auto const& n: name_idx)
         *n.idx = create_idx(n.name, remove_names);
+}
+
+void ResourceManager::check_overwrite(std::string const& name)
+{
+    if (!allow_overwrites_) {
+        auto it = resources_str_.find(name);
+        if (it != resources_str_.end())
+            throw std::runtime_error("There's already a resource called `" + name + "`");
+    }
 }
 
 ResourceManager& res()

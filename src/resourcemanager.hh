@@ -44,14 +44,13 @@ public:
 
     ~ResourceManager();
 
-    resource_idx_t add_texture(std::vector<uint8_t> const& data);
+    resource_idx_t add_texture(std::vector<uint8_t> const& data, ImageManipulation const& manipulation={});
+    void           add_texture(std::string const& name, std::vector<uint8_t> const& data, ImageManipulation const& manipulation={});
 
-    void check_overwrite(std::string const& name);
-
-    void add_texture(std::string const& name, std::vector<uint8_t> const& data);
-
-    template <b::embed_string_literal img_file> void           add_texture(std::string const& name) { add_texture(name, b::embed<img_file>().vec()); }
-    template <b::embed_string_literal img_file> resource_idx_t add_texture() { return add_texture(b::embed<img_file>().vec()); }
+    template <b::embed_string_literal img_file>
+    void           add_texture(std::string const& name, ImageManipulation const& manipulation={}) { add_texture(name, b::embed<img_file>().vec(), manipulation); }
+    template <b::embed_string_literal img_file>
+    resource_idx_t add_texture(ImageManipulation const& manipulation={}) { return add_texture(b::embed<img_file>().vec(), manipulation); }
 
     resource_idx_t add_tile(ResourceId const& parent, int tile_size, int x, int y, int w=1, int h=1);
     void           add_tile(ResourceId const& parent, std::string const& name, int x, int y, int w, int h, int tile_size);
@@ -63,9 +62,6 @@ public:
     void           add_tiles(ResourceId const& parent) { add_tiles(parent, b::embed<lua_tileset>().str()); }
     template <b::embed_string_literal img_file, b::embed_string_literal lua_tileset>
     void           add_texture_and_tiles() { add_tiles(add_texture<img_file>(), b::embed<lua_tileset>().str()); }
-
-    resource_idx_t add_manipulation(ResourceId const& origin, ImageManipulation const& manipulation);
-    void           add_manipulation(std::string const& name, ResourceId const& origin, ImageManipulation const& manipulation);
 
     resource_idx_t add_cursor(SDL_Cursor* cursor);
     void           add_cursor(std::string const& name, SDL_Cursor* cursor);
@@ -94,8 +90,9 @@ public:
     [[nodiscard]] TTF_Font*    font(ResourceId const& r) const     { return convert_resource<TTF_Font*>(get(r)); }
 
 private:
-    SDL_Texture* create_texture(std::vector<uint8_t> const& data);
-    SDL_Texture* create_manipulation(ResourceId const& origin, ImageManipulation const& manipulation) const;
+    SDL_Texture* create_texture(std::vector<uint8_t> const& data, ImageManipulation const& manipulation);
+
+    void check_overwrite(std::string const& name);
 
     template <typename T>
     T convert_resource(Resource const& res) const {

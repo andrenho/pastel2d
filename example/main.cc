@@ -7,9 +7,13 @@ public:
     MyGraphics()
         : Graphics("pastel2d-example", 1024, 800)
     {
-        res_.add_texture_and_tiles<"example/example.png", "example/example.tileset.lua">();
+        res_.add_texture<"example/example.png">("example");
+        res_.add_tiles<"example/example.tileset.lua">("example");
+
+        res_.add_texture<"example/example.png">("shadow", ps::ExtractShadow({ 0, 0, 0 }));
+        res_.add_tiles<"example/example-shadow.tileset.lua">("shadow");
+
         res_.add_font<"example/OpenSans-Medium.ttf">("font", 16);
-        res_.add_manipulation("face_shadow", "happy", ps::ExtractShadow({ 0, 0, 0 }));
     }
 
 protected:
@@ -40,9 +44,9 @@ protected:
         scene.set_current_zoom(2);
         scene.bg = { 230, 230, 230 };
         scene.add_text("font", "Hello world!", 300, 200, { 0, 0, 0 });
-        scene.add("face_shadow", x_ + 2, y_ + 2);
+        scene.add("shadow_happy", x_ + 2, y_ + 2);
         scene.add("happy", x_, y_);
-        scene.add("face_shadow", y_ + 2, x_ + 2);
+        scene.add("shadow_sad", y_ + 2, x_ + 2);
         scene.add("sad", y_, x_);
         return scene;
     }

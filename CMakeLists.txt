@@ -59,6 +59,8 @@ set(PASTEL2D_SRC
         src/util/time.hh
         src/imagemanipulation.cc
         src/imagemanipulation.hh
+        src/textcache.cc
+        src/textcache.hh
 )
 
 set(IMGUI_SRC
@@ -72,8 +74,6 @@ set(IMGUI_SRC
         contrib/ImGuiFileDialog/ImGuiFileDialog.h
         contrib/ImGuiFileDialog/ImGuiFileDialog.cpp
         contrib/ImGuiFileDialog/ImGuiFileDialogConfig.h
-        src/textcache.cc
-        src/textcache.hh
 )
 
 add_library(${PROJECT_NAME} STATIC
@@ -113,4 +113,5 @@ target_link_libraries(pastel2d-example PRIVATE pastel2d)
 
 b_embed(pastel2d-example example/example.png)
 b_embed(pastel2d-example example/example.tileset.lua)
+b_embed(pastel2d-example example/example-shadow.tileset.lua)
 b_embed(pastel2d-example example/OpenSans-Medium.ttf)
