@@ -7,6 +7,7 @@
 #include <variant>
 #include <vector>
 
+#include "imagemanipulation.hh"
 #include "battery/embed.hpp"
 #include "util/noncopyable.hh"
 
@@ -63,6 +64,9 @@ public:
     template <b::embed_string_literal img_file, b::embed_string_literal lua_tileset>
     void           add_texture_and_tiles() { add_tiles(add_texture<img_file>(), b::embed<lua_tileset>().str()); }
 
+    resource_idx_t add_manipulation(ResourceId const& origin, ImageManipulation const& manipulation);
+    void           add_manipulation(std::string const& name, ResourceId const& origin, ImageManipulation const& manipulation);
+
     resource_idx_t add_cursor(SDL_Cursor* cursor);
     void           add_cursor(std::string const& name, SDL_Cursor* cursor);
 
@@ -87,10 +91,11 @@ public:
     [[nodiscard]] SDL_Texture* texture(ResourceId const& r) const { return convert_resource<SDL_Texture*>(get(r)); }
     [[nodiscard]] Tile         tile(ResourceId const& r) const    { return convert_resource<Tile>(get(r)); }
     [[nodiscard]] SDL_Cursor*  cursor(ResourceId const& r) const  { return convert_resource<SDL_Cursor*>(get(r)); }
-    [[nodiscard]] TTF_Font*   font(ResourceId const& r) const     { return convert_resource<TTF_Font*>(get(r)); }
+    [[nodiscard]] TTF_Font*    font(ResourceId const& r) const     { return convert_resource<TTF_Font*>(get(r)); }
 
 private:
     SDL_Texture* create_texture(std::vector<uint8_t> const& data);
+    SDL_Texture* create_manipulation(ResourceId const& origin, ImageManipulation const& manipulation) const;
 
     template <typename T>
     T convert_resource(Resource const& res) const {

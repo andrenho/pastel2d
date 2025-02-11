@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <optional>
 #include <string>
+
+#include "util/visitor.hh"
 using namespace std::string_literals;
 
 #include <SDL2/SDL.h>
@@ -124,6 +126,37 @@ void ResourceManager::add_tiles(ResourceId const& parent, std::string const& lua
     lua_close(L);
 
     add_tiles(parent, tiles, tile_size);
+}
+
+SDL_Texture* ResourceManager::create_manipulation(ResourceId const& origin, ImageManipulation const& manipulation) const
+{
+    SDL_Texture* texture;
+    SDL_Rect rect { 0, 0, 0, 0 };
+
+    std::visit(overloaded {
+        [&](SDL_Texture* tx) {
+            texture = tx;
+            SDL_QueryTexture(texture, nullptr, nullptr, &rect.w, &rect.h);
+        },
+        [&](Tile const& tile) {
+            texture = tile.texture;
+            rect = { tile.x, tile.y, tile.w, tile.h };
+        },
+        [&](auto) { throw std::runtime_error("Unsupported resource type"); }
+    }, get(origin));
+
+    return manipulation.manipulate(texture, rect);
+}
+
+resource_idx_t ResourceManager::add_manipulation(ResourceId const& origin, ImageManipulation const& manipulation)
+{
+    resources_idx_.emplace_back(create_manipulation(origin, manipulation));
+    return resources_idx_.size() - 1;
+}
+
+void ResourceManager::add_manipulation(std::string const& name, ResourceId const& origin, ImageManipulation const& manipulation)
+{
+    resources_str_.emplace(name, create_manipulation(origin, manipulation));
 }
 
 resource_idx_t ResourceManager::add_cursor(SDL_Cursor* cursor)

@@ -57,6 +57,8 @@ set(PASTEL2D_SRC
         src/pastel2d.hh
         src/util/visitor.hh
         src/util/time.hh
+        src/imagemanipulation.cc
+        src/imagemanipulation.hh
 )
 
 set(IMGUI_SRC
