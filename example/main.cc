@@ -43,7 +43,7 @@ protected:
         ps::Scene scene;
         scene.set_current_zoom(2);
         scene.bg = { 230, 230, 230 };
-        scene.add_text("font", "Hello world!", 300, 200, { 0, 0, 0 });
+        scene.add_text("font", "Hello world!", 150, 100, { 0, 0, 0 });
         scene.add("shadow_happy", x_ + 2, y_ + 2);
         scene.add("happy", x_, y_);
         scene.add("shadow_sad", y_ + 2, x_ + 2);

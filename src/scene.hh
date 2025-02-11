@@ -53,6 +53,9 @@ public:
 
     void add_text(ResourceId const& font, std::string const& text, int x, int y, SDL_Color const& color, Pen pen={}, Duration cache_duration=15s)
     {
+        pen.zoom *= current_zoom_;
+        x = x * current_zoom_ + relative_x_;
+        y = y * current_zoom_ + relative_y_;
         artifacts_.emplace_back(Text { font, text, x, y, color, pen, cache_duration });
     }
 
