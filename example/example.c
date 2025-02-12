@@ -31,9 +31,11 @@ int main()
         .appidentifier = "com.github.pastel2d",
         .appversion = "1.0.0",
         .window_w = 1400,
-        .window_h = 1000,
+        .window_h = 900,
         .flags = SDL_WINDOW_RESIZABLE,
     });
+    ps_graphics_set_bg(160, 180, 200);
+
     init_resources();
 
     while (ps_graphics_running()) {

@@ -15,13 +15,17 @@ typedef struct {
     SDL_WindowFlags flags;
 } GraphicsInit;
 
-int  ps_graphics_init(GraphicsInit const* init);
-int  ps_graphics_finalize();
+int    ps_graphics_init(GraphicsInit const* init);
+int    ps_graphics_finalize();
 
-bool   ps_graphics_running();
+int    ps_graphics_set_bg(uint8_t r, uint8_t g, uint8_t b);
+
 int    ps_graphics_do_events(void (*event_manager)(SDL_Event* e, bool* running));
-size_t ps_graphics_timestep_us();
+
 void   ps_graphics_render_scene(void (*scene_creator)());
 int    ps_graphics_present();
+
+bool   ps_graphics_running();
+size_t ps_graphics_timestep_us();
 
 #endif //GRAPHICS_H
