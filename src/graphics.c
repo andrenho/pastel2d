@@ -1,10 +1,16 @@
 #include "graphics.h"
 
+#include <stdio.h>
+
+#include <GLFW/glfw3.h>
+
 static bool running = true;
 
 void ps_graphics_init(const char* window_title, size_t w, size_t h)
 {
-
+    int maj, min, patch;
+    glfwGetVersion(&maj, &min, &patch);
+    printf("GLFW version %d.%d.%d\n", maj, min, patch);
 }
 
 void ps_graphics_finalize()

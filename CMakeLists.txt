@@ -14,8 +14,10 @@ project(pastel2d
 # external libraries
 #
 
+# GLFW
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
+set(GLFW_LIBRARY_TYPE OBJECT)
 add_subdirectory(contrib/glfw)
 
 #
@@ -27,7 +29,8 @@ add_library(${PROJECT_NAME} STATIC
         src/graphics.c
         src/pastel2d.hh
 )
-target_include_directories(${PROJECT_NAME} PUBLIC src)
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/contrib/glfw/include)
 
 #
 # sample executable

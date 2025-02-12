@@ -1,5 +1,3 @@
-// #include "pastel2d_hh"
-
 #include <stdlib.h>
 
 #include "pastel2d.hh"
