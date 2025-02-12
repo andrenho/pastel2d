@@ -7,3 +7,6 @@
 [submodule "contrib/embed"]
 	path = contrib/embed
 	url = https://github.com/batterycenter/embed
+[submodule "contrib/glfw"]
+	path = contrib/glfw
+	url = https://github.com/glfw/glfw.git

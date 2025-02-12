@@ -44,11 +44,16 @@ protected:
         scene.set_current_zoom(2);
         scene.bg = { 230, 230, 230 };
         scene.add_text("font", "Hello world!", 150, 100, { 0, 0, 0 });
-        scene.add_text("font", "Hello!", { 50, 50, 75, 25 }, { 0, 0, 0 }, { .rotation = 90 });
+        scene.add_text("font", "Hello!", { 50, 50, 75, 25 }, { 0, 0, 0 });
         scene.add("shadow_happy", x_ + 2, y_ + 2);
         scene.add("happy", x_, y_);
         scene.add("shadow_sad", y_ + 2, x_ + 2);
         scene.add("sad", y_, x_);
+
+        scene.add_text("font", "123456", { 150, 50, 75, 25 }, { 0, 0, 0 }, { .rotation = 0 });
+        scene.add_text("font", "123456", { 150, 50, 75, 25 }, { 128, 0, 0 }, { .rotation = 90 });
+        scene.add_text("font", "123456", { 150, 50, 75, 25 }, { 0, 128, 0 }, { .rotation = 180 });
+        scene.add_text("font", "123456", { 150, 50, 75, 25 }, { 0, 0, 128 }, { .rotation = 270 });
         return scene;
     }
 
