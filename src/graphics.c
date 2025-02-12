@@ -1,6 +1,7 @@
 #include "graphics.h"
 
 #include <SDL3/SDL_timer.h>
+#include <stdio.h>
 
 #include "error.h"
 
