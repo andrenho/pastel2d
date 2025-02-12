@@ -31,10 +31,11 @@ add_library(${PROJECT_NAME} STATIC
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/contrib/glfw/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 
 #
 # sample executable
 #
 
 add_executable(pastel2d-example EXCLUDE_FROM_ALL example/example.c)
-target_link_libraries(pastel2d-example PRIVATE pastel2d glfw OpenGL::GL)
+target_link_libraries(pastel2d-example PRIVATE pastel2d OpenGL::GL)
