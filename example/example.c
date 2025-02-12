@@ -6,8 +6,10 @@ static void init_resources()
 {
 }
 
-static void event_manager(/* TODO - parameters? */)
+static void event_manager(SDL_Event* e, bool* running)
 {
+    if (e->type == SDL_EVENT_QUIT)
+        *running = false;
 }
 
 static void /* TODO - return type? */ scene_creator()
@@ -24,14 +26,22 @@ static void update(size_t timestep_us)
 
 int main()
 {
-    ps_graphics_init("pastel2d-example", 1200, 800);
+    ps_graphics_init(&(GraphicsInit) {
+        .appname = "pastel2d-example",
+        .appidentifier = "com.github.pastel2d",
+        .appversion = "1.0.0",
+        .window_w = 1400,
+        .window_h = 1000,
+        .flags = SDL_WINDOW_RESIZABLE,
+    });
     init_resources();
 
     while (ps_graphics_running()) {
         ps_graphics_do_events(event_manager);
         update(ps_graphics_timestep_us());
-        post_scene();
         ps_graphics_render_scene(scene_creator);
+        post_scene();
+        ps_graphics_present();
     }
 
     ps_graphics_finalize();

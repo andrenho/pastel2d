@@ -14,11 +14,7 @@ project(pastel2d
 # external libraries
 #
 
-# GLFW
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS})
-set(GLFW_LIBRARY_TYPE OBJECT)
-add_subdirectory(contrib/glfw)
+find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 
 #
 # C library
@@ -28,14 +24,17 @@ add_library(${PROJECT_NAME} STATIC
         src/graphics.h
         src/graphics.c
         src/pastel2d.hh
+        src/error.c
+        src/error.h
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
-        ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/contrib/glfw/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+        ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(${PROJECT_NAME}
+        PUBLIC SDL3::SDL3)
 
 #
 # sample executable
 #
 
 add_executable(pastel2d-example EXCLUDE_FROM_ALL example/example.c)
-target_link_libraries(pastel2d-example PRIVATE pastel2d OpenGL::GL)
+target_link_libraries(pastel2d-example PRIVATE pastel2d)
