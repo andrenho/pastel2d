@@ -36,7 +36,7 @@ public:
     struct Text {
         ResourceId  resource;
         std::string text;
-        int         x, y;
+        SDL_Rect    rect;
         SDL_Color   color;
         Pen         pen;
         Duration    cache_duration;
@@ -56,7 +56,15 @@ public:
         pen.zoom *= current_zoom_;
         x = x * current_zoom_ + relative_x_;
         y = y * current_zoom_ + relative_y_;
-        artifacts_.emplace_back(Text { font, text, x, y, color, pen, cache_duration });
+        artifacts_.emplace_back(Text { font, text, { x, y, 0, 0 }, color, pen, cache_duration });
+    }
+
+    void add_text(ResourceId const& font, std::string const& text, SDL_Rect rect, SDL_Color const& color, Pen pen={}, Duration cache_duration=15s)
+    {
+        pen.zoom *= current_zoom_;
+        rect.x = rect.x * current_zoom_ + relative_x_;
+        rect.y = rect.y * current_zoom_ + relative_y_;
+        artifacts_.emplace_back(Text { font, text, rect, color, pen, cache_duration });
     }
 
     void set_current_zoom(float zoom) { current_zoom_ = zoom; }

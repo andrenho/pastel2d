@@ -44,11 +44,19 @@ protected:
         scene.set_current_zoom(2);
         scene.bg = { 230, 230, 230 };
         scene.add_text("font", "Hello world!", 150, 100, { 0, 0, 0 });
+        scene.add_text("font", "Hi!", { 15, 15, 75, 25 }, { 0, 0, 0 });
         scene.add("shadow_happy", x_ + 2, y_ + 2);
         scene.add("happy", x_, y_);
         scene.add("shadow_sad", y_ + 2, x_ + 2);
         scene.add("sad", y_, x_);
         return scene;
+    }
+
+    void render_post_scene() const override
+    {
+        SDL_SetRenderDrawColor(ren_, 0, 0, 0, 255);
+        SDL_Rect r { 30, 30, 150, 50 };
+        SDL_RenderDrawRect(ren_, &r);
     }
 
 private:

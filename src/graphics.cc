@@ -103,6 +103,7 @@ void Graphics::render() const
     SDL_RenderClear(ren_);
 
     render_scene(scene);
+    render_post_scene();
 
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
@@ -152,7 +153,11 @@ void Graphics::render_text(Scene::Text const& text) const
     int tw, th;
     SDL_QueryTexture(texture, nullptr, nullptr, &tw, &th);
 
-    render_texture(texture, { 0, 0, tw, th }, text.pen, text.x, text.y);
+    if (text.rect.w == 0) {
+        render_texture(texture, { 0, 0, tw, th }, text.pen, text.rect.x, text.rect.y);
+    } else {
+        render_texture(texture, { 0, 0, tw, th }, text.pen, text.rect.x + text.rect.w / 2, text.rect.y + text.rect.h / 2);
+    }
 }
 
 void Graphics::render_texture(SDL_Texture* texture, SDL_Rect const& origin, Pen const& pen, int x, int y) const

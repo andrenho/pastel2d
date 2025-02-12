@@ -38,6 +38,8 @@ protected:
     virtual Scene create_scene() const = 0;
     virtual void draw_gui() const {}
 
+    virtual void render_post_scene() const {}
+
     bool            running_ = true;
     ResourceManager res_ {};
     SDL_Window*     window_ = nullptr;
