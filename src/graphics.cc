@@ -156,7 +156,9 @@ void Graphics::render_text(Scene::Text const& text) const
     if (text.rect.w == 0) {
         render_texture(texture, { 0, 0, tw, th }, text.pen, text.rect.x, text.rect.y);
     } else {
-        render_texture(texture, { 0, 0, tw, th }, text.pen, text.rect.x + text.rect.w / 2, text.rect.y + text.rect.h / 2);
+        render_texture(texture, { 0, 0, tw, th }, text.pen,
+            text.rect.x + (text.rect.w / 2 * text.pen.zoom) - (tw / 2 * text.pen.zoom),
+            text.rect.y + (text.rect.h / 2 * text.pen.zoom) - (th / 2 * text.pen.zoom));
     }
 }
 
