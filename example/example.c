@@ -1,9 +1,11 @@
 #include <stdlib.h>
 
 #include "pastel2d.hh"
+#include "example.png.h"
 
 static void init_resources()
 {
+    resource_idx_t png = ps_res_add_png(example_example_png, example_example_png_sz);
 }
 
 static void event_manager(SDL_Event* e, bool* running)
