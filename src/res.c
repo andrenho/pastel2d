@@ -39,10 +39,10 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
     }
 
     SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, img, w * 4);
-    stbi_image_free(img);
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(ps_graphics_renderer(), sf);
     SDL_DestroySurface(sf);
+    stbi_image_free(img);
 
     Resource res = {
         .type = RT_TEXTURE,

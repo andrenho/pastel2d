@@ -91,6 +91,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
             SDL3::SDL3
+            m
 )
 
 #
@@ -114,4 +115,3 @@ add_custom_command(TARGET leaks
         DEPENDS pastel2d-example
         COMMAND valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=${CMAKE_SOURCE_DIR}/valgrind.supp ./pastel2d-example
 )
-
