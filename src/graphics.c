@@ -100,7 +100,10 @@ static void render_image(Image const* image)
         .h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th,
     };
 
+    if (image->context.zoom.has_value)
+        SDL_SetRenderScale(ren, image->context.zoom.value, image->context.zoom.value);
     SDL_RenderTexture(ren, tx, NULL, &dest);
+    SDL_SetRenderScale(ren, 1.f, 1.f);
 }
 
 void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))

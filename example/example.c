@@ -19,7 +19,8 @@ static void event_manager(SDL_Event* e, bool* running)
 
 static void scene_creator(Scene scenes[MAX_SCENES])
 {
-    ps_scene_add_image(&scenes[0], png, 100, 100);
+    ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
+    ps_scene_add_image(&scenes[0], png, 100, 100, NULL);
 }
 
 static void post_scene()

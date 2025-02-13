@@ -28,7 +28,7 @@ Context ps_context_sum(Context const* current, Context const* sum)
 
     if (sum->zoom.has_value) {
         context.zoom.has_value = true;
-        context.zoom.value += sum->rotation.value;
+        context.zoom.value += sum->zoom.value;
     }
 
     if (sum->zoom.has_value) {

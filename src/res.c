@@ -44,6 +44,8 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
     SDL_DestroySurface(sf);
     stbi_image_free(img);
 
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
+
     Resource res = {
         .type = RT_TEXTURE,
         .texture = texture,

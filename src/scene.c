@@ -13,11 +13,13 @@ int ps_scene_init(Scene* scene)
     return 0;
 }
 
-int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y)
+int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, Context const* ctx)
 {
     ps_scene_push_context(scene, &(Context) {
         .position = { true, { x, y, 0, 0 } },
     });
+    if (ctx)
+        ps_scene_push_context(scene, ctx);
 
     Artifact artifact = {
         .type = A_IMAGE,
@@ -29,6 +31,8 @@ int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y)
     arrpush(scene->artifacts, artifact);
 
     ps_scene_pop_context(scene);
+    if (ctx)
+        ps_scene_pop_context(scene);
 
     return 0;
 }
