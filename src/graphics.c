@@ -91,13 +91,23 @@ static void render_image(Image const* image)
     float tw, th;
     SDL_GetTextureSize(tx, &tw, &th);
 
-    SDL_RenderTexture(ren, tx, NULL, &(SDL_FRect) { image->x, image->y, tw, th });
+    Context const* ctx = &image->context;
+
+    SDL_FRect dest = {
+        .x = ctx->position.rect.x,
+        .y = ctx->position.rect.y,
+        .w = ctx->position.rect.w != 0 ? ctx->position.rect.w : tw,
+        .h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th,
+    };
+
+    SDL_RenderTexture(ren, tx, NULL, &dest);
 }
 
 void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))
 {
     Scene scenes[MAX_SCENES];
-    memset(scenes, 0, sizeof scenes);
+    for (size_t i = 0; i < MAX_SCENES; ++i)
+        ps_scene_init(&scenes[i]);
 
     scene_creator(scenes);
 
@@ -113,7 +123,7 @@ void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))
             }
         }
 
-        ps_scene_free(&scenes[i]);
+        ps_scene_finalize(&scenes[i]);
     }
 }
 

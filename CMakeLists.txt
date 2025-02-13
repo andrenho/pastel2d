@@ -78,6 +78,8 @@ add_library(${PROJECT_NAME} STATIC
         src/res.h
         src/scene.c
         src/scene.h
+        src/context.h
+        src/context.c
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC
