@@ -34,7 +34,11 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
     }
 
     // TODO - process image
-    SDL_Texture* texture = SDL_CreateTexture(ps_graphics_renderer(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, w, h);
+    uint8_t pixels [w * h * 4];
+    memset(pixels, 128, sizeof pixels);
+    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA8888, pixels, w * 4);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(ps_graphics_renderer(), sf);
+    SDL_DestroySurface(sf);
 
     Resource res = {
         .type = RT_TEXTURE,
