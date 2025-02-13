@@ -26,17 +26,21 @@ static Resource* resources;
 
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
 {
-    int w, h;
-    stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, NULL, 0);
+    int w, h, bpp;
+    stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &bpp, STBI_rgb_alpha);
     if (img == NULL) {
         snprintf(last_error, sizeof last_error, "Could not load image.");
         return RES_ERROR;
     }
+    if (bpp != 4) {
+        snprintf(last_error, sizeof last_error, "Only 4-bit images supported by now (sorry).");
+        stbi_image_free(img);
+        return RES_ERROR;
+    }
 
-    // TODO - process image
-    uint8_t pixels [w * h * 4];
-    memset(pixels, 128, sizeof pixels);
-    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA8888, pixels, w * 4);
+    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, img, w * 4);
+    stbi_image_free(img);
+
     SDL_Texture* texture = SDL_CreateTextureFromSurface(ps_graphics_renderer(), sf);
     SDL_DestroySurface(sf);
 
