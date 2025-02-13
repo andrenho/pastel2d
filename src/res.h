@@ -10,4 +10,6 @@ typedef size_t resource_idx_t;
 
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
 
+void ps_res_finalize();
+
 #endif //RES_H

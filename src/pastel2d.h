@@ -5,4 +5,6 @@
 #include "res.h"
 #include "error.h"
 
+void ps_finalize();
+
 #endif //PASTEL2D_HH

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "pastel2d.hh"
+#include "pastel2d.h"
 #include "example.png.h"
 
 static void init_resources()
@@ -48,7 +48,7 @@ int main()
         ps_graphics_present();
     }
 
-    ps_graphics_finalize();
+    ps_finalize();
 
     return EXIT_SUCCESS;
 }

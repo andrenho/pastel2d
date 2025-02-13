@@ -43,3 +43,16 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
     arrput(resources, res);
     return arrlen(resources) - 1;
 }
+
+void ps_res_finalize()
+{
+    for (size_t i = 0; i < arrlen(resources); ++i) {
+        switch (resources[i].type) {
+            case RT_TEXTURE:
+                SDL_DestroyTexture(resources[i].texture);
+                break;
+        }
+    }
+
+    arrfree(resources);
+}

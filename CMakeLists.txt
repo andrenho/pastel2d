@@ -46,7 +46,8 @@ endfunction()
 add_library(${PROJECT_NAME} STATIC
         src/graphics.h
         src/graphics.c
-        src/pastel2d.hh
+        src/pastel2d.h
+        src/pastel2d.c
         src/error.c
         src/error.h
         src/res.c
