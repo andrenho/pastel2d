@@ -1,9 +1,11 @@
 #include "graphics.h"
 
+#include <stb_ds.h>
 #include <SDL3/SDL_timer.h>
 #include <stdio.h>
 
 #include "error.h"
+#include "scene.h"
 
 static bool          running_ = true;
 static SDL_Window*   window = NULL;
@@ -82,10 +84,37 @@ size_t ps_graphics_timestep_us()
     return SDL_NS_TO_US(diff);
 }
 
-void ps_graphics_render_scene(void(* scene_creator)())
+static void render_image(Image const* image)
 {
+    SDL_Texture* tx = ps_res_get_texture(image->res_id);
+
+    float tw, th;
+    SDL_GetTextureSize(tx, &tw, &th);
+
+    SDL_RenderTexture(ren, tx, NULL, &(SDL_FRect) { image->x, image->y, tw, th });
+}
+
+void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))
+{
+    Scene scenes[MAX_SCENES];
+    memset(scenes, 0, sizeof scenes);
+
+    scene_creator(scenes);
+
     SDL_SetRenderDrawColor(ren, bg_r, bg_g, bg_b, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(ren);
+
+    for (size_t i = 0; i < MAX_SCENES; ++i) {
+        for (size_t j = 0; j < arrlen(scenes[i].artifacts); ++j) {
+            switch (scenes[i].artifacts[j].type) {
+                case A_IMAGE:
+                    render_image(&scenes[i].artifacts[j].image);
+                    break;
+            }
+        }
+
+        ps_scene_free(&scenes[i]);
+    }
 }
 
 int ps_graphics_present()

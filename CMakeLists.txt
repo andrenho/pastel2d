@@ -7,8 +7,32 @@ cmake_minimum_required(VERSION 3.28)
 project(pastel2d
         VERSION 1.0.0
         DESCRIPTION "A 2D thin static game library built on top of SDL2, Lua and ImGui."
-        LANGUAGES C CXX
+        LANGUAGES C
 )
+
+#
+# configuration
+#
+
+set(CMAKE_C_STANDARD 17)
+
+# warnings / flags
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(warnings -Wall -Wextra -Wformat-nonliteral -Wundef -Wshadow -Wwrite-strings -Wfloat-equal -Wswitch-default -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set(warnings ${warnings} -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wsuggest-attribute=format -Wsuggest-attribute=cold)
+    endif()
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-ggdb -O0)
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(DEF B_PRODUCTION_MODE=ON)
+    add_compile_options(-Ofast -flto)
+endif()
+
 
 #
 # external libraries
@@ -52,6 +76,8 @@ add_library(${PROJECT_NAME} STATIC
         src/error.h
         src/res.c
         src/res.h
+        src/scene.c
+        src/scene.h
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC

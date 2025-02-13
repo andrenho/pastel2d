@@ -4,11 +4,15 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <SDL3/SDL.h>
+
 typedef size_t resource_idx_t;
 
 #define RES_ERROR -1
 
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
+
+SDL_Texture* ps_res_get_texture(resource_idx_t res_id);
 
 void ps_res_finalize();
 

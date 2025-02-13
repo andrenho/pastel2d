@@ -2,10 +2,13 @@
 
 #include "pastel2d.h"
 #include "example.png.h"
+#include "scene.h"
+
+static resource_idx_t png;
 
 static void init_resources()
 {
-    resource_idx_t png = ps_res_add_png(example_example_png, example_example_png_sz);
+     png = ps_res_add_png(example_example_png, example_example_png_sz);
 }
 
 static void event_manager(SDL_Event* e, bool* running)
@@ -14,8 +17,9 @@ static void event_manager(SDL_Event* e, bool* running)
         *running = false;
 }
 
-static void /* TODO - return type? */ scene_creator()
+static void scene_creator(Scene scenes[MAX_SCENES])
 {
+    ps_scene_add_image(&scenes[0], png, 10, 10);
 }
 
 static void post_scene()

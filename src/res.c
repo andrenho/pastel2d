@@ -40,7 +40,7 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
         .type = RT_TEXTURE,
         .texture = texture,
     };
-    arrput(resources, res);
+    arrpush(resources, res);
     return arrlen(resources) - 1;
 }
 
@@ -55,4 +55,10 @@ void ps_res_finalize()
     }
 
     arrfree(resources);
+}
+
+SDL_Texture* ps_res_get_texture(resource_idx_t res_id)
+{
+    // TODO - check for type
+    return resources[res_id].texture;
 }
