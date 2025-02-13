@@ -84,14 +84,10 @@ size_t ps_graphics_timestep_us()
     return SDL_NS_TO_US(diff);
 }
 
-static void render_image(Image const* image)
+static void render_texture(SDL_Texture* tx, Context const* ctx)
 {
-    SDL_Texture* tx = ps_res_get_texture(image->res_id);
-
     float tw, th;
     SDL_GetTextureSize(tx, &tw, &th);
-
-    Context const* ctx = &image->context;
 
     SDL_FRect dest = {
         .x = ctx->position.rect.x,
@@ -100,10 +96,16 @@ static void render_image(Image const* image)
         .h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th,
     };
 
-    if (image->context.zoom.has_value)
-        SDL_SetRenderScale(ren, image->context.zoom.value, image->context.zoom.value);
+    if (ctx->zoom.has_value)
+        SDL_SetRenderScale(ren, ctx->zoom.value, ctx->zoom.value);
     SDL_RenderTexture(ren, tx, NULL, &dest);
     SDL_SetRenderScale(ren, 1.f, 1.f);
+}
+
+static void render_image(Image const* image)
+{
+    SDL_Texture* tx = ps_res_get_texture(image->res_id);
+    render_texture(tx, &image->context);
 }
 
 void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))
