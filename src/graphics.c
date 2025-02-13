@@ -92,3 +92,6 @@ int ps_graphics_present()
 {
     return SDL_RenderPresent(ren) ? 0 : -1;
 }
+
+SDL_Window* ps_graphics_window() { return window; }
+SDL_Renderer* ps_graphics_renderer() { return ren; }

@@ -25,7 +25,9 @@ int    ps_graphics_do_events(void (*event_manager)(SDL_Event* e, bool* running))
 void   ps_graphics_render_scene(void (*scene_creator)());
 int    ps_graphics_present();
 
-bool   ps_graphics_running();
-size_t ps_graphics_timestep_us();
+bool          ps_graphics_running();
+size_t        ps_graphics_timestep_us();
+SDL_Window*   ps_graphics_window();
+SDL_Renderer* ps_graphics_renderer();
 
 #endif //GRAPHICS_H

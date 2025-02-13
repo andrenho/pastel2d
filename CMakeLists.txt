@@ -54,8 +54,10 @@ add_library(${PROJECT_NAME} STATIC
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC
-            ${CMAKE_SOURCE_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR}/src
             ${CMAKE_CURRENT_BINARY_DIR}/generated
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
 )
 target_link_libraries(${PROJECT_NAME}
         PUBLIC

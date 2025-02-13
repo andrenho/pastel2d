@@ -3,5 +3,6 @@
 
 #include "graphics.h"
 #include "res.h"
+#include "error.h"
 
 #endif //PASTEL2D_HH
