@@ -103,3 +103,15 @@ add_executable(pastel2d-example EXCLUDE_FROM_ALL
 target_link_libraries(pastel2d-example PRIVATE pastel2d)
 
 embed(pastel2d-example example/example.png)
+
+# check for leaks
+
+add_custom_target(leaks)
+add_custom_command(TARGET leaks
+        POST_BUILD
+        COMMENT "Check for leaks using valgrind."
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        DEPENDS pastel2d-example
+        COMMAND valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=${CMAKE_SOURCE_DIR}/valgrind.supp ./pastel2d-example
+)
+
