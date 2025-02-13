@@ -18,7 +18,7 @@ set(CMAKE_C_STANDARD 17)
 
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(warnings -Wall -Wextra -Wformat-nonliteral -Wundef -Wshadow -Wwrite-strings -Wfloat-equal -Wswitch-default -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
+    set(warnings -Wall -Wextra -Wformat-nonliteral -Wshadow -Wwrite-strings -Wfloat-equal -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         set(warnings ${warnings} -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wsuggest-attribute=format -Wsuggest-attribute=cold)
     endif()
@@ -93,6 +93,8 @@ target_link_libraries(${PROJECT_NAME}
             SDL3::SDL3
             m
 )
+target_compile_options(${PROJECT_NAME}
+        PRIVATE ${warnings})
 
 #
 # sample executable
@@ -101,6 +103,8 @@ target_link_libraries(${PROJECT_NAME}
 add_executable(pastel2d-example EXCLUDE_FROM_ALL
         example/example.c
 )
+target_compile_options(pastel2d-example
+        PRIVATE ${warnings})
 target_link_libraries(pastel2d-example PRIVATE pastel2d)
 
 embed(pastel2d-example example/example.png)

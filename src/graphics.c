@@ -115,7 +115,7 @@ void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))
     SDL_RenderClear(ren);
 
     for (size_t i = 0; i < MAX_SCENES; ++i) {
-        for (size_t j = 0; j < arrlen(scenes[i].artifacts); ++j) {
+        for (size_t j = 0; j < (size_t) arrlen(scenes[i].artifacts); ++j) {
             switch (scenes[i].artifacts[j].type) {
                 case A_IMAGE:
                     render_image(&scenes[i].artifacts[j].image);

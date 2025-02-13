@@ -54,7 +54,7 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
 
 void ps_res_finalize()
 {
-    for (size_t i = 0; i < arrlen(resources); ++i) {
+    for (size_t i = 0; i < (size_t) arrlen(resources); ++i) {
         switch (resources[i].type) {
             case RT_TEXTURE:
                 SDL_DestroyTexture(resources[i].texture);

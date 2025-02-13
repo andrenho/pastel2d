@@ -36,4 +36,5 @@ Context ps_context_sum(Context const* current, Context const* sum)
         context.opacity.value = sum->opacity.value;
     }
 
+    return context;
 }

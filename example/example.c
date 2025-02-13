@@ -19,7 +19,7 @@ static void event_manager(SDL_Event* e, bool* running)
 
 static void scene_creator(Scene scenes[MAX_SCENES])
 {
-    ps_scene_add_image(&scenes[0], png, 10, 10);
+    ps_scene_add_image(&scenes[0], png, 100, 100);
 }
 
 static void post_scene()
