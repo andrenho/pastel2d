@@ -13,3 +13,6 @@
 [submodule "contrib/stb"]
 	path = contrib/stb
 	url = https://github.com/nothings/stb.git
+[submodule "contrib/lualzw"]
+	path = contrib/lualzw
+	url = https://github.com/Rochet2/lualzw.git
