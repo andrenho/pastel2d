@@ -5,8 +5,8 @@
 #include <SDL3/SDL_rect.h>
 
 typedef struct {
-    bool      has_value;
-    SDL_Point point;
+    bool       has_value;
+    SDL_FPoint point;
 } ContextPointValue;
 
 typedef struct {
@@ -24,12 +24,14 @@ typedef struct {
     int   value;
 } ContextIntValue;
 
+
 typedef struct {
     ContextRectValue  position;
     ContextRectValue  alignment;
     ContextFloatValue rotation;
     ContextFloatValue zoom;
     ContextIntValue   opacity;
+    ContextPointValue rotation_center;
 } Context;
 
 Context ps_create_context();

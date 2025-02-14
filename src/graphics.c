@@ -106,7 +106,11 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context con
 
     if (ctx->zoom.has_value)
         SDL_SetRenderScale(ren, ctx->zoom.value, ctx->zoom.value);
-    SDL_RenderTexture(ren, tx, origin, &dest);
+    SDL_RenderTextureRotated(ren, tx,
+        origin, &dest,
+        ctx->rotation.value,
+        ctx->rotation_center.has_value ? &ctx->rotation_center.point : NULL,
+        SDL_FLIP_NONE);
     SDL_SetRenderScale(ren, 1.f, 1.f);
 }
 

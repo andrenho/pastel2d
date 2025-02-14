@@ -36,5 +36,10 @@ Context ps_context_sum(Context const* current, Context const* sum)
         context.opacity.value = sum->opacity.value;
     }
 
+    if (sum->rotation_center.has_value) {
+        context.rotation_center.has_value = true;
+        context.rotation_center.point = sum->rotation_center.point;
+    }
+
     return context;
 }

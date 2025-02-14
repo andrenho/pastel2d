@@ -2,8 +2,8 @@
   - [x] Build luajit
   - [x] Lua file as object, string
 - [x] Manipulate image (shadow)
+- [x] Rotation + rotation center
 - [ ] Alignment
-- [ ] Rotation + rotation center
 - [ ] Opacity
 - [ ] Draw only what's visible
 - [ ] Text

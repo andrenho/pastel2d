@@ -22,7 +22,7 @@ static void init_resources()
 
 static void event_manager(SDL_Event* e, bool* running)
 {
-    if (e->type == SDL_EVENT_QUIT)
+    if (e->type == SDL_EVENT_QUIT || (e->type == SDL_EVENT_KEY_DOWN && e->key.key == SDLK_Q))
         *running = false;
 }
 
@@ -30,8 +30,8 @@ static Scene* scene_creator(void*)
 {
     Scene* scenes = ps_create_scenes(1);
 
-    ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
-    ps_scene_add_image_name(&scenes[0], "shadow_happy", 100, 100, NULL);
+    ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 }, .rotation = { true, 90 } });
+    ps_scene_add_image_name(&scenes[0], "happy", 100, 100, NULL);
 
     return scenes;
 }
