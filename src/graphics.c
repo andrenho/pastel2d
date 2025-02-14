@@ -123,6 +123,8 @@ void ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
 
         ps_scene_finalize(&scenes[i]);
     }
+
+    arrfree(scenes);
 }
 
 int ps_graphics_present()
