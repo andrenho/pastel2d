@@ -112,6 +112,7 @@ target_compile_options(pastel2d-example
 target_link_libraries(pastel2d-example PRIVATE pastel2d)
 
 embed(pastel2d-example example/example.png)
+embed(pastel2d-example example/example.tileset.lua lua-strip)
 
 # check for leaks
 

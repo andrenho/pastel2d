@@ -1,6 +1,9 @@
 #include "res.h"
 
 #include <SDL3/SDL.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 
 #define STB_DS_IMPLEMENTATION
 #include <stb_ds.h>
@@ -90,7 +93,9 @@ int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size
 {
     for (size_t i = 0; i < n_tiles; ++i) {
         resource_idx_t idx = ps_res_add_tile(parent, tiles[i].rect, tile_sz);
-        if (*tiles->idx)
+        if (idx == RES_ERROR)
+            return RES_ERROR;
+        if (tiles->idx)
             *tiles->idx = idx;
         if (tiles->name)
             ps_res_name_idx(tiles->name, idx);
@@ -100,7 +105,61 @@ int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size
 
 int ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t sz)
 {
-    return -1;  // TODO
+    lua_State* L = luaL_newstate();
+    luaL_openlibs(L);
+
+    static const char* ERR_MSG = "Error loading Lua tileset:";
+#define CHECK(check, msg) \
+    if (!(check)) { \
+        snprintf(last_error, sizeof last_error, "%s %s", ERR_MSG, msg ? msg : lua_tostring(L, -1)); \
+        lua_close(L); \
+        return RES_ERROR; \
+    }
+
+    CHECK(luaL_loadbuffer(L, (const char *) data, sz, "tile_loader") == LUA_OK, NULL);
+    CHECK(lua_pcall(L, 0, LUA_MULTRET, 0) == LUA_OK, NULL);
+    CHECK(lua_istable(L, -1), "Script should return a table.");
+
+    lua_getfield(L, -1, "tile_size");
+    CHECK(lua_isnumber(L, -1), "Expected field `tile_size` with a number.");
+    int tile_size = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_getfield(L, -1, "tiles");
+    CHECK(lua_istable(L, -1), "Expected table `tiles`.");
+
+    TileDef* tiles = NULL;
+
+    lua_pushnil(L);
+    while (lua_next(L, -2) != 0) {
+        TileDef tile = {
+            .name = strdup(lua_tostring(L, -2)),
+        };
+
+        CHECK(lua_istable(L, -1), "Expected a table for key");
+        size_t len = lua_objlen(L, -1);
+
+        CHECK((len == 2) || (len == 4), "Expected a table with 2 or 4 items for key");
+        lua_rawgeti(L, -1, 1); tile.rect.x = luaL_checkinteger(L, -1); lua_pop(L, 1);
+        lua_rawgeti(L, -1, 2); tile.rect.y = luaL_checkinteger(L, -1); lua_pop(L, 1);
+        if (len == 4) {
+            lua_rawgeti(L, -1, 3); tile.rect.w = luaL_checkinteger(L, -1); lua_pop(L, 1);
+            lua_rawgeti(L, -1, 4); tile.rect.h = luaL_checkinteger(L, -1); lua_pop(L, 1);
+        }
+
+        lua_pop(L, 1);
+        arrpush(tiles, tile);
+    }
+
+    lua_close(L);
+
+    ps_res_add_tiles(parent, tiles, arrlen(tiles), tile_size);
+
+    for (size_t j = 0; j < (size_t) arrlen(tiles); ++j)
+        free(tiles[j].name);
+    arrfree(tiles);
+
+    return 0;
 }
 
 int ps_res_name_idx(const char* name, resource_idx_t idx)
@@ -110,7 +169,7 @@ int ps_res_name_idx(const char* name, resource_idx_t idx)
         snprintf(last_error, sizeof last_error, "Name '%s' already in use.", name);
         return RES_ERROR;
     }
-    shput(resource_names, name, idx);
+    shput(resource_names, strdup(name), idx);
     return 0;
 }
 
@@ -158,6 +217,9 @@ void ps_res_finalize()
                 break;
         }
     }
+
+    for (size_t i = 0; i < shlen(resource_names); ++i)
+        free(resource_names[i].key);
 
     shfree(resource_names);
     arrfree(resources);

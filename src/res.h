@@ -17,9 +17,9 @@ typedef struct {
 
 typedef struct {
     resource_idx_t* idx;
-    const char*     name;
-    SDL_Texture* texture;
-    SDL_FRect    rect;
+    char*           name;
+    SDL_Texture*    texture;
+    SDL_FRect       rect;
 } TileDef;
 
 typedef enum { RT_TEXTURE, RT_TILE } ResourceType;
