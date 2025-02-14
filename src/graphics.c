@@ -111,6 +111,13 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context con
         dest.y = ctx->position.rect.y + ctx->position.rect.h / 2 - dest.h / 2;
     }
 
+    // check if within bounds
+    int scr_w, scr_h;
+    SDL_GetWindowSizeInPixels(window, &scr_w, &scr_h);
+    SDL_FRect scr = { 0, 0, scr_w / (ctx->zoom.has_value ? ctx->zoom.value : 1), scr_h / (ctx->zoom.has_value ? ctx->zoom.value : 1) };
+    if (!SDL_HasRectIntersectionFloat(&scr, &dest))
+        return;
+
     // opacity
     if (ctx->opacity.has_value)
         SDL_SetTextureAlphaModFloat(tx, ctx->opacity.value / 100.f);

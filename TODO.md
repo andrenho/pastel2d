@@ -5,7 +5,7 @@
 - [x] Rotation + rotation center
 - [x] Alignment
 - [x] Opacity
-- [ ] Draw only what's visible
+- [x] Draw only what's visible
 - [ ] Text
   - [ ] Font resource
   - [ ] Draw text (cache management)
