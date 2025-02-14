@@ -51,7 +51,10 @@ int ps_graphics_finalize()
     if (window)
         SDL_DestroyWindow(window);
     if (SDL_WasInit(SDL_INIT_VIDEO))
-        SDL_Quit();
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    if (SDL_WasInit(SDL_INIT_AUDIO))
+        SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    SDL_Quit();
     return 0;
 }
 
