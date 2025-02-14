@@ -1,6 +1,7 @@
 - [ ] Lua tiles
-  - [ ] Build luajit
+  - [x] Build luajit
   - [ ] Lua file as object, string
+- [ ] Manipulate image (shadow)
 - [ ] Alignment
 - [ ] Rotation + rotation center
 - [ ] Opacity
@@ -10,6 +11,7 @@
   - [ ] Draw text (cache management)
 - [ ] Audio
 - [ ] Cursors
+- [ ] FPS on title
 - [ ] C++ interface
   - [ ] imgui
 

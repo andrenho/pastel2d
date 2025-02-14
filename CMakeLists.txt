@@ -19,7 +19,7 @@ set(CMAKE_C_STANDARD 17)
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(warnings -Wall -Wextra -Wformat-nonliteral -Wshadow -Wwrite-strings -Wfloat-equal -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
         set(warnings ${warnings} -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wsuggest-attribute=format -Wsuggest-attribute=cold)
     endif()
 endif()
@@ -39,6 +39,8 @@ endif()
 #
 
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+set(LUAJIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT)
+add_subdirectory(contrib/luajit-cmake)
 
 #
 # function to generate embedded file
@@ -89,6 +91,8 @@ target_include_directories(${PROJECT_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
 )
 target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            luajit::lib luajit::header
         PUBLIC
             SDL3::SDL3
             m

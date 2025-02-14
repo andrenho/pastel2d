@@ -1,3 +1,9 @@
 [submodule "contrib/stb"]
 	path = contrib/stb
 	url = https://github.com/nothings/stb.git
+[submodule "contrib/LuaJIT"]
+	path = contrib/LuaJIT
+	url = https://github.com/LuaJIT/LuaJIT.git
+[submodule "contrib/luajit-cmake"]
+	path = contrib/luajit-cmake
+	url = https://github.com/zhaozg/luajit-cmake.git
