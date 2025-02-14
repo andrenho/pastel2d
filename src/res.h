@@ -24,8 +24,8 @@ typedef struct {
 
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
 
-resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_Rect rect, SDL_Rect tile_sz);
-int            ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, SDL_Rect tile_sz);
+resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_Rect rect, size_t tile_sz);
+int            ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size_t tile_sz);
 int            ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t sz);
 
 int            ps_res_name_idx(const char* name, resource_idx_t idx);

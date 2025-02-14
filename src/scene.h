@@ -1,7 +1,6 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#define MAX_SCENES 16
 #include "res.h"
 #include "context.h"
 
@@ -24,7 +23,7 @@ typedef struct {
     Context*  context_stack;
 } Scene;
 
-int     ps_scene_init(Scene* scene);
+Scene*         ps_create_scenes(size_t n_scenes);
 
 Context const* ps_scene_current_context(Scene const* scene);
 int            ps_scene_push_context(Scene* scene, Context const* context);

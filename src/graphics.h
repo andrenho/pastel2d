@@ -24,7 +24,7 @@ int    ps_graphics_set_bg(uint8_t r, uint8_t g, uint8_t b);
 
 int    ps_graphics_do_events(void (*event_manager)(SDL_Event* e, bool* running));
 
-void   ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]));
+void   ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data);
 int    ps_graphics_present();
 
 bool          ps_graphics_running();

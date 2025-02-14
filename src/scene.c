@@ -2,7 +2,7 @@
 
 #include <stb_ds.h>
 
-int ps_scene_init(Scene* scene)
+static int ps_scene_init(Scene* scene)
 {
     scene->artifacts = NULL;
     scene->context_stack = NULL;
@@ -11,6 +11,17 @@ int ps_scene_init(Scene* scene)
     arrpush(scene->context_stack, context);
 
     return 0;
+}
+
+Scene* ps_create_scenes(size_t n_scenes)
+{
+    Scene* scenes = NULL;
+    for (size_t i = 0; i < n_scenes; ++i) {
+        Scene scene;
+        ps_scene_init(&scene);
+        arrpush(scenes, scene);
+    }
+    return scenes;
 }
 
 int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, Context const* ctx)

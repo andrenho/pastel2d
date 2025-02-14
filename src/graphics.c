@@ -84,7 +84,7 @@ size_t ps_graphics_timestep_us()
     return SDL_NS_TO_US(diff);
 }
 
-static void render_texture(SDL_Texture* tx, Context const* ctx)
+static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context const* ctx)
 {
     float tw, th;
     SDL_GetTextureSize(tx, &tw, &th);
@@ -98,33 +98,26 @@ static void render_texture(SDL_Texture* tx, Context const* ctx)
 
     if (ctx->zoom.has_value)
         SDL_SetRenderScale(ren, ctx->zoom.value, ctx->zoom.value);
-    SDL_RenderTexture(ren, tx, NULL, &dest);
+    SDL_RenderTexture(ren, tx, origin, &dest);
     SDL_SetRenderScale(ren, 1.f, 1.f);
 }
 
-static void render_image(Image const* image)
+void ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
 {
-    SDL_Texture* tx = ps_res_get_texture(image->res_id);
-    render_texture(tx, &image->context);
-}
-
-void ps_graphics_render_scene(void (*scene_creator)(Scene scenes[MAX_SCENES]))
-{
-    Scene scenes[MAX_SCENES];
-    for (size_t i = 0; i < MAX_SCENES; ++i)
-        ps_scene_init(&scenes[i]);
-
-    scene_creator(scenes);
+    Scene* scenes = scene_creator(data);
 
     SDL_SetRenderDrawColor(ren, bg_r, bg_g, bg_b, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(ren);
 
-    for (size_t i = 0; i < MAX_SCENES; ++i) {
+    for (size_t i = 0; i < (size_t) arrlen(scenes); ++i) {
         for (size_t j = 0; j < (size_t) arrlen(scenes[i].artifacts); ++j) {
+            Artifact const* a = &scenes[i].artifacts[j];
             switch (scenes[i].artifacts[j].type) {
-                case A_IMAGE:
-                    render_image(&scenes[i].artifacts[j].image);
+                case A_IMAGE: {
+                    SDL_Texture* tx = ps_res_get_texture(a->image.res_id);
+                    render_texture(tx, NULL, &a->image.context);
                     break;
+                }
             }
         }
 

@@ -6,7 +6,8 @@
 
 static void init_resources()
 {
-     ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz));
+    resource_idx_t example = ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz));
+    ps_res_name_idx("happy", ps_res_add_tile(example, (SDL_Rect) { 0, 0, 1, 1 }, 32));
 }
 
 static void event_manager(SDL_Event* e, bool* running)
@@ -15,10 +16,14 @@ static void event_manager(SDL_Event* e, bool* running)
         *running = false;
 }
 
-static void scene_creator(Scene scenes[MAX_SCENES])
+static Scene* scene_creator(void*)
 {
+    Scene* scenes = ps_create_scenes(1);
+
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
     ps_scene_add_image_name(&scenes[0], "example", 100, 100, NULL);
+
+    return scenes;
 }
 
 static void post_scene()
@@ -46,7 +51,7 @@ int main()
     while (ps_graphics_running()) {
         ps_graphics_do_events(event_manager);
         update(ps_graphics_timestep_us());
-        ps_graphics_render_scene(scene_creator);
+        ps_graphics_render_scene(scene_creator, NULL);
         post_scene();
         ps_graphics_present();
     }

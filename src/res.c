@@ -60,21 +60,24 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_Rect rect, SDL_Rect tile_sz)
+resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_Rect rect, size_t tile_sz)
 {
     SDL_Texture* tx = ps_res_get_texture(parent);
     if (tx == NULL)
         return RES_ERROR;
+
+    if (rect.w == 0)
+        rect.w = rect.h = 1;
 
     Resource res = {
         .type = RT_TILE,
         .tile = {
             .texture = tx,
             .rect = {
-                .x = rect.x * tile_sz.w,
-                .y = rect.y * tile_sz.h,
-                .w = rect.w * tile_sz.w,
-                .h = rect.h * tile_sz.h,
+                .x = rect.x * tile_sz,
+                .y = rect.y * tile_sz,
+                .w = rect.w * tile_sz,
+                .h = rect.h * tile_sz,
             },
         },
     };
@@ -82,7 +85,7 @@ resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_Rect rect, SDL_Rect ti
     return arrlen(resources) - 1;
 }
 
-int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, SDL_Rect tile_sz)
+int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size_t tile_sz)
 {
     for (size_t i = 0; i < n_tiles; ++i) {
         resource_idx_t idx = ps_res_add_tile(parent, tiles[i].rect, tile_sz);
@@ -135,6 +138,8 @@ void ps_res_finalize()
         switch (resources[i].type) {
             case RT_TEXTURE:
                 SDL_DestroyTexture(resources[i].texture);
+                break;
+            case RT_TILE:
                 break;
         }
     }
