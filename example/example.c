@@ -22,7 +22,7 @@ static Scene* scene_creator(void*)
     Scene* scenes = ps_create_scenes(1);
 
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
-    SDL_assert(ps_scene_add_image_name(&scenes[0], "happy", 100, 100, NULL) == 0);
+    SDL_assert(ps_scene_add_image_name(&scenes[0], "sad", 100, 100, NULL) == 0);
 
     return scenes;
 }
@@ -35,8 +35,16 @@ static void update(size_t timestep_us)
 {
 }
 
+static SDL_AssertState assertion_handler(const SDL_AssertData *data, void *userdata)
+{
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", ps_last_error(), ps_graphics_window());
+    return SDL_ASSERTION_BREAK;
+}
+
 int main()
 {
+    SDL_SetAssertionHandler(assertion_handler, NULL);
+
     ps_graphics_init(&(GraphicsInit) {
         .appname = "pastel2d-example",
         .appidentifier = "com.github.pastel2d",
