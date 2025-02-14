@@ -1,8 +1,8 @@
 #ifndef RES_H
 #define RES_H
 
-#include <stddef.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 #include <SDL3/SDL.h>
 
