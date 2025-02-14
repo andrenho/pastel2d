@@ -7,7 +7,7 @@
 
 static void init_resources()
 {
-    resource_idx_t example = ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz));
+    resource_idx_t example = ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz, NULL));
     ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
 }
 
@@ -22,7 +22,7 @@ static Scene* scene_creator(void*)
     Scene* scenes = ps_create_scenes(1);
 
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
-    ps_scene_add_image_name(&scenes[0], "sad", 100, 100, NULL);
+    ps_scene_add_image_name(&scenes[0], "happy", 100, 100, NULL);
 
     return scenes;
 }

@@ -31,7 +31,7 @@ struct {
     resource_idx_t value;
 } *resource_names = NULL;
 
-resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
+resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz, Manupulator manupulator)
 {
     int w, h, bpp;
     stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &bpp, STBI_rgb_alpha);
@@ -44,6 +44,9 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
         stbi_image_free(img);
         return RES_ERROR;
     }
+
+    if (manupulator)
+        manupulator(img, w, h, w * 4);
 
     SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, img, w * 4);
 

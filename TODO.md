@@ -1,6 +1,6 @@
-- [ ] Lua tiles
+- [x] Lua tiles
   - [x] Build luajit
-  - [ ] Lua file as object, string
+  - [x] Lua file as object, string
 - [ ] Manipulate image (shadow)
 - [ ] Alignment
 - [ ] Rotation + rotation center
