@@ -138,7 +138,7 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context con
     SDL_SetTextureAlphaModFloat(tx, 1.0f);
 }
 
-void render_scene(Scene* scene)
+int render_scene(Scene* scene)
 {
     for (size_t j = 0; j < (size_t) arrlen(scene->artifacts); ++j) {
         Artifact const* a = &scene->artifacts[j];
@@ -153,13 +153,20 @@ void render_scene(Scene* scene)
                         Tile const* tile = ps_res_get_tile(a->image.res_id);
                         render_texture(tile->texture, &tile->rect, &a->image.context);
                         break;
+                    case RT_FONT:
+                        // TODO
+                    default:
+                        snprintf(last_error, sizeof last_error, "Invalid type for resource %zu", a->image.res_id);
+                        return -1;
                 }
                 break;
         }
     }
+
+    return 0;
 }
 
-void ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
+int ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
 {
     Scene* scenes = scene_creator(data);
 
@@ -167,11 +174,14 @@ void ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
     SDL_RenderClear(ren);
 
     for (size_t i = 0; i < (size_t) arrlen(scenes); ++i) {
-        render_scene(&scenes[i]);
+        if (render_scene(&scenes[i]) != 0)
+            return -1;
         ps_scene_finalize(&scenes[i]);
     }
 
     arrfree(scenes);
+
+    return 0;
 }
 
 int ps_graphics_present()

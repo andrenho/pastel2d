@@ -12,6 +12,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#define STB_TRUETYPE_IMPLEMENTATION
+#include <stb_truetype.h>
+
 #include "error.h"
 #include "graphics.h"
 extern char last_error[LAST_ERROR_SZ];
@@ -19,8 +22,9 @@ extern char last_error[LAST_ERROR_SZ];
 typedef struct {
     ResourceType type;
     union {
-        SDL_Texture* texture;
-        Tile         tile;
+        SDL_Texture*   texture;
+        Tile           tile;
+        stbtt_fontinfo font;
     };
 } Resource;
 
@@ -171,8 +175,24 @@ int ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t
     return 0;
 }
 
+resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
+{
+    Resource resource = {
+        .type = RT_FONT,
+    };
+    if (!stbtt_InitFont(&resource.font, data, 0)) {
+        snprintf(last_error, sizeof last_error, "Could not load TTF file.");
+        return RES_ERROR;
+    }
+    arrpush(resources, resource);
+    return arrlen(resources) - 1;
+}
+
 int ps_res_name_idx(const char* name, resource_idx_t idx)
 {
+    if (idx == RES_ERROR)
+        return RES_ERROR;
+
     ptrdiff_t i = shgeti(resource_names, name);
     if (i != -1) {
         snprintf(last_error, sizeof last_error, "Name '%s' already in use.", name);
@@ -223,6 +243,7 @@ void ps_res_finalize()
                 SDL_DestroyTexture(resources[i].texture);
                 break;
             case RT_TILE:
+            case RT_FONT:
                 break;
         }
     }

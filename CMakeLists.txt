@@ -19,7 +19,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(warnings -Wall -Wextra -Wformat-nonliteral -Wshadow -Wwrite-strings -Wfloat-equal -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
+    set(warnings -Wall -Wextra -Wformat-nonliteral -Wshadow -Wwrite-strings -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
     if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
         set(warnings ${warnings} -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wsuggest-attribute=format -Wsuggest-attribute=cold)
     endif()
@@ -117,6 +117,7 @@ target_link_libraries(pastel2d-example PRIVATE pastel2d)
 embed(pastel2d-example example/example.png)
 embed(pastel2d-example example/example.tileset.lua lua-strip)
 embed(pastel2d-example example/example-shadow.tileset.lua lua-strip)
+embed(pastel2d-example example/OpenSans-Medium.ttf)
 
 # check for leaks
 

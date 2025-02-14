@@ -22,7 +22,7 @@ typedef struct {
     SDL_FRect       rect;
 } TileDef;
 
-typedef enum { RT_TEXTURE, RT_TILE } ResourceType;
+typedef enum { RT_TEXTURE, RT_TILE, RT_FONT } ResourceType;
 
 typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
@@ -32,6 +32,8 @@ resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator 
 resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t tile_sz);
 int            ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size_t tile_sz);
 int            ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t sz);
+
+resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz);
 
 int            ps_res_name_idx(const char* name, resource_idx_t idx);
 resource_idx_t ps_res_idx(const char* name);

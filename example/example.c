@@ -8,6 +8,7 @@
 #include "example.png.h"
 #include "example.tileset.lua.h"
 #include "example-shadow.tileset.lua.h"
+#include "OpenSans-Medium.ttf.h"
 
 static void init_resources()
 {
@@ -18,6 +19,9 @@ static void init_resources()
 
     ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
     ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz);
+
+    ps_res_name_idx("font",
+        ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz));
 }
 
 static void event_manager(SDL_Event* e, bool* running)
