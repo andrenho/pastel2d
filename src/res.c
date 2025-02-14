@@ -64,8 +64,11 @@ resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t til
     if (tx == NULL)
         return RES_ERROR;
 
-    if (rect.w == 0)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-equal"
+    if (rect.w == 0.f)
         rect.w = rect.h = 1;
+#pragma GCC diagnostic pop
 
     Resource res = {
         .type = RT_TILE,
