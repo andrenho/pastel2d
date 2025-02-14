@@ -20,17 +20,10 @@ typedef struct {
 } ContextFloatValue;
 
 typedef struct {
-    bool  has_value;
-    int   value;
-} ContextIntValue;
-
-
-typedef struct {
     ContextRectValue  position;
-    ContextRectValue  alignment;
     ContextFloatValue rotation;
     ContextFloatValue zoom;
-    ContextIntValue   opacity;
+    ContextFloatValue opacity;
     ContextPointValue rotation_center;
 } Context;
 

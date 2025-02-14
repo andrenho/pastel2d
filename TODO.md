@@ -3,8 +3,8 @@
   - [x] Lua file as object, string
 - [x] Manipulate image (shadow)
 - [x] Rotation + rotation center
-- [ ] Alignment
-- [ ] Opacity
+- [x] Alignment
+- [x] Opacity
 - [ ] Draw only what's visible
 - [ ] Text
   - [ ] Font resource

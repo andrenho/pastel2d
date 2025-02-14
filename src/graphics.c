@@ -89,29 +89,46 @@ size_t ps_graphics_timestep_us()
 
 static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context const* ctx)
 {
-    SDL_FRect dest = {
-        .x = ctx->position.rect.x,
-        .y = ctx->position.rect.y,
-    };
+    SDL_FRect dest = {};
 
-    if (origin != NULL) {
+    // calculate destination size
+    if (origin != NULL) {  // partial texture (tile)
         dest.w = origin->w;
         dest.h = origin->h;
-    } else {
+    } else {  // full texture
         float tw, th;
         SDL_GetTextureSize(tx, &tw, &th);
         dest.w = ctx->position.rect.w != 0 ? ctx->position.rect.w : tw;
         dest.h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th;
     }
 
+    // calculate position
+    if (ctx->position.rect.w == 0) {
+        dest.x = ctx->position.rect.x;
+        dest.y = ctx->position.rect.y;
+    } else {
+        dest.x = ctx->position.rect.x + ctx->position.rect.w / 2 - dest.w / 2;
+        dest.y = ctx->position.rect.y + ctx->position.rect.h / 2 - dest.h / 2;
+    }
+
+    // opacity
+    if (ctx->opacity.has_value)
+        SDL_SetTextureAlphaModFloat(tx, ctx->opacity.value / 100.f);
+
+    // zoom
     if (ctx->zoom.has_value)
         SDL_SetRenderScale(ren, ctx->zoom.value, ctx->zoom.value);
+
+    // render with rotation/center
     SDL_RenderTextureRotated(ren, tx,
         origin, &dest,
         ctx->rotation.value,
         ctx->rotation_center.has_value ? &ctx->rotation_center.point : NULL,
         SDL_FLIP_NONE);
+
+    // restore
     SDL_SetRenderScale(ren, 1.f, 1.f);
+    SDL_SetTextureAlphaModFloat(tx, 1.0f);
 }
 
 void render_scene(Scene* scene)

@@ -13,12 +13,8 @@ Context ps_context_sum(Context const* current, Context const* sum)
         context.position.has_value = true;
         context.position.rect.x += sum->position.rect.x;
         context.position.rect.y += sum->position.rect.y;
-    }
-
-    if (sum->alignment.has_value) {
-        context.alignment.has_value = true;
-        context.alignment.rect.x += sum->alignment.rect.x;
-        context.alignment.rect.y += sum->alignment.rect.y;
+        context.position.rect.w = sum->position.rect.w;
+        context.position.rect.h = sum->position.rect.h;
     }
 
     if (sum->rotation.has_value) {
@@ -31,7 +27,7 @@ Context ps_context_sum(Context const* current, Context const* sum)
         context.zoom.value += sum->zoom.value;
     }
 
-    if (sum->zoom.has_value) {
+    if (sum->opacity.has_value) {
         context.opacity.has_value = true;
         context.opacity.value = sum->opacity.value;
     }

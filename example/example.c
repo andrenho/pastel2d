@@ -30,14 +30,19 @@ static Scene* scene_creator(void*)
 {
     Scene* scenes = ps_create_scenes(1);
 
-    ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 }, .rotation = { true, 90 } });
-    ps_scene_add_image_name(&scenes[0], "happy", 100, 100, NULL);
+    ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2.f } });
+    ps_scene_add_image_name_rect(&scenes[0], "happy", (SDL_Rect) { 100, 100, 58, 78 },
+        &(Context) { .rotation = { true, 90 }, .opacity = { true, 20 } });
 
     return scenes;
 }
 
 static void post_scene()
 {
+    SDL_Renderer* r = ps_graphics_renderer();
+    SDL_SetRenderDrawColorFloat(r, 0, 0, 0, 255);
+    SDL_SetRenderScale(r, 2.f, 2.f);
+    SDL_RenderRect(r, &(SDL_FRect) { 100, 100, 58, 78 });
 }
 
 static void update(size_t timestep_us)

@@ -24,11 +24,9 @@ Scene* ps_create_scenes(size_t n_scenes)
     return scenes;
 }
 
-int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, Context const* ctx)
+int ps_scene_add_image_rect(Scene* scene, resource_idx_t resource_id, SDL_Rect r, Context const* ctx)
 {
-    ps_scene_push_context(scene, &(Context) {
-        .position = { true, { x, y, 0, 0 } },
-    });
+    ps_scene_push_context(scene, &(Context) { .position = { true, r }, });
     if (ctx)
         ps_scene_push_context(scene, ctx);
 
@@ -46,6 +44,12 @@ int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, C
         ps_scene_pop_context(scene);
 
     return 0;
+
+}
+
+int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, Context const* ctx)
+{
+    return ps_scene_add_image_rect(scene, resource_id, (SDL_Rect) { x, y, 0, 0 }, ctx);
 }
 
 int ps_scene_add_image_name(Scene* scene, const char* resource_name, int x, int y, Context const* ctx)
@@ -54,6 +58,14 @@ int ps_scene_add_image_name(Scene* scene, const char* resource_name, int x, int 
     if (idx == RES_ERROR)
         return -1;
     return ps_scene_add_image(scene, idx, x, y, ctx);
+}
+
+int ps_scene_add_image_name_rect(Scene* scene, const char* resource_name, SDL_Rect r, Context const* ctx)
+{
+    resource_idx_t idx = ps_res_idx(resource_name);
+    if (idx == RES_ERROR)
+        return -1;
+    return ps_scene_add_image_rect(scene, idx, r, ctx);
 }
 
 Context const* ps_scene_current_context(Scene const* scene)
