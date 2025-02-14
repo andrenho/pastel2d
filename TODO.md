@@ -1,4 +1,17 @@
-- [ ] Rewrite
+- [ ] Lua tiles
+  - [ ] Build luajit
+  - [ ] Lua file as object, string
+- [ ] Alignment
+- [ ] Rotation + rotation center
+- [ ] Opacity
+- [ ] Draw only what's visible
+- [ ] Text
+  - [ ] Font resource
+  - [ ] Draw text (cache management)
+- [ ] Audio
+- [ ] Cursors
+- [ ] C++ interface
+  - [ ] imgui
 
 Supports:
   - [ ] Ideally self-contained (for libraries)

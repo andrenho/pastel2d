@@ -13,8 +13,6 @@
 #include "graphics.h"
 extern char last_error[LAST_ERROR_SZ];
 
-typedef enum { RT_TEXTURE, RT_TILE } ResourceType;
-
 typedef struct {
     ResourceType type;
     union {
@@ -60,7 +58,7 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_Rect rect, size_t tile_sz)
+resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t tile_sz)
 {
     SDL_Texture* tx = ps_res_get_texture(parent);
     if (tx == NULL)
@@ -123,13 +121,27 @@ resource_idx_t ps_res_idx(const char* name)
     return resource_names[i].value;
 }
 
-SDL_Texture* ps_res_get_texture(resource_idx_t res_id)
+ResourceType ps_res_get_type(resource_idx_t idx)
 {
-    if (resources[res_id].type != RT_TEXTURE) {
+    return resources[idx].type;
+}
+
+SDL_Texture* ps_res_get_texture(resource_idx_t idx)
+{
+    if (resources[idx].type != RT_TEXTURE) {
         snprintf(last_error, sizeof last_error, "Invalid resource (not a texture)");
         return NULL;
     }
-    return resources[res_id].texture;
+    return resources[idx].texture;
+}
+
+Tile const* ps_res_get_tile(resource_idx_t idx)
+{
+    if (resources[idx].type != RT_TILE) {
+        snprintf(last_error, sizeof last_error, "Invalid resource (not a tile)");
+        return NULL;
+    }
+    return &resources[idx].tile;
 }
 
 void ps_res_finalize()

@@ -7,7 +7,7 @@
 static void init_resources()
 {
     resource_idx_t example = ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz));
-    ps_res_name_idx("happy", ps_res_add_tile(example, (SDL_Rect) { 0, 0, 1, 1 }, 32));
+    ps_res_name_idx("happy", ps_res_add_tile(example, (SDL_FRect) { 0, 0, 1, 1 }, 32));
 }
 
 static void event_manager(SDL_Event* e, bool* running)

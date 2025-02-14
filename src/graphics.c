@@ -86,20 +86,46 @@ size_t ps_graphics_timestep_us()
 
 static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context const* ctx)
 {
-    float tw, th;
-    SDL_GetTextureSize(tx, &tw, &th);
-
     SDL_FRect dest = {
         .x = ctx->position.rect.x,
         .y = ctx->position.rect.y,
-        .w = ctx->position.rect.w != 0 ? ctx->position.rect.w : tw,
-        .h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th,
     };
+
+    if (origin != NULL) {
+        dest.w = origin->w;
+        dest.h = origin->h;
+    } else {
+        float tw, th;
+        SDL_GetTextureSize(tx, &tw, &th);
+        dest.w = ctx->position.rect.w != 0 ? ctx->position.rect.w : tw;
+        dest.h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th;
+    }
 
     if (ctx->zoom.has_value)
         SDL_SetRenderScale(ren, ctx->zoom.value, ctx->zoom.value);
     SDL_RenderTexture(ren, tx, origin, &dest);
     SDL_SetRenderScale(ren, 1.f, 1.f);
+}
+
+void render_scene(Scene* scene)
+{
+    for (size_t j = 0; j < (size_t) arrlen(scene->artifacts); ++j) {
+        Artifact const* a = &scene->artifacts[j];
+        switch (a->type) {
+            case A_IMAGE:
+                switch (ps_res_get_type(a->image.res_id)) {
+                    case RT_TEXTURE:
+                        SDL_Texture* tx = ps_res_get_texture(a->image.res_id);
+                        render_texture(tx, NULL, &a->image.context);
+                        break;
+                    case RT_TILE:
+                        Tile const* tile = ps_res_get_tile(a->image.res_id);
+                        render_texture(tile->texture, &tile->rect, &a->image.context);
+                        break;
+                }
+                break;
+        }
+    }
 }
 
 void ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
@@ -110,17 +136,7 @@ void ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
     SDL_RenderClear(ren);
 
     for (size_t i = 0; i < (size_t) arrlen(scenes); ++i) {
-        for (size_t j = 0; j < (size_t) arrlen(scenes[i].artifacts); ++j) {
-            Artifact const* a = &scenes[i].artifacts[j];
-            switch (scenes[i].artifacts[j].type) {
-                case A_IMAGE: {
-                    SDL_Texture* tx = ps_res_get_texture(a->image.res_id);
-                    render_texture(tx, NULL, &a->image.context);
-                    break;
-                }
-            }
-        }
-
+        render_scene(&scenes[i]);
         ps_scene_finalize(&scenes[i]);
     }
 
