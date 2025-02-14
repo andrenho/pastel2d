@@ -4,7 +4,7 @@
 #include "res.h"
 #include "context.h"
 
-typedef enum { A_IMAGE } ArtifactType;
+typedef enum { A_IMAGE, A_TEXT } ArtifactType;
 
 typedef struct {
     resource_idx_t res_id;
@@ -12,9 +12,17 @@ typedef struct {
 } Image;
 
 typedef struct {
+    resource_idx_t font_idx;
+    Context        context;
+    char*          text;
+    SDL_Color      color;
+} Text;
+
+typedef struct {
     ArtifactType type;
     union {
         Image image;
+        Text  text;
     };
 } Artifact;
 

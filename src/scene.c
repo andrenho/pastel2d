@@ -44,7 +44,6 @@ int ps_scene_add_image_rect(Scene* scene, resource_idx_t resource_id, SDL_Rect r
         ps_scene_pop_context(scene);
 
     return 0;
-
 }
 
 int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, Context const* ctx)
@@ -83,6 +82,28 @@ int ps_scene_add_text_name(Scene* scene, const char* resource_name, const char* 
 
 int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, SDL_Color color, Context const* ctx)
 {
+    ps_scene_push_context(scene, &(Context) { .position = { true, rect }, });
+    if (ctx)
+        ps_scene_push_context(scene, ctx);
+
+    Artifact artifact = {
+        .type = A_TEXT,
+        .text = {
+            .font_idx = idx,
+            .context = *ps_scene_current_context(scene),
+            .text = strdup(text),
+            .color = color,
+        },
+    };
+    arrpush(scene->artifacts, artifact);
+
+    ps_scene_pop_context(scene);
+    if (ctx)
+        ps_scene_pop_context(scene);
+
+    return 0;
+
+    // stbtt_MakeCodepointBitmap(font, )
     return 0;
 }
 
@@ -114,6 +135,10 @@ int ps_scene_pop_context(Scene* scene)
 
 int ps_scene_finalize(Scene* scene)
 {
+    for (int i = 0; i < arrlen(scene->artifacts); ++i)
+        if (scene->artifacts[i].type == A_TEXT)
+            free(scene->artifacts[i].text.text);
+
     arrfree(scene->artifacts);
     arrfree(scene->context_stack);
     return 0;

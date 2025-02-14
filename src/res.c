@@ -235,6 +235,15 @@ Tile const* ps_res_get_tile(resource_idx_t idx)
     return &resources[idx].tile;
 }
 
+stbtt_fontinfo const* ps_res_get_font(resource_idx_t idx)
+{
+    if (resources[idx].type != RT_FONT) {
+        snprintf(last_error, sizeof last_error, "Invalid resource (not a font)");
+        return NULL;
+    }
+    return &resources[idx].font;
+}
+
 void ps_res_finalize()
 {
     for (int i = 0; i < arrlen(resources); ++i) {

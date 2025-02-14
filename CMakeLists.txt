@@ -85,6 +85,8 @@ add_library(${PROJECT_NAME} STATIC
         src/context.c
         src/manip.c
         src/manip.h
+        src/textcache.c
+        src/textcache.h
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC

@@ -6,6 +6,7 @@
 
 #include "error.h"
 #include "scene.h"
+#include "textcache.h"
 
 static bool          running_ = true;
 static SDL_Window*   window = NULL;
@@ -73,6 +74,8 @@ bool ps_graphics_running()
 
 int ps_graphics_do_events(void(* event_manager)(SDL_Event* e, bool* running))
 {
+    text_cache_cleanup();
+
     SDL_Event e;
     while (SDL_PollEvent(&e))
         event_manager(&e, &running_);
@@ -154,12 +157,19 @@ int render_scene(Scene* scene)
                         render_texture(tile->texture, &tile->rect, &a->image.context);
                         break;
                     case RT_FONT:
-                        // TODO
                     default:
-                        snprintf(last_error, sizeof last_error, "Invalid type for resource %zu", a->image.res_id);
+                        snprintf(last_error, sizeof last_error, "Invalid type for text resource %zu", a->image.res_id);
                         return -1;
                 }
                 break;
+            case A_TEXT: {
+                stbtt_fontinfo const* font = ps_res_get_font(a->text.font_idx);
+                if (font == NULL)
+                    return -1;
+                SDL_Texture* tx = text_cache_get_texture(font, a->text.text, a->text.color);
+                render_texture(tx, NULL, &a->text.context);
+                break;
+            }
         }
     }
 
