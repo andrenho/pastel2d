@@ -47,6 +47,7 @@ int ps_graphics_init(GraphicsInit const* init)
 
 int ps_graphics_finalize()
 {
+    text_cache_finalize();
     if (ren)
         SDL_DestroyRenderer(ren);
     if (window)
