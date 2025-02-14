@@ -24,9 +24,10 @@ typedef struct {
 
 typedef enum { RT_TEXTURE, RT_TILE } ResourceType;
 
-typedef int (*Manupulator)(uint8_t* pixels, int w, int h, int pitch);
+typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
-resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz, Manupulator manupulator);
+resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
+resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator manupulator, void* manip_data);
 
 resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t tile_sz);
 int            ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size_t tile_sz);

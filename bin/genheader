@@ -2,7 +2,7 @@
 
 local filename, format = unpack(arg)
 
-local varname = filename:gsub("/", "_"):gsub("%.", "_")
+local varname = filename:gsub("/", "_"):gsub("%.", "_"):gsub("-", "_")
 local define = varname:upper() .. "_H_"
 
 local filesize = 0

@@ -83,6 +83,8 @@ add_library(${PROJECT_NAME} STATIC
         src/scene.h
         src/context.h
         src/context.c
+        src/manip.c
+        src/manip.h
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC
@@ -114,6 +116,7 @@ target_link_libraries(pastel2d-example PRIVATE pastel2d)
 
 embed(pastel2d-example example/example.png)
 embed(pastel2d-example example/example.tileset.lua lua-strip)
+embed(pastel2d-example example/example-shadow.tileset.lua lua-strip)
 
 # check for leaks
 

@@ -31,7 +31,12 @@ struct {
     resource_idx_t value;
 } *resource_names = NULL;
 
-resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz, Manupulator manupulator)
+resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
+{
+    return ps_res_add_png_manip(data, sz, NULL, NULL);
+}
+
+resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator manupulator, void* manip_data)
 {
     int w, h, bpp;
     stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &bpp, STBI_rgb_alpha);
@@ -45,8 +50,9 @@ resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz, Manupulator manupu
         return RES_ERROR;
     }
 
-    if (manupulator)
-        manupulator(img, w, h, w * 4);
+    if (manupulator && manupulator(img, w, h, w * 4, manip_data) != 0) {
+        return RES_ERROR;
+    }
 
     SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, img, w * 4);
 
@@ -211,7 +217,7 @@ Tile const* ps_res_get_tile(resource_idx_t idx)
 
 void ps_res_finalize()
 {
-    for (size_t i = 0; i < (size_t) arrlen(resources); ++i) {
+    for (int i = 0; i < arrlen(resources); ++i) {
         switch (resources[i].type) {
             case RT_TEXTURE:
                 SDL_DestroyTexture(resources[i].texture);
@@ -221,7 +227,7 @@ void ps_res_finalize()
         }
     }
 
-    for (size_t i = 0; i < shlen(resource_names); ++i)
+    for (int i = 0; i < shlen(resource_names); ++i)
         free(resource_names[i].key);
 
     shfree(resource_names);

@@ -1,14 +1,23 @@
 #include <stdlib.h>
 
 #include "pastel2d.h"
+#include "manip.h"
+#include "scene.h"
+
+// embedded files
 #include "example.png.h"
 #include "example.tileset.lua.h"
-#include "scene.h"
+#include "example-shadow.tileset.lua.h"
 
 static void init_resources()
 {
-    resource_idx_t example = ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz, NULL));
+    resource_idx_t example = ps_res_add_png(example_example_png, example_example_png_sz);
+
+    SDL_Color shadow = { 0, 0, 0, 255 };
+    resource_idx_t example_shadow = ps_res_add_png_manip(example_example_png, example_example_png_sz, manip_shadow, &shadow);
+
     ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
+    ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz);
 }
 
 static void event_manager(SDL_Event* e, bool* running)
@@ -22,7 +31,7 @@ static Scene* scene_creator(void*)
     Scene* scenes = ps_create_scenes(1);
 
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
-    ps_scene_add_image_name(&scenes[0], "happy", 100, 100, NULL);
+    ps_scene_add_image_name(&scenes[0], "shadow_happy", 100, 100, NULL);
 
     return scenes;
 }
