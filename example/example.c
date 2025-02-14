@@ -37,6 +37,7 @@ static Scene* scene_creator(void*)
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2.f } });
     ps_scene_add_image_name_rect(&scenes[0], "happy", (SDL_Rect) { 100, 100, 58, 78 },
         &(Context) { .rotation = { true, 90 }, .opacity = { true, 20 } });
+    ps_scene_add_text_name(&scenes[0], "font", "Hello world!", 10, 10, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
     return scenes;
 }
