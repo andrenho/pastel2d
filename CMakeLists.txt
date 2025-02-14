@@ -15,6 +15,7 @@ project(pastel2d
 #
 
 set(CMAKE_C_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

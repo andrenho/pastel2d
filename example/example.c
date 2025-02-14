@@ -22,7 +22,7 @@ static Scene* scene_creator(void*)
     Scene* scenes = ps_create_scenes(1);
 
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
-    SDL_assert(ps_scene_add_image_name(&scenes[0], "sad", 100, 100, NULL) == 0);
+    ps_scene_add_image_name(&scenes[0], "sad", 100, 100, NULL);
 
     return scenes;
 }

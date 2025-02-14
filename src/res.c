@@ -95,10 +95,10 @@ int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size
         resource_idx_t idx = ps_res_add_tile(parent, tiles[i].rect, tile_sz);
         if (idx == RES_ERROR)
             return RES_ERROR;
-        if (tiles->idx)
-            *tiles->idx = idx;
-        if (tiles->name)
-            ps_res_name_idx(tiles->name, idx);
+        if (tiles[i].idx)
+            *tiles[i].idx = idx;
+        if (tiles[i].name)
+            ps_res_name_idx(tiles[i].name, idx);
     }
     return 0;
 }
