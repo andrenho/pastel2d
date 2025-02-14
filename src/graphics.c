@@ -18,6 +18,8 @@ extern char last_error[LAST_ERROR_SZ];
 
 int ps_graphics_init(GraphicsInit const* init)
 {
+    srand(time(NULL));
+
     const int linked = SDL_GetVersion();
     SDL_Log("SDL version: %d.%d.%d\n",
         SDL_VERSIONNUM_MAJOR(linked), SDL_VERSIONNUM_MINOR(linked), SDL_VERSIONNUM_MICRO(linked));
