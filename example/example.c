@@ -4,11 +4,9 @@
 #include "example.png.h"
 #include "scene.h"
 
-static resource_idx_t png;
-
 static void init_resources()
 {
-     png = ps_res_add_png(example_example_png, example_example_png_sz);
+     ps_res_name_idx("example", ps_res_add_png(example_example_png, example_example_png_sz));
 }
 
 static void event_manager(SDL_Event* e, bool* running)
@@ -20,7 +18,7 @@ static void event_manager(SDL_Event* e, bool* running)
 static void scene_creator(Scene scenes[MAX_SCENES])
 {
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2 } });
-    ps_scene_add_image(&scenes[0], png, 100, 100, NULL);
+    ps_scene_add_image_name(&scenes[0], "example", 100, 100, NULL);
 }
 
 static void post_scene()

@@ -37,6 +37,14 @@ int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, C
     return 0;
 }
 
+int ps_scene_add_image_name(Scene* scene, const char* resource_name, int x, int y, Context const* ctx)
+{
+    resource_idx_t idx = ps_res_idx(resource_name);
+    if (idx == RES_ERROR)
+        return -1;
+    return ps_scene_add_image(scene, idx, x, y, ctx);
+}
+
 Context const* ps_scene_current_context(Scene const* scene)
 {
     return &scene->context_stack[arrlen(scene->context_stack) - 1];
