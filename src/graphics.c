@@ -169,7 +169,7 @@ int render_scene(Scene* scene)
                 stbtt_fontinfo const* font = ps_res_get_font(a->text.font_idx);
                 if (font == NULL)
                     return -1;
-                SDL_Texture* tx = text_cache_get_texture(font, a->text.text, a->text.color);
+                SDL_Texture* tx = text_cache_get_texture(font, a->text.text, a->text.font_size, a->text.color);
                 render_texture(tx, NULL, &a->text.context);
                 break;
             }
