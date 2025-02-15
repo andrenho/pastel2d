@@ -38,12 +38,12 @@ Context const* ps_scene_current_context(Scene const* scene);
 int            ps_scene_push_context(Scene* scene, Context context);
 int            ps_scene_pop_context(Scene* scene);
 
-int ps_scene_add_image(Scene* scene, resource_idx_t idx, int x, int y, Context const* ctx);
-int ps_scene_add_image_rect(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx);
+int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx);
 
-int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, int x, int y, int font_size, SDL_Color color, Context const* ctx);
-int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx);
+int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx);
 
 int ps_scene_finalize(Scene* scene);
+
+#define POS(x, y) ((SDL_Rect) { x, y, 0, 0 })
 
 #endif //SCENE_H

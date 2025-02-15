@@ -40,12 +40,12 @@ static Scene* scene_creator(void*)
     ps_scene_push_context(&scenes[0], ps_create_context_with(CTX_ZOOM, 2.f, NULL));
 
     Context ctx = ps_create_context_with(CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
-    ps_scene_add_image_rect(&scenes[0], IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 }, &ctx);
+    ps_scene_add_image(&scenes[0], IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 }, &ctx);
 
     ctx = ps_create_context_with(CTX_ZOOM, .5f, NULL);
-    ps_scene_add_text(&scenes[0], IDX("font1"), "Hello world to ALL!", 10, 10, 32, (SDL_Color) { 0, 0, 0, 255 }, &ctx);
+    ps_scene_add_text(&scenes[0], IDX("font1"), "Hello world to ALL!", POS(10, 10), 32, (SDL_Color) { 0, 0, 0, 255 }, &ctx);
 
-    ps_scene_add_text(&scenes[0], IDX("font2"), "Hello world to ALL!", 10, 30, 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
+    ps_scene_add_text(&scenes[0], IDX("font2"), "Hello world to ALL!", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
     return scenes;
 }

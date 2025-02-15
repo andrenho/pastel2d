@@ -23,7 +23,7 @@ Scene* ps_create_scenes(size_t n_scenes)
     return scenes;
 }
 
-int ps_scene_add_image_rect(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx)
+int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx)
 {
     if (idx == RES_ERROR)
         return -1;
@@ -48,17 +48,7 @@ int ps_scene_add_image_rect(Scene* scene, resource_idx_t idx, SDL_Rect r, Contex
     return 0;
 }
 
-int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, Context const* ctx)
-{
-    return ps_scene_add_image_rect(scene, resource_id, (SDL_Rect) { x, y, 0, 0 }, ctx);
-}
-
-int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, int x, int y, int font_size, SDL_Color color, Context const* ctx)
-{
-    return ps_scene_add_text_rect(scene, idx, text, (SDL_Rect) { x, y, 0, 0 }, font_size, color, ctx);
-}
-
-int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx)
+int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx)
 {
     if (idx == RES_ERROR)
         return -1;
