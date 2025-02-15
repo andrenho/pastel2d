@@ -7,8 +7,7 @@ static int ps_scene_init(Scene* scene)
     scene->artifacts = NULL;
     scene->context_stack = NULL;
 
-    Context context = ps_create_context();
-    arrpush(scene->context_stack, context);
+    arrpush(scene->context_stack, ps_create_context());
 
     return 0;
 }
@@ -26,9 +25,9 @@ Scene* ps_create_scenes(size_t n_scenes)
 
 int ps_scene_add_image_rect(Scene* scene, resource_idx_t resource_id, SDL_Rect r, Context const* ctx)
 {
-    ps_scene_push_context(scene, &(Context) { .position = { true, r }, });
+    ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, r, NULL));
     if (ctx)
-        ps_scene_push_context(scene, ctx);
+        ps_scene_push_context(scene, *ctx);
 
     Artifact artifact = {
         .type = A_IMAGE,
@@ -82,9 +81,9 @@ int ps_scene_add_text_name(Scene* scene, const char* resource_name, const char* 
 
 int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx)
 {
-    ps_scene_push_context(scene, &(Context) { .position = { true, rect }, });
+    ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, rect, NULL));
     if (ctx)
-        ps_scene_push_context(scene, ctx);
+        ps_scene_push_context(scene, *ctx);
 
     Artifact artifact = {
         .type = A_TEXT,
@@ -122,9 +121,9 @@ Context const* ps_scene_current_context(Scene const* scene)
     return &scene->context_stack[arrlen(scene->context_stack) - 1];
 }
 
-int ps_scene_push_context(Scene* scene, Context const* context)
+int ps_scene_push_context(Scene* scene, Context context)
 {
-    Context new_context = ps_context_sum(ps_scene_current_context(scene), context);
+    Context new_context = ps_context_sum(ps_scene_current_context(scene), &context);
     arrpush(scene->context_stack, new_context);
     return 0;
 }

@@ -106,39 +106,37 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context con
     } else {  // full texture
         float tw, th;
         SDL_GetTextureSize(tx, &tw, &th);
-        dest.w = ctx->position.rect.w != 0 ? ctx->position.rect.w : tw;
-        dest.h = ctx->position.rect.h != 0 ? ctx->position.rect.h : th;
+        dest.w = ctx->position.w != 0 ? ctx->position.w : tw;
+        dest.h = ctx->position.h != 0 ? ctx->position.h : th;
     }
 
     // calculate position
-    if (ctx->position.rect.w == 0) {
-        dest.x = ctx->position.rect.x;
-        dest.y = ctx->position.rect.y;
+    if (ctx->position.w == 0) {
+        dest.x = ctx->position.x;
+        dest.y = ctx->position.y;
     } else {
-        dest.x = ctx->position.rect.x + ctx->position.rect.w / 2 - dest.w / 2;
-        dest.y = ctx->position.rect.y + ctx->position.rect.h / 2 - dest.h / 2;
+        dest.x = ctx->position.x + ctx->position.w / 2 - dest.w / 2;
+        dest.y = ctx->position.y + ctx->position.h / 2 - dest.h / 2;
     }
 
     // check if within bounds
     int scr_w, scr_h;
     SDL_GetWindowSizeInPixels(window, &scr_w, &scr_h);
-    SDL_FRect scr = { 0, 0, scr_w / (ctx->zoom.has_value ? ctx->zoom.value : 1), scr_h / (ctx->zoom.has_value ? ctx->zoom.value : 1) };
+    SDL_FRect scr = { 0, 0, scr_w / ctx->zoom, scr_h / ctx->zoom };
     if (!SDL_HasRectIntersectionFloat(&scr, &dest))
         return;
 
     // opacity
-    if (ctx->opacity.has_value)
-        SDL_SetTextureAlphaModFloat(tx, ctx->opacity.value / 100.f);
+    SDL_SetTextureAlphaModFloat(tx, ctx->opacity);
 
     // zoom
-    if (ctx->zoom.has_value)
-        SDL_SetRenderScale(ren, ctx->zoom.value, ctx->zoom.value);
+    SDL_SetRenderScale(ren, ctx->zoom, ctx->zoom);
 
     // render with rotation/center
     SDL_RenderTextureRotated(ren, tx,
         origin, &dest,
-        ctx->rotation.value,
-        ctx->rotation_center.has_value ? &ctx->rotation_center.point : NULL,
+        ctx->rotation,
+        ctx->rotation_center.x != DEFAULT_ROT_CENTER ? &ctx->rotation_center : NULL,
         SDL_FLIP_NONE);
 
     // restore

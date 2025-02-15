@@ -37,10 +37,14 @@ static Scene* scene_creator(void*)
 {
     Scene* scenes = ps_create_scenes(1);
 
-    ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2.f } });
-    ps_scene_add_image_name_rect(&scenes[0], "happy", (SDL_Rect) { 100, 100, 58, 78 },
-        &(Context) { .rotation = { true, 90 }, .opacity = { true, 80 } });
-    ps_scene_add_text_name(&scenes[0], "font1", "Hello world to ALL!", 10, 10, 32, (SDL_Color) { 0, 0, 0, 255 }, &(Context) { .zoom = { true, -1.f } });
+    ps_scene_push_context(&scenes[0], ps_create_context_with(CTX_ZOOM, 2.f, NULL));
+
+    Context ctx = ps_create_context_with(CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
+    ps_scene_add_image_name_rect(&scenes[0], "happy", (SDL_Rect) { 100, 100, 58, 78 }, &ctx);
+
+    ctx = ps_create_context_with(CTX_ZOOM, .5f, NULL);
+    ps_scene_add_text_name(&scenes[0], "font1", "Hello world to ALL!", 10, 10, 32, (SDL_Color) { 0, 0, 0, 255 }, &ctx);
+
     ps_scene_add_text_name(&scenes[0], "font2", "Hello world to ALL!", 10, 30, 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
     return scenes;

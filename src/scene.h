@@ -35,7 +35,7 @@ typedef struct {
 Scene*         ps_create_scenes(size_t n_scenes);
 
 Context const* ps_scene_current_context(Scene const* scene);
-int            ps_scene_push_context(Scene* scene, Context const* context);
+int            ps_scene_push_context(Scene* scene, Context context);
 int            ps_scene_pop_context(Scene* scene);
 
 int ps_scene_add_image(Scene* scene, resource_idx_t idx, int x, int y, Context const* ctx);

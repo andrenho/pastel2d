@@ -1,41 +1,65 @@
 #include "context.h"
 
+#include <stdarg.h>
+
 Context ps_create_context()
 {
-    return (Context) {};
+    return (Context) {
+        .position = { 0, 0, 0, 0 },
+        .rotation = 0.f,
+        .zoom = 1.f,
+        .opacity = 1.f,
+        .rotation_center = { DEFAULT_ROT_CENTER, DEFAULT_ROT_CENTER },
+    };
+}
+
+Context ps_create_context_with(ContextProperty props, ...)
+{
+    Context ctx = ps_create_context();
+
+    va_list ap;
+    va_start(ap, props);
+
+    ContextProperty prop = props;
+
+    while (1) {
+        if (prop == CTX_END)
+            break;
+        switch (prop) {
+            case CTX_POSITION:   ctx.position = va_arg(ap, SDL_Rect); break;
+            case CTX_ROTATION:   ctx.rotation = va_arg(ap, double); break;
+            case CTX_ZOOM:       ctx.zoom = va_arg(ap, double); break;
+            case CTX_OPACITY:    ctx.opacity = va_arg(ap, double); break;
+            case CTX_ROT_CENTER: ctx.rotation_center = va_arg(ap, SDL_FPoint); break;
+            case CTX_END: break;
+        }
+
+        prop = va_arg(ap, ContextProperty);
+    }
+
+    va_end(ap);
+
+    return ctx;
 }
 
 Context ps_context_sum(Context const* current, Context const* sum)
 {
     Context context = *current;
 
-    if (sum->position.has_value) {
-        context.position.has_value = true;
-        context.position.rect.x += sum->position.rect.x;
-        context.position.rect.y += sum->position.rect.y;
-        context.position.rect.w = sum->position.rect.w;
-        context.position.rect.h = sum->position.rect.h;
+    context.position.x += sum->position.x;
+    context.position.y += sum->position.y;
+    if (sum->position.w != 0) {
+        context.position.w = sum->position.w;
+        context.position.h = sum->position.h;
     }
 
-    if (sum->rotation.has_value) {
-        context.rotation.has_value = true;
-        context.rotation.value += sum->rotation.value;
-    }
+    context.rotation += sum->rotation;
 
-    if (sum->zoom.has_value) {
-        context.zoom.has_value = true;
-        context.zoom.value += sum->zoom.value;
-    }
+    context.zoom *= sum->zoom;
+    context.opacity *= sum->opacity;
 
-    if (sum->opacity.has_value) {
-        context.opacity.has_value = true;
-        context.opacity.value = sum->opacity.value;
-    }
-
-    if (sum->rotation_center.has_value) {
-        context.rotation_center.has_value = true;
-        context.rotation_center.point = sum->rotation_center.point;
-    }
+    if (sum->rotation_center.x != DEFAULT_ROT_CENTER)
+        context.rotation_center = sum->rotation_center;
 
     return context;
 }

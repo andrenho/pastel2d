@@ -1,33 +1,25 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include <stdbool.h>
+#include <float.h>
 #include <SDL3/SDL_rect.h>
 
-typedef struct {
-    bool       has_value;
-    SDL_FPoint point;
-} ContextPointValue;
+#define DEFAULT_ROT_CENTER FLT_MIN
 
 typedef struct {
-    bool     has_value;
-    SDL_Rect rect;
-} ContextRectValue;
-
-typedef struct {
-    bool  has_value;
-    float value;
-} ContextFloatValue;
-
-typedef struct {
-    ContextRectValue  position;
-    ContextFloatValue rotation;
-    ContextFloatValue zoom;
-    ContextFloatValue opacity;
-    ContextPointValue rotation_center;
+    SDL_Rect   position;
+    float      rotation;
+    float      zoom;
+    float      opacity;
+    SDL_FPoint rotation_center;
 } Context;
 
+typedef enum {
+    CTX_END = 0, CTX_POSITION = 1, CTX_ROTATION, CTX_ZOOM, CTX_OPACITY, CTX_ROT_CENTER,
+} ContextProperty;
+
 Context ps_create_context();
+Context ps_create_context_with(ContextProperty props, ...);
 Context ps_context_sum(Context const* current, Context const* sum);
 
 #endif //CONTEXT_H
