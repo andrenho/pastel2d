@@ -6,9 +6,10 @@
 - [x] Alignment
 - [x] Opacity
 - [x] Draw only what's visible
-- [ ] Text
-  - [ ] Font resource
-  - [ ] Draw text (cache management)
+- [x] Text
+  - [x] Font resource
+  - [x] Draw text (cache management)
+- [ ] Context improvement
 - [ ] Audio
 - [ ] Cursors
 - [ ] FPS on title
