@@ -160,8 +160,9 @@ int render_scene(Scene* scene)
                         render_texture(tile->texture, &tile->rect, &a->image.context);
                         break;
                     case RT_FONT:
+                    case RT_CURSOR:
                     default:
-                        snprintf(last_error, sizeof last_error, "Invalid type for text resource %zu", a->image.res_id);
+                        snprintf(last_error, sizeof last_error, "Invalid type for image resource %zu", a->image.res_id);
                         return -1;
                 }
                 break;

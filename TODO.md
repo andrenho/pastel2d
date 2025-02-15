@@ -9,9 +9,9 @@
 - [x] Text
   - [x] Font resource
   - [x] Draw text (cache management)
-- [ ] Context improvement
+- [x] Context improvement
+- [x] Cursors
 - [ ] Audio
-- [ ] Cursors
 - [ ] FPS on title
 - [ ] C++ interface
   - [ ] imgui

@@ -25,6 +25,7 @@ typedef struct {
         SDL_Texture*   texture;
         Tile           tile;
         stbtt_fontinfo font;
+        SDL_Cursor*    cursor;
     };
 } Resource;
 
@@ -111,7 +112,7 @@ int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size
         if (tiles[i].idx)
             *tiles[i].idx = idx;
         if (tiles[i].name)
-            ps_res_name_idx(tiles[i].name, idx);
+            ps_res_set_name(tiles[i].name, idx);
     }
     return 0;
 }
@@ -188,7 +189,17 @@ resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
     return arrlen(resources) - 1;
 }
 
-int ps_res_name_idx(const char* name, resource_idx_t idx)
+resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
+{
+    Resource resource = {
+        .type = RT_CURSOR,
+        .cursor = cursor,
+    };
+    arrpush(resources, resource);
+    return arrlen(resources) - 1;
+}
+
+int ps_res_set_name(const char* name, resource_idx_t idx)
 {
     if (idx == RES_ERROR)
         return RES_ERROR;
@@ -244,12 +255,24 @@ stbtt_fontinfo const* ps_res_get_font(resource_idx_t idx)
     return &resources[idx].font;
 }
 
+SDL_Cursor* ps_res_get_cursor(resource_idx_t idx)
+{
+    if (resources[idx].type != RT_CURSOR) {
+        snprintf(last_error, sizeof last_error, "Invalid resource (not a cursor)");
+        return NULL;
+    }
+    return resources[idx].cursor;
+}
+
 void ps_res_finalize()
 {
     for (int i = 0; i < arrlen(resources); ++i) {
         switch (resources[i].type) {
             case RT_TEXTURE:
                 SDL_DestroyTexture(resources[i].texture);
+                break;
+            case RT_CURSOR:
+                SDL_DestroyCursor(resources[i].cursor);
                 break;
             case RT_TILE:
             case RT_FONT:
