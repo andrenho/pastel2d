@@ -48,6 +48,17 @@ int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context con
     return 0;
 }
 
+int ps_scene_add_image_with(Scene* scene, resource_idx_t idx, SDL_Rect r, ContextProperty props, ...)
+{
+    va_list ap;
+
+    va_start(ap, props);
+    Context ctx = ps_create_context_with_v(props, ap);
+    va_end(ap);
+
+    return ps_scene_add_image(scene, idx, r, &ctx);
+}
+
 int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx)
 {
     if (idx == RES_ERROR)
@@ -74,9 +85,17 @@ int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Re
         ps_scene_pop_context(scene);
 
     return 0;
+}
 
-    // stbtt_MakeCodepointBitmap(font, )
-    return 0;
+int ps_scene_add_text_with(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ContextProperty props, ...)
+{
+    va_list ap;
+
+    va_start(ap, props);
+    Context ctx = ps_create_context_with_v(props, ap);
+    va_end(ap);
+
+    return ps_scene_add_text(scene, idx, text, rect, font_size, color, &ctx);
 }
 
 Context const* ps_scene_current_context(Scene const* scene)

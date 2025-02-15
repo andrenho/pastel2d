@@ -13,15 +13,11 @@ Context ps_create_context()
     };
 }
 
-Context ps_create_context_with(ContextProperty props, ...)
+Context ps_create_context_with_v(ContextProperty props, va_list ap)
 {
     Context ctx = ps_create_context();
 
-    va_list ap;
-    va_start(ap, props);
-
     ContextProperty prop = props;
-
     while (1) {
         if (prop == CTX_END)
             break;
@@ -37,6 +33,15 @@ Context ps_create_context_with(ContextProperty props, ...)
         prop = va_arg(ap, ContextProperty);
     }
 
+    return ctx;
+}
+
+Context ps_create_context_with(ContextProperty props, ...)
+{
+    va_list ap;
+
+    va_start(ap, props);
+    Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
     return ctx;

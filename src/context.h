@@ -19,6 +19,7 @@ typedef enum {
 } ContextProperty;
 
 Context ps_create_context();
+Context ps_create_context_with_v(ContextProperty props, va_list arg);
 Context ps_create_context_with(ContextProperty props, ...);
 Context ps_context_sum(Context const* current, Context const* sum);
 
