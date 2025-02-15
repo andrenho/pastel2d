@@ -71,9 +71,8 @@ static SDL_Texture* create_text_texture(stbtt_fontinfo const* font, const char* 
         stbtt_MakeCodepointBitmap(font, bitmap + byte_offset, bb_x2 - bb_x1, bb_y2 - bb_y1, MAX_W, scale, scale, *p);
 
         // advance space
-        x += roundf(advance_width * scale);
         int kern = stbtt_GetCodepointKernAdvance(font, *p, *(p + 1));
-        x += kern * scale;
+        x += (advance_width + kern) * scale;
     } while (*(++p) != '\0');
 
     // convert to pixel data using the requested colors
@@ -83,15 +82,16 @@ static SDL_Texture* create_text_texture(stbtt_fontinfo const* font, const char* 
     memset(pixels, 255, sizeof pixels);
     for (x = 0; x < w; ++x) {
         for (int y = 0; y < h; ++y) {
-            pixels[(x + y * h) * 4] = color.r;
-            pixels[(x + y * h) * 4 + 1] = color.g;
-            pixels[(x + y * h) * 4 + 2] = color.b;
-            pixels[(x + y * h) * 4 + 3] = bitmap[x + (y * MAX_W)];
+            pixels[(x + y * w) * 4] = color.r;
+            pixels[(x + y * w) * 4 + 1] = color.g;
+            pixels[(x + y * w) * 4 + 2] = color.b;
+            pixels[(x + y * w) * 4 + 3] = bitmap[x + (y * MAX_W)];
         }
     }
 
     SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, pixels, MAX_W * 4);
     SDL_Texture* tx = SDL_CreateTextureFromSurface(ps_graphics_renderer(), sf);
+    SDL_SetTextureScaleMode(tx, SDL_SCALEMODE_NEAREST);
     SDL_DestroySurface(sf);
 
     return tx;

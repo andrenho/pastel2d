@@ -120,6 +120,7 @@ embed(pastel2d-example example/example.png)
 embed(pastel2d-example example/example.tileset.lua lua-strip)
 embed(pastel2d-example example/example-shadow.tileset.lua lua-strip)
 embed(pastel2d-example example/OpenSans-Medium.ttf)
+embed(pastel2d-example example/Born2bSportyFS.otf)
 
 # check for leaks
 

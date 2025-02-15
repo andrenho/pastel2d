@@ -9,6 +9,7 @@
 #include "example.tileset.lua.h"
 #include "example-shadow.tileset.lua.h"
 #include "OpenSans-Medium.ttf.h"
+#include "Born2bSportyFS.otf.h"
 
 static void init_resources()
 {
@@ -20,8 +21,10 @@ static void init_resources()
     ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
     ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz);
 
-    ps_res_name_idx("font",
-        ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz));
+    SDL_assert(ps_res_name_idx("font1",
+        ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz)) >= 0);
+    SDL_assert(ps_res_name_idx("font2",
+        ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)) >= 0);
 }
 
 static void event_manager(SDL_Event* e, bool* running)
@@ -37,7 +40,8 @@ static Scene* scene_creator(void*)
     ps_scene_push_context(&scenes[0], &(Context) { .zoom = { true, 2.f } });
     ps_scene_add_image_name_rect(&scenes[0], "happy", (SDL_Rect) { 100, 100, 58, 78 },
         &(Context) { .rotation = { true, 90 }, .opacity = { true, 80 } });
-    ps_scene_add_text_name(&scenes[0], "font", "Hello world!", 10, 10, 16, (SDL_Color) { 0, 0, 0, 255 }, NULL);
+    ps_scene_add_text_name(&scenes[0], "font1", "Hello world to ALL!", 10, 10, 32, (SDL_Color) { 0, 0, 0, 255 }, &(Context) { .zoom = { true, -1.f } });
+    ps_scene_add_text_name(&scenes[0], "font2", "Hello world to ALL!", 10, 30, 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
     return scenes;
 }
