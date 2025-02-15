@@ -1,8 +1,10 @@
 #include "graphics.h"
 
+#include <stdio.h>
+#include <time.h>
+
 #include <stb_ds.h>
 #include <SDL3/SDL_timer.h>
-#include <stdio.h>
 
 #include "error.h"
 #include "scene.h"
