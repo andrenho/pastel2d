@@ -47,4 +47,6 @@ stbtt_fontinfo const* ps_res_get_font(resource_idx_t idx);
 
 void ps_res_finalize();
 
+#define IDX ps_res_idx
+
 #endif //RES_H

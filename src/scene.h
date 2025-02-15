@@ -40,13 +40,9 @@ int            ps_scene_pop_context(Scene* scene);
 
 int ps_scene_add_image(Scene* scene, resource_idx_t idx, int x, int y, Context const* ctx);
 int ps_scene_add_image_rect(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx);
-int ps_scene_add_image_name(Scene* scene, const char* resource_name, int x, int y, Context const* ctx);
-int ps_scene_add_image_name_rect(Scene* scene, const char* resource_name, SDL_Rect r, Context const* ctx);
 
 int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, int x, int y, int font_size, SDL_Color color, Context const* ctx);
-int ps_scene_add_text_name(Scene* scene, const char* resource_name, const char* text, int x, int y, int font_size, SDL_Color color, Context const* ctx);
 int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx);
-int ps_scene_add_text_name_rect(Scene* scene, const char* resource_name, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx);
 
 int ps_scene_finalize(Scene* scene);
 

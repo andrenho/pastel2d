@@ -23,8 +23,11 @@ Scene* ps_create_scenes(size_t n_scenes)
     return scenes;
 }
 
-int ps_scene_add_image_rect(Scene* scene, resource_idx_t resource_id, SDL_Rect r, Context const* ctx)
+int ps_scene_add_image_rect(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx)
 {
+    if (idx == RES_ERROR)
+        return -1;
+
     ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, r, NULL));
     if (ctx)
         ps_scene_push_context(scene, *ctx);
@@ -32,7 +35,7 @@ int ps_scene_add_image_rect(Scene* scene, resource_idx_t resource_id, SDL_Rect r
     Artifact artifact = {
         .type = A_IMAGE,
         .image = {
-            .res_id = resource_id,
+            .res_id = idx,
             .context = *ps_scene_current_context(scene),
         },
     };
@@ -50,37 +53,16 @@ int ps_scene_add_image(Scene* scene, resource_idx_t resource_id, int x, int y, C
     return ps_scene_add_image_rect(scene, resource_id, (SDL_Rect) { x, y, 0, 0 }, ctx);
 }
 
-int ps_scene_add_image_name(Scene* scene, const char* resource_name, int x, int y, Context const* ctx)
-{
-    resource_idx_t idx = ps_res_idx(resource_name);
-    if (idx == RES_ERROR)
-        return -1;
-    return ps_scene_add_image(scene, idx, x, y, ctx);
-}
-
-int ps_scene_add_image_name_rect(Scene* scene, const char* resource_name, SDL_Rect r, Context const* ctx)
-{
-    resource_idx_t idx = ps_res_idx(resource_name);
-    if (idx == RES_ERROR)
-        return -1;
-    return ps_scene_add_image_rect(scene, idx, r, ctx);
-}
-
 int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, int x, int y, int font_size, SDL_Color color, Context const* ctx)
 {
     return ps_scene_add_text_rect(scene, idx, text, (SDL_Rect) { x, y, 0, 0 }, font_size, color, ctx);
 }
 
-int ps_scene_add_text_name(Scene* scene, const char* resource_name, const char* text, int x, int y, int font_size, SDL_Color color, Context const* ctx)
-{
-    resource_idx_t idx = ps_res_idx(resource_name);
-    if (idx == RES_ERROR)
-        return -1;
-    return ps_scene_add_text(scene, idx, text, x, y, font_size, color, ctx);
-}
-
 int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx)
 {
+    if (idx == RES_ERROR)
+        return -1;
+
     ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, rect, NULL));
     if (ctx)
         ps_scene_push_context(scene, *ctx);
@@ -105,15 +87,6 @@ int ps_scene_add_text_rect(Scene* scene, resource_idx_t idx, const char* text, S
 
     // stbtt_MakeCodepointBitmap(font, )
     return 0;
-}
-
-int ps_scene_add_text_name_rect(Scene* scene, const char* resource_name, const char* text, SDL_Rect rect,
-    int font_size, SDL_Color color, Context const* ctx)
-{
-    resource_idx_t idx = ps_res_idx(resource_name);
-    if (idx == RES_ERROR)
-        return -1;
-    return ps_scene_add_text_rect(scene, idx, text, rect, font_size, color, ctx);
 }
 
 Context const* ps_scene_current_context(Scene const* scene)
