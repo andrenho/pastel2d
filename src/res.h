@@ -22,7 +22,7 @@ typedef struct {
     SDL_FRect       rect;
 } TileDef;
 
-typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_MUSIC, RT_SOUND, RT_ANY } ResourceType;
+typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_MUSIC, RT_SOUND } ResourceType;
 
 typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
@@ -50,9 +50,10 @@ resource_idx_t ps_res_idx(const char* name);
 int ps_res_finalize();
 
 typedef struct {
-    SDL_AudioSpec  spec;
-    uint8_t*       data;
-    uint32_t       sz;
+    SDL_AudioSpec    spec;
+    uint8_t*         data;
+    uint32_t         sz;
+    SDL_AudioStream* stream;
 } SoundEffect;
 
 typedef struct {

@@ -217,13 +217,17 @@ resource_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
         snprintf(last_error, sizeof last_error, "Could not load WAV file.");
         return RES_ERROR;
     }
+
+    extern SDL_AudioStream* ps_audio_create_stream(SDL_AudioSpec* spec);
+    res.sound.stream = ps_audio_create_stream(&res.sound.spec);
+
     arrpush(resources, res);
     return arrlen(resources) - 1;
 }
 
 Resource const* ps_res_get(resource_idx_t idx, ResourceType validate_resource_type)
 {
-    if (validate_resource_type != RT_ANY && resources[idx].type != validate_resource_type) {
+    if (resources[idx].type != validate_resource_type) {
         snprintf(last_error, sizeof last_error, "Resource requested is not the correct type.");
         return NULL;
     }
@@ -278,16 +282,17 @@ int ps_res_finalize()
                 free(resources[i].music);
                 break;
             case RT_SOUND:
+                SDL_DestroyAudioStream(resources[i].sound.stream);
                 free(resources[i].sound.data);
                 break;
         }
     }
+    arrfree(resources);
 
     for (int i = 0; i < shlen(resource_names); ++i)
         free(resource_names[i].key);
 
     shfree(resource_names);
-    arrfree(resources);
 
     return 0;
 }
