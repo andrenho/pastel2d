@@ -125,6 +125,7 @@ embed(pastel2d-example example/example-shadow.tileset.lua lua-strip)
 embed(pastel2d-example example/OpenSans-Medium.ttf)
 embed(pastel2d-example example/Born2bSportyFS.otf)
 embed(pastel2d-example example/nemesis.mod)
+embed(pastel2d-example example/shotgun.wav)
 
 # check for leaks
 

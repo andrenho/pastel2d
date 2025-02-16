@@ -55,6 +55,16 @@ int ps_audio_play_music(bool play)
     return 0;
 }
 
+int ps_audio_play_sound(resource_idx_t idx)
+{
+    if (idx == RES_ERROR)
+        return -1;
+
+    SoundEffect sound = ps_res_get(idx)->sound;
+    // TODO ...
+    return 0;
+}
+
 int ps_audio_step()
 {
     if (mod_ctx != NULL && playing_music) {

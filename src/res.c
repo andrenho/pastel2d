@@ -207,6 +207,20 @@ resource_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate)
     return arrlen(resources) - 1;
 }
 
+resource_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
+{
+    Resource res = {
+        .type = RT_SOUND,
+    };
+    SDL_IOStream* io = SDL_IOFromConstMem(data, sz);
+    if (!SDL_LoadWAV_IO(io, true, &res.sound.spec, &res.sound.data, &res.sound.sz)) {
+        snprintf(last_error, sizeof last_error, "Could not load WAV file.");
+        return RES_ERROR;
+    }
+    arrpush(resources, res);
+    return arrlen(resources) - 1;
+}
+
 Resource const* ps_res_get(resource_idx_t idx)
 {
     return &resources[idx];
@@ -253,6 +267,9 @@ int ps_res_finalize()
                 break;
             case RT_MUSIC:
                 free(resources[i].music);
+                break;
+            case RT_SOUND:
+                free(resources[i].sound.data);
                 break;
         }
     }

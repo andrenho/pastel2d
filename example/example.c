@@ -11,6 +11,7 @@
 #include "OpenSans-Medium.ttf.h"
 #include "Born2bSportyFS.otf.h"
 #include "nemesis.mod.h"
+#include "shotgun.wav.h"
 
 static void init_resources()
 {
@@ -26,12 +27,16 @@ static void init_resources()
     SDL_assert(NAME("font2", ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)) != RES_ERROR);
 
     SDL_assert(NAME("music", ps_res_add_music(example_nemesis_mod, example_nemesis_mod_sz, 44100)) != RES_ERROR);
+
+    SDL_assert(NAME("sound", ps_red_add_sound(example_shotgun_wav, example_shotgun_wav_sz)) != RES_ERROR);
 }
 
 static void event_manager(SDL_Event* e, bool* running)
 {
     if (e->type == SDL_EVENT_QUIT || (e->type == SDL_EVENT_KEY_DOWN && e->key.key == SDLK_Q))
         *running = false;
+    if (e->type == SDL_EVENT_KEY_DOWN && e->key.key == SDLK_SPACE)
+        ps_audio_play_sound(IDX("sound"));
 }
 
 static Scene* scene_creator(void*)
@@ -46,7 +51,7 @@ static Scene* scene_creator(void*)
     ps_scene_add_text_with(&scenes[0], IDX("font1"), "Hello world to ALL!", POS(10, 10), 32, (SDL_Color) { 0, 0, 0, 255 },
         CTX_ZOOM, .5f, NULL);
 
-    ps_scene_add_text(&scenes[0], IDX("font2"), "Hello world to ALL!", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
+    ps_scene_add_text(&scenes[0], IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
     return scenes;
 }

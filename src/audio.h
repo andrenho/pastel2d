@@ -11,4 +11,6 @@ int ps_audio_step();
 int ps_audio_choose_music(resource_idx_t idx);
 int ps_audio_play_music(bool play);
 
+int ps_audio_play_sound(resource_idx_t idx);
+
 #endif //AUDIO_H

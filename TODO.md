@@ -16,6 +16,7 @@
   - [ ] WAV
 - [ ] What about return values?
   - [ ] Create assertion function
+  - [ ] Rename everything (structs) to use ps_
 - [ ] Compression
 - [ ] FPS on title
 - [ ] C++ interface
