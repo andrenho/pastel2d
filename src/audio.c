@@ -88,7 +88,7 @@ int ps_audio_play_sound(resource_idx_t idx)
 int ps_audio_step()
 {
     if (mod_ctx != NULL && playing_music) {
-        static float samples[44100];
+        static float samples[8000];
         size_t sz = pocketmod_render((pocketmod_context *) mod_ctx, samples, sizeof samples);
         SDL_PutAudioStreamData(music_stream, samples, sz);
     }
