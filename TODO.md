@@ -18,6 +18,7 @@
   - [ ] Create assertion function
   - [ ] Rename everything (structs) to use ps_
   - [ ] Optionally, add SDL3 as static library
+  - [ ] Return version
 - [ ] Compression
 - [ ] FPS on title
 - [ ] C++ interface
