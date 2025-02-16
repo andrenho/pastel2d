@@ -12,10 +12,10 @@
 - [x] Context improvement
 - [x] Cursors
 - [ ] Audio
-  - [ ] MOD
+  - [x] MOD
   - [ ] WAV
 - [ ] What about return values?
-  - [ ] Stronger type checking
+  - [ ] Create assertion function
 - [ ] Compression
 - [ ] FPS on title
 - [ ] C++ interface
