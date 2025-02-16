@@ -90,16 +90,16 @@ int main()
 
     init_resources();
 
-    SDL_assert(ps_audio_choose_music(IDX("music")) == 0);
-    ps_audio_play_music(true);
+    PS_ASRT(ps_audio_choose_music(IDX("music")));
+    PS_ASRT(ps_audio_play_music(true));
 
     while (ps_graphics_running()) {
-        ps_graphics_do_events(event_manager);
-        ps_audio_step();
+        PS_ASRT(ps_graphics_do_events(event_manager));
+        PS_ASRT(ps_audio_step());
         update(ps_graphics_timestep_us());
-        ps_graphics_render_scene(scene_creator, NULL);
+        PS_ASRT(ps_graphics_render_scene(scene_creator, NULL));
         post_scene();
-        ps_graphics_present();
+        PS_ASRT(ps_graphics_present());
     }
 
     ps_finalize();
