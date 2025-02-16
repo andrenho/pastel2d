@@ -19,8 +19,12 @@
   - [x] Rename everything (structs) to use ps_
   - [x] Return version
 - [x] FPS on title
+- [ ] Loop function?
+  - [ ] Remove event handler?
 - [ ] C++ interface
-  - [ ] imgui
+  - [ ] New library
+  - [ ] Write code
+  - [ ] Add ImGUI?
 - [ ] Write README.md
 
 Supports:
