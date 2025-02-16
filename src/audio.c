@@ -40,16 +40,16 @@ int ps_audio_finalize()
     return 0;
 }
 
-int ps_audio_choose_mod(resource_idx_t idx)
+int ps_audio_choose_music(resource_idx_t idx)
 {
     if (idx == RES_ERROR)
         return -1;
 
-    mod_ctx = ps_res_get(idx)->mod;
+    mod_ctx = ps_res_get(idx)->music;
     return 0;
 }
 
-int ps_audio_play_mod(bool play)
+int ps_audio_play_music(bool play)
 {
     playing_music = play;
     return 0;

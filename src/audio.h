@@ -6,9 +6,9 @@
 int ps_audio_init();
 int ps_audio_finalize();
 
-int ps_audio_choose_mod(resource_idx_t idx);
-int ps_audio_play_mod(bool play);
-
 int ps_audio_step();
+
+int ps_audio_choose_music(resource_idx_t idx);
+int ps_audio_play_music(bool play);
 
 #endif //AUDIO_H

@@ -22,7 +22,7 @@ typedef struct {
     SDL_FRect       rect;
 } TileDef;
 
-typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_AUDIO_MOD } ResourceType;
+typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_MUSIC } ResourceType;
 
 typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
@@ -40,7 +40,7 @@ resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz);
 
 resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor);
 
-resource_idx_t ps_res_add_audio_mod(uint8_t const* data, size_t sz, int rate);
+resource_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate);
 
 int            ps_res_set_name(const char* name, resource_idx_t idx);
 resource_idx_t ps_res_idx(const char* name);
@@ -54,7 +54,7 @@ typedef struct {
         Tile               tile;
         stbtt_fontinfo*    font;
         SDL_Cursor*        cursor;
-        pocketmod_context* mod;
+        pocketmod_context* music;
     };
 } Resource;
 

@@ -193,13 +193,13 @@ resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_res_add_audio_mod(uint8_t const* data, size_t sz, int rate)
+resource_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate)
 {
     Resource res = {
-        .type = RT_AUDIO_MOD,
-        .mod = malloc(sizeof(pocketmod_context))
+        .type = RT_MUSIC,
+        .music = malloc(sizeof(pocketmod_context))
     };
-    if (pocketmod_init(res.mod, data, sz, rate) == 0) {
+    if (pocketmod_init(res.music, data, sz, rate) == 0) {
         snprintf(last_error, sizeof last_error, "Could not load MOD file.");
         return RES_ERROR;
     }
@@ -251,8 +251,8 @@ int ps_res_finalize()
             case RT_FONT:
                 free(resources[i].font);
                 break;
-            case RT_AUDIO_MOD:
-                free(resources[i].mod);
+            case RT_MUSIC:
+                free(resources[i].music);
                 break;
         }
     }

@@ -162,7 +162,7 @@ int render_scene(Scene* scene)
                         break;
                     case RT_FONT:
                     case RT_CURSOR:
-                    case RT_AUDIO_MOD:
+                    case RT_MUSIC:
                         snprintf(last_error, sizeof last_error, "Invalid type for image resource %zu", a->image.res_id);
                         return -1;
                 }
