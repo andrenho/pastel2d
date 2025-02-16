@@ -91,14 +91,9 @@ bool ps_graphics_running()
     return running_;
 }
 
-int ps_graphics_do_events(void(* event_manager)(SDL_Event* e, bool* running))
+void ps_graphics_quit()
 {
-    text_cache_cleanup();
-
-    SDL_Event e;
-    while (SDL_PollEvent(&e))
-        event_manager(&e, &running_);
-    return 0;
+    running_ = false;
 }
 
 size_t ps_graphics_timestep_us()
@@ -217,6 +212,8 @@ int ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* data)
 
 int ps_graphics_present()
 {
+    text_cache_cleanup();
+
     char new_window_title[512];
     snprintf(new_window_title, sizeof new_window_title, "%s (FPS %d)", window_title, (int) fps);
     SDL_SetWindowTitle(window, new_window_title);
