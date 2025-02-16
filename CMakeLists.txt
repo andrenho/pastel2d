@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(pastel2d
-        VERSION 1.0.0
+        VERSION 0.1.0
         DESCRIPTION "A 2D thin static game library built on top of SDL2, Lua and ImGui."
         LANGUAGES C
 )
@@ -34,6 +34,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_options(-Ofast -flto)
 endif()
 
+add_compile_definitions(
+        PROJECT_VERSION=\"${PROJECT_VERSION}\"
+        PROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+        PROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+        PROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH}
+)
 
 #
 # external libraries

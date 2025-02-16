@@ -4,47 +4,47 @@
 #include "res.h"
 #include "context.h"
 
-typedef enum { A_IMAGE, A_TEXT } ArtifactType;
+typedef enum { A_IMAGE, A_TEXT } ps_ArtifactType;
 
 typedef struct {
-    resource_idx_t res_id;
-    Context        context;
-} Image;
+    ps_res_idx_t res_id;
+    ps_Context        context;
+} ps_Image;
 
 typedef struct {
-    resource_idx_t font_idx;
-    Context        context;
+    ps_res_idx_t font_idx;
+    ps_Context        context;
     char*          text;
     int            font_size;
     SDL_Color      color;
-} Text;
+} ps_Text;
 
 typedef struct {
-    ArtifactType type;
+    ps_ArtifactType type;
     union {
-        Image image;
-        Text  text;
+        ps_Image image;
+        ps_Text  text;
     };
-} Artifact;
+} ps_Artifact;
 
 typedef struct {
-    Artifact* artifacts;
-    Context*  context_stack;
-} Scene;
+    ps_Artifact* artifacts;
+    ps_Context*  context_stack;
+} ps_Scene;
 
-Scene*         ps_create_scenes(size_t n_scenes);
+ps_Scene*      ps_create_scenes(size_t n_scenes);
 
-Context const* ps_scene_current_context(Scene const* scene);
-int            ps_scene_push_context(Scene* scene, Context context);
-int            ps_scene_pop_context(Scene* scene);
+ps_Context const* ps_scene_current_context(ps_Scene const* scene);
+int            ps_scene_push_context(ps_Scene* scene, ps_Context context);
+int            ps_scene_pop_context(ps_Scene* scene);
 
-int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx);
-int ps_scene_add_image_with(Scene* scene, resource_idx_t idx, SDL_Rect r, ContextProperty props, ...);
+int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx);
+int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_ContextProperty props, ...);
 
-int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx);
-int ps_scene_add_text_with(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ContextProperty props, ...);
+int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_Context const* ctx);
+int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_ContextProperty props, ...);
 
-int ps_scene_finalize(Scene* scene);
+int ps_scene_finalize(ps_Scene* scene);
 
 #define POS(x, y) ((SDL_Rect) { x, y, 0, 0 })
 

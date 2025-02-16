@@ -15,14 +15,15 @@
   - [x] MOD
   - [x] WAV
 - [ ] What about return values?
-  - [ ] Create assertion function
-  - [ ] Rename everything (structs) to use ps_
-  - [ ] Optionally, add SDL3 as static library
-  - [ ] Return version
+  - [x] Create assertion function
+  - [x] Rename everything (structs) to use ps_
+  - [x] Return version
 - [ ] Compression
+- [ ] Optionally, add SDL3 as static library
 - [ ] FPS on title
 - [ ] C++ interface
   - [ ] imgui
+- [ ] Write README.md
 
 Supports:
   - [ ] Ideally self-contained (for libraries)

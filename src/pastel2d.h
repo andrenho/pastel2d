@@ -7,7 +7,9 @@
 #include "audio.h"
 #include "passert.h"
 
-int ps_init(GraphicsInit const* graphics);
+int ps_init(ps_GraphicsInit const* graphics);
 int ps_finalize();
+
+const char* ps_version(uint8_t* major, uint8_t* minor, uint8_t* patch);
 
 #endif //PASTEL2D_HH

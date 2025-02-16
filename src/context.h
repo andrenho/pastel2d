@@ -12,15 +12,15 @@ typedef struct {
     float      zoom;
     float      opacity;
     SDL_FPoint rotation_center;
-} Context;
+} ps_Context;
 
 typedef enum {
     CTX_END = 0, CTX_POSITION = 1, CTX_ROTATION, CTX_ZOOM, CTX_OPACITY, CTX_ROT_CENTER,
-} ContextProperty;
+} ps_ContextProperty;
 
-Context ps_create_context();
-Context ps_create_context_with_v(ContextProperty props, va_list arg);
-Context ps_create_context_with(ContextProperty props, ...);
-Context ps_context_sum(Context const* current, Context const* sum);
+ps_Context ps_create_context();
+ps_Context ps_create_context_with_v(ps_ContextProperty props, va_list arg);
+ps_Context ps_create_context_with(ps_ContextProperty props, ...);
+ps_Context ps_context_sum(ps_Context const* current, ps_Context const* sum);
 
 #endif //CONTEXT_H

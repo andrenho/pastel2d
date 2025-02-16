@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-int manip_shadow(uint8_t* pixels, int w, int h, int pitch, void* data);
+int ps_manip_shadow(uint8_t* pixels, int w, int h, int pitch, void* data);
 
 #endif //MANIP_H

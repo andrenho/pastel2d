@@ -22,25 +22,25 @@
 #include "graphics.h"
 extern char last_error[LAST_ERROR_SZ];
 
-static Resource* resources;
+static ps_Resource* resources;
 
 struct {
     char*          key;
-    resource_idx_t value;
+    ps_res_idx_t value;
 } *resource_names = NULL;
 
 int ps_res_init()
 {
-    arrpush(resources, (Resource) {});  // index 0 is always an error
+    arrpush(resources, (ps_Resource) {});  // index 0 is always an error
     return 0;
 }
 
-resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
+ps_res_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
 {
     return ps_res_add_png_manip(data, sz, NULL, NULL);
 }
 
-resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator manupulator, void* manip_data)
+ps_res_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data)
 {
     int w, h, bpp;
     stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &bpp, STBI_rgb_alpha);
@@ -66,7 +66,7 @@ resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator 
 
     SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
-    Resource res = {
+    ps_Resource res = {
         .type = RT_TEXTURE,
         .texture = texture,
     };
@@ -74,7 +74,7 @@ resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator 
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t tile_sz)
+ps_res_idx_t ps_res_add_tile(ps_res_idx_t parent, SDL_FRect rect, size_t tile_sz)
 {
     SDL_Texture* tx = ps_res_get(parent, RT_TEXTURE)->texture;
     if (tx == NULL)
@@ -86,7 +86,7 @@ resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t til
         rect.w = rect.h = 1;
 #pragma GCC diagnostic pop
 
-    Resource res = {
+    ps_Resource res = {
         .type = RT_TILE,
         .tile = {
             .texture = tx,
@@ -102,10 +102,10 @@ resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t til
     return arrlen(resources) - 1;
 }
 
-int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size_t tile_sz)
+int ps_res_add_tiles(ps_res_idx_t parent, ps_TileDef* tiles, size_t n_tiles, size_t tile_sz)
 {
     for (size_t i = 0; i < n_tiles; ++i) {
-        resource_idx_t idx = ps_res_add_tile(parent, tiles[i].rect, tile_sz);
+        ps_res_idx_t idx = ps_res_add_tile(parent, tiles[i].rect, tile_sz);
         if (idx == RES_ERROR)
             return RES_ERROR;
         if (tiles[i].idx)
@@ -116,7 +116,7 @@ int ps_res_add_tiles(resource_idx_t parent, TileDef* tiles, size_t n_tiles, size
     return 0;
 }
 
-int ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t sz)
+int ps_res_add_tiles_from_lua(ps_res_idx_t parent, uint8_t const* data, size_t sz)
 {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
@@ -141,11 +141,11 @@ int ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t
     lua_getfield(L, -1, "tiles");
     CHECK(lua_istable(L, -1), "Expected table `tiles`.");
 
-    TileDef* tiles = NULL;
+    ps_TileDef* tiles = NULL;
 
     lua_pushnil(L);
     while (lua_next(L, -2) != 0) {
-        TileDef tile = {
+        ps_TileDef tile = {
             .name = strdup(lua_tostring(L, -2)),
         };
 
@@ -175,9 +175,9 @@ int ps_res_add_tiles_from_lua(resource_idx_t parent, uint8_t const* data, size_t
     return 0;
 }
 
-resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
+ps_res_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
 {
-    Resource resource = {
+    ps_Resource resource = {
         .type = RT_FONT,
         .font = malloc(sizeof(stbtt_fontinfo)),
     };
@@ -189,9 +189,9 @@ resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
+ps_res_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
 {
-    Resource resource = {
+    ps_Resource resource = {
         .type = RT_CURSOR,
         .cursor = cursor,
     };
@@ -199,9 +199,9 @@ resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate)
+ps_res_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate)
 {
-    Resource res = {
+    ps_Resource res = {
         .type = RT_MUSIC,
         .music = malloc(sizeof(pocketmod_context))
     };
@@ -213,9 +213,9 @@ resource_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate)
     return arrlen(resources) - 1;
 }
 
-resource_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
+ps_res_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
 {
-    Resource res = {
+    ps_Resource res = {
         .type = RT_SOUND,
     };
     SDL_IOStream* io = SDL_IOFromConstMem(data, sz);
@@ -231,7 +231,7 @@ resource_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
     return arrlen(resources) - 1;
 }
 
-Resource const* ps_res_get(resource_idx_t idx, ResourceType validate_resource_type)
+ps_Resource const* ps_res_get(ps_res_idx_t idx, ps_ResourceType validate_resource_type)
 {
     if (resources[idx].type != validate_resource_type) {
         snprintf(last_error, sizeof last_error, "Resource requested is not the correct type.");
@@ -240,12 +240,12 @@ Resource const* ps_res_get(resource_idx_t idx, ResourceType validate_resource_ty
     return &resources[idx];
 }
 
-ResourceType ps_res_get_type(resource_idx_t idx)
+ps_ResourceType ps_res_get_type(ps_res_idx_t idx)
 {
     return resources[idx].type;
 }
 
-int ps_res_set_name(const char* name, resource_idx_t idx)
+int ps_res_set_name(const char* name, ps_res_idx_t idx)
 {
     if (idx == RES_ERROR)
         return RES_ERROR;
@@ -259,7 +259,7 @@ int ps_res_set_name(const char* name, resource_idx_t idx)
     return 0;
 }
 
-resource_idx_t ps_res_idx(const char* name)
+ps_res_idx_t ps_res_idx(const char* name)
 {
     ptrdiff_t i = shgeti(resource_names, name);
     if (i == -1) {

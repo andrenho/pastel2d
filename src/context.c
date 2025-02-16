@@ -2,9 +2,9 @@
 
 #include <stdarg.h>
 
-Context ps_create_context()
+ps_Context ps_create_context()
 {
-    return (Context) {
+    return (ps_Context) {
         .position = { 0, 0, 0, 0 },
         .rotation = 0.f,
         .zoom = 1.f,
@@ -13,11 +13,11 @@ Context ps_create_context()
     };
 }
 
-Context ps_create_context_with_v(ContextProperty props, va_list ap)
+ps_Context ps_create_context_with_v(ps_ContextProperty props, va_list ap)
 {
-    Context ctx = ps_create_context();
+    ps_Context ctx = ps_create_context();
 
-    ContextProperty prop = props;
+    ps_ContextProperty prop = props;
     while (1) {
         if (prop == CTX_END)
             break;
@@ -30,26 +30,26 @@ Context ps_create_context_with_v(ContextProperty props, va_list ap)
             case CTX_END: break;
         }
 
-        prop = va_arg(ap, ContextProperty);
+        prop = va_arg(ap, ps_ContextProperty);
     }
 
     return ctx;
 }
 
-Context ps_create_context_with(ContextProperty props, ...)
+ps_Context ps_create_context_with(ps_ContextProperty props, ...)
 {
     va_list ap;
 
     va_start(ap, props);
-    Context ctx = ps_create_context_with_v(props, ap);
+    ps_Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
     return ctx;
 }
 
-Context ps_context_sum(Context const* current, Context const* sum)
+ps_Context ps_context_sum(ps_Context const* current, ps_Context const* sum)
 {
-    Context context = *current;
+    ps_Context context = *current;
 
     context.position.x += sum->position.x;
     context.position.y += sum->position.y;

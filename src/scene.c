@@ -2,7 +2,7 @@
 
 #include <stb_ds.h>
 
-static int ps_scene_init(Scene* scene)
+static int ps_scene_init(ps_Scene* scene)
 {
     scene->artifacts = NULL;
     scene->context_stack = NULL;
@@ -12,18 +12,18 @@ static int ps_scene_init(Scene* scene)
     return 0;
 }
 
-Scene* ps_create_scenes(size_t n_scenes)
+ps_Scene* ps_create_scenes(size_t n_scenes)
 {
-    Scene* scenes = NULL;
+    ps_Scene* scenes = NULL;
     for (size_t i = 0; i < n_scenes; ++i) {
-        Scene scene;
+        ps_Scene scene;
         ps_scene_init(&scene);
         arrpush(scenes, scene);
     }
     return scenes;
 }
 
-int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context const* ctx)
+int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx)
 {
     if (idx == RES_ERROR)
         return -1;
@@ -32,7 +32,7 @@ int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context con
     if (ctx)
         ps_scene_push_context(scene, *ctx);
 
-    Artifact artifact = {
+    ps_Artifact artifact = {
         .type = A_IMAGE,
         .image = {
             .res_id = idx,
@@ -48,18 +48,18 @@ int ps_scene_add_image(Scene* scene, resource_idx_t idx, SDL_Rect r, Context con
     return 0;
 }
 
-int ps_scene_add_image_with(Scene* scene, resource_idx_t idx, SDL_Rect r, ContextProperty props, ...)
+int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_ContextProperty props, ...)
 {
     va_list ap;
 
     va_start(ap, props);
-    Context ctx = ps_create_context_with_v(props, ap);
+    ps_Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
     return ps_scene_add_image(scene, idx, r, &ctx);
 }
 
-int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, Context const* ctx)
+int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_Context const* ctx)
 {
     if (idx == RES_ERROR)
         return -1;
@@ -68,7 +68,7 @@ int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Re
     if (ctx)
         ps_scene_push_context(scene, *ctx);
 
-    Artifact artifact = {
+    ps_Artifact artifact = {
         .type = A_TEXT,
         .text = {
             .font_idx = idx,
@@ -87,36 +87,36 @@ int ps_scene_add_text(Scene* scene, resource_idx_t idx, const char* text, SDL_Re
     return 0;
 }
 
-int ps_scene_add_text_with(Scene* scene, resource_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ContextProperty props, ...)
+int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_ContextProperty props, ...)
 {
     va_list ap;
 
     va_start(ap, props);
-    Context ctx = ps_create_context_with_v(props, ap);
+    ps_Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
     return ps_scene_add_text(scene, idx, text, rect, font_size, color, &ctx);
 }
 
-Context const* ps_scene_current_context(Scene const* scene)
+ps_Context const* ps_scene_current_context(ps_Scene const* scene)
 {
     return &scene->context_stack[arrlen(scene->context_stack) - 1];
 }
 
-int ps_scene_push_context(Scene* scene, Context context)
+int ps_scene_push_context(ps_Scene* scene, ps_Context context)
 {
-    Context new_context = ps_context_sum(ps_scene_current_context(scene), &context);
+    ps_Context new_context = ps_context_sum(ps_scene_current_context(scene), &context);
     arrpush(scene->context_stack, new_context);
     return 0;
 }
 
-int ps_scene_pop_context(Scene* scene)
+int ps_scene_pop_context(ps_Scene* scene)
 {
     arrpop(scene->context_stack);
     return 0;
 }
 
-int ps_scene_finalize(Scene* scene)
+int ps_scene_finalize(ps_Scene* scene)
 {
     for (int i = 0; i < arrlen(scene->artifacts); ++i)
         if (scene->artifacts[i].type == A_TEXT)

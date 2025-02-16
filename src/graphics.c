@@ -19,7 +19,7 @@ static uint8_t       bg_r = 0, bg_g = 0, bg_b = 0;
 
 extern char last_error[LAST_ERROR_SZ];
 
-int ps_graphics_init(GraphicsInit const* init)
+int ps_graphics_init(ps_GraphicsInit const* init)
 {
     srand(time(NULL));
 
@@ -96,7 +96,7 @@ size_t ps_graphics_timestep_us()
     return SDL_NS_TO_US(diff);
 }
 
-static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context const* ctx)
+static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_Context const* ctx)
 {
     SDL_FRect dest = {};
 
@@ -145,10 +145,10 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, Context con
     SDL_SetTextureAlphaModFloat(tx, 1.0f);
 }
 
-int render_scene(Scene* scene)
+int render_scene(ps_Scene* scene)
 {
     for (size_t j = 0; j < (size_t) arrlen(scene->artifacts); ++j) {
-        Artifact const* a = &scene->artifacts[j];
+        ps_Artifact const* a = &scene->artifacts[j];
         switch (a->type) {
             case A_IMAGE:
                 switch (ps_res_get_type(a->image.res_id)) {
@@ -157,7 +157,7 @@ int render_scene(Scene* scene)
                         render_texture(tx, NULL, &a->image.context);
                         break;
                     case RT_TILE:
-                        Tile const* tile = &ps_res_get(a->image.res_id, RT_TILE)->tile;
+                        ps_Tile const* tile = &ps_res_get(a->image.res_id, RT_TILE)->tile;
                         render_texture(tile->texture, &tile->rect, &a->image.context);
                         break;
                     case RT_FONT:
@@ -182,9 +182,9 @@ int render_scene(Scene* scene)
     return 0;
 }
 
-int ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data)
+int ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* data)
 {
-    Scene* scenes = scene_creator(data);
+    ps_Scene* scenes = scene_creator(data);
 
     SDL_SetRenderDrawColor(ren, bg_r, bg_g, bg_b, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(ren);

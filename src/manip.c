@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <SDL3/SDL.h>
 
-int manip_shadow(uint8_t* pixels, int w, int h, int pitch, void* data)
+int ps_manip_shadow(uint8_t* pixels, int w, int h, int pitch, void* data)
 {
     SDL_Color* shadow_color = (SDL_Color *) data;
 

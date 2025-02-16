@@ -15,16 +15,16 @@ typedef struct {
     const char*     appversion;
     const char*     appidentifier;
     SDL_WindowFlags flags;
-} GraphicsInit;
+} ps_GraphicsInit;
 
-int    ps_graphics_init(GraphicsInit const* init);
+int    ps_graphics_init(ps_GraphicsInit const* init);
 int    ps_graphics_finalize();
 
 int    ps_graphics_set_bg(uint8_t r, uint8_t g, uint8_t b);
 
 int    ps_graphics_do_events(void (*event_manager)(SDL_Event* e, bool* running));
 
-int    ps_graphics_render_scene(Scene* (*scene_creator)(void* data), void* data);
+int    ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* data);
 int    ps_graphics_present();
 
 bool          ps_graphics_running();

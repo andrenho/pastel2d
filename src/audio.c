@@ -45,7 +45,7 @@ SDL_AudioStream* ps_audio_create_stream(SDL_AudioSpec* spec)  // private in res.
 }
 
 
-int ps_audio_choose_music(resource_idx_t idx)
+int ps_audio_choose_music(ps_res_idx_t idx)
 {
     if (idx == RES_ERROR)
         return -1;
@@ -77,12 +77,12 @@ int ps_audio_play_music(bool play)
     return 0;
 }
 
-int ps_audio_play_sound(resource_idx_t idx)
+int ps_audio_play_sound(ps_res_idx_t idx)
 {
     if (idx == RES_ERROR)
         return -1;
 
-    SoundEffect sound = ps_res_get(idx, RT_SOUND)->sound;
+    ps_SoundEffect sound = ps_res_get(idx, RT_SOUND)->sound;
 
     if (SDL_GetAudioStreamAvailable(sound.stream) < ((int) sound.sz)) {
         SDL_PutAudioStreamData(sound.stream, sound.data, sound.sz);
