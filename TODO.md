@@ -13,7 +13,7 @@
 - [x] Cursors
 - [ ] Audio
   - [x] MOD
-  - [ ] WAV
+  - [x] WAV
 - [ ] What about return values?
   - [ ] Create assertion function
   - [ ] Rename everything (structs) to use ps_
