@@ -45,7 +45,7 @@ resource_idx_t ps_res_add_audio_mod(uint8_t const* data, size_t sz, int rate);
 int            ps_res_set_name(const char* name, resource_idx_t idx);
 resource_idx_t ps_res_idx(const char* name);
 
-void ps_res_finalize();
+int ps_res_finalize();
 
 typedef struct {
     ResourceType type;

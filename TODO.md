@@ -12,6 +12,11 @@
 - [x] Context improvement
 - [x] Cursors
 - [ ] Audio
+  - [ ] MOD
+  - [ ] WAV
+- [ ] What about return values?
+  - [ ] Stronger type checking
+- [ ] Compression
 - [ ] FPS on title
 - [ ] C++ interface
   - [ ] imgui

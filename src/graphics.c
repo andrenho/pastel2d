@@ -47,8 +47,6 @@ int ps_graphics_init(GraphicsInit const* init)
 
     last_frame = SDL_GetTicksNS();
 
-    audio_init();
-
     return 0;
 }
 

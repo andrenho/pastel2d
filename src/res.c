@@ -236,7 +236,7 @@ resource_idx_t ps_res_idx(const char* name)
     return resource_names[i].value;
 }
 
-void ps_res_finalize()
+int ps_res_finalize()
 {
     for (int i = 0; i < arrlen(resources); ++i) {
         switch (resources[i].type) {
@@ -262,5 +262,7 @@ void ps_res_finalize()
 
     shfree(resource_names);
     arrfree(resources);
+
+    return 0;
 }
 

@@ -4,7 +4,9 @@
 #include "graphics.h"
 #include "res.h"
 #include "error.h"
+#include "audio.h"
 
-void ps_finalize();
+int ps_init(GraphicsInit const* graphics);
+int ps_finalize();
 
 #endif //PASTEL2D_HH

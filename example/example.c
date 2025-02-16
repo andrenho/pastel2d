@@ -73,7 +73,7 @@ int main()
 {
     SDL_SetAssertionHandler(assertion_handler, NULL);
 
-    ps_graphics_init(&(GraphicsInit) {
+    ps_init(&(GraphicsInit) {
         .appname = "pastel2d-example",
         .appidentifier = "com.github.pastel2d",
         .appversion = "1.0.0",
@@ -85,8 +85,12 @@ int main()
 
     init_resources();
 
+    SDL_assert(ps_audio_choose_mod(IDX("music")) == 0);
+    ps_audio_play_mod(true);
+
     while (ps_graphics_running()) {
         ps_graphics_do_events(event_manager);
+        ps_audio_step();
         update(ps_graphics_timestep_us());
         ps_graphics_render_scene(scene_creator, NULL);
         post_scene();
