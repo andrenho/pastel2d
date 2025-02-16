@@ -6,7 +6,7 @@
 
 #include <SDL3/SDL.h>
 
-#define RES_ERROR -1
+#define RES_ERROR 0
 
 typedef ssize_t resource_idx_t;
 
@@ -29,6 +29,9 @@ typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data)
 typedef struct stbtt_fontinfo stbtt_fontinfo;
 typedef struct pocketmod_context pocketmod_context;
 
+int ps_res_init();
+int ps_res_finalize();
+
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
 resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator manupulator, void* manip_data);
 
@@ -46,8 +49,6 @@ resource_idx_t ps_red_add_sound(uint8_t const* data, size_t sz);
 
 int            ps_res_set_name(const char* name, resource_idx_t idx);
 resource_idx_t ps_res_idx(const char* name);
-
-int ps_res_finalize();
 
 typedef struct {
     SDL_AudioSpec    spec;

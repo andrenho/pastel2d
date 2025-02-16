@@ -15,20 +15,20 @@
 
 static void init_resources()
 {
-    resource_idx_t example = ps_res_add_png(example_example_png, example_example_png_sz);
+    resource_idx_t example = PS_ASRT_RES(ps_res_add_png(example_example_png, example_example_png_sz));
 
     SDL_Color shadow = { 0, 0, 0, 255 };
-    resource_idx_t example_shadow = ps_res_add_png_manip(example_example_png, example_example_png_sz, manip_shadow, &shadow);
+    resource_idx_t example_shadow = PS_ASRT_RES(ps_res_add_png_manip(example_example_png, example_example_png_sz, manip_shadow, &shadow));
 
-    ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
-    ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz);
+    PS_ASRT(ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz));
+    PS_ASRT(ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz));
 
-    SDL_assert(NAME("font1", ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz)) != RES_ERROR);
-    SDL_assert(NAME("font2", ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)) != RES_ERROR);
+    NAME("font1", PS_ASRT_RES(ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz)));
+    NAME("font2", PS_ASRT_RES(ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)));
 
-    SDL_assert(NAME("music", ps_res_add_music(example_nemesis_mod, example_nemesis_mod_sz, 44100)) != RES_ERROR);
+    NAME("music", PS_ASRT_RES(ps_res_add_music(example_nemesis_mod, example_nemesis_mod_sz, 44100)));
 
-    SDL_assert(NAME("sound", ps_red_add_sound(example_shotgun_wav, example_shotgun_wav_sz)) != RES_ERROR);
+    NAME("sound", PS_ASRT_RES(ps_red_add_sound(example_shotgun_wav, example_shotgun_wav_sz)));
 }
 
 static void event_manager(SDL_Event* e, bool* running)
@@ -36,17 +36,17 @@ static void event_manager(SDL_Event* e, bool* running)
     if (e->type == SDL_EVENT_QUIT || (e->type == SDL_EVENT_KEY_DOWN && e->key.key == SDLK_Q))
         *running = false;
     if (e->type == SDL_EVENT_KEY_DOWN && e->key.key == SDLK_SPACE)
-        ps_audio_play_sound(IDX("sound"));
+        PS_ASRT(ps_audio_play_sound(IDX("sound")));
 }
 
 static Scene* scene_creator(void*)
 {
     Scene* scenes = ps_create_scenes(1);
 
-    ps_scene_push_context(&scenes[0], ps_create_context_with(CTX_ZOOM, 2.f, NULL));
+    PS_ASRT(ps_scene_push_context(&scenes[0], ps_create_context_with(CTX_ZOOM, 2.f, NULL)));
 
-    ps_scene_add_image_with(&scenes[0], IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 },
-        CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
+    PS_ASRT(ps_scene_add_image_with(&scenes[0], IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 },
+        CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL));
 
     ps_scene_add_text_with(&scenes[0], IDX("font1"), "Hello world to ALL!", POS(10, 10), 32, (SDL_Color) { 0, 0, 0, 255 },
         CTX_ZOOM, .5f, NULL);

@@ -5,6 +5,7 @@
 #include "res.h"
 #include "error.h"
 #include "audio.h"
+#include "passert.h"
 
 int ps_init(GraphicsInit const* graphics);
 int ps_finalize();

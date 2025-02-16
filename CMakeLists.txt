@@ -89,6 +89,8 @@ add_library(${PROJECT_NAME} STATIC
         src/textcache.h
         src/audio.c
         src/audio.h
+        src/passert.h
+        src/passert.c
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC

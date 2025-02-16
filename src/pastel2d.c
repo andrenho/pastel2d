@@ -2,6 +2,8 @@
 
 int ps_init(GraphicsInit const* graphics)
 {
+    if (ps_res_init() != 0)
+        return -1;
     if (ps_graphics_init(graphics) != 0)
         return -1;
     if (ps_audio_init() != 0)

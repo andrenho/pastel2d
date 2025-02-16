@@ -29,6 +29,12 @@ struct {
     resource_idx_t value;
 } *resource_names = NULL;
 
+int ps_res_init()
+{
+    arrpush(resources, (Resource) {});  // index 0 is always an error
+    return 0;
+}
+
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
 {
     return ps_res_add_png_manip(data, sz, NULL, NULL);
