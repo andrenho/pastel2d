@@ -16,6 +16,7 @@ project(pastel2d
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fms-extensions")
 
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -109,8 +110,8 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
             luajit::lib luajit::header
-        PUBLIC
             SDL3::SDL3
+        PUBLIC
             m
 )
 target_compile_options(${PROJECT_NAME}
@@ -125,7 +126,7 @@ add_executable(pastel2d-example EXCLUDE_FROM_ALL
 )
 target_compile_options(pastel2d-example
         PRIVATE ${warnings})
-target_link_libraries(pastel2d-example PRIVATE pastel2d)
+target_link_libraries(pastel2d-example PRIVATE pastel2d SDL3::SDL3)
 
 embed(pastel2d-example example/example.png)
 embed(pastel2d-example example/example.tileset.lua lua-strip)

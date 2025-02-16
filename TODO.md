@@ -11,16 +11,14 @@
   - [x] Draw text (cache management)
 - [x] Context improvement
 - [x] Cursors
-- [ ] Audio
+- [x] Audio
   - [x] MOD
   - [x] WAV
-- [ ] What about return values?
+- [x] What about return values?
   - [x] Create assertion function
   - [x] Rename everything (structs) to use ps_
   - [x] Return version
-- [ ] Compression
-- [ ] Optionally, add SDL3 as static library
-- [ ] FPS on title
+- [x] FPS on title
 - [ ] C++ interface
   - [ ] imgui
 - [ ] Write README.md

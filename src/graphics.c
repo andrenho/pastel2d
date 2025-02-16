@@ -16,8 +16,21 @@ static SDL_Window*   window = NULL;
 static SDL_Renderer* ren = NULL;
 static uint64_t      last_frame = 0;
 static uint8_t       bg_r = 0, bg_g = 0, bg_b = 0;
+static char          window_title[256];
+
+// FPS calculation
+static uint64_t      frame_count = 0;
+static double        fps = 0.0;
+static bool          show_fps = false;
 
 extern char last_error[LAST_ERROR_SZ];
+
+static uint32_t update_fps(void* userdata, SDL_TimerID timer_id, uint32_t interval)
+{
+    fps = (double) frame_count / (double) interval * 1000.0;
+    frame_count = 0;
+    return 1000;
+}
 
 int ps_graphics_init(ps_GraphicsInit const* init)
 {
@@ -36,7 +49,6 @@ int ps_graphics_init(ps_GraphicsInit const* init)
 
     SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 
-    char window_title[256];
     snprintf(window_title, sizeof window_title, "%s %s", init->appname, init->appversion);
     if (!SDL_CreateWindowAndRenderer(init->appname, init->window_w, init->window_h, init->flags, &window, &ren)) {
         snprintf(last_error, sizeof last_error, "Could not create window: %s", SDL_GetError());
@@ -46,6 +58,7 @@ int ps_graphics_init(ps_GraphicsInit const* init)
     SDL_Log("Current SDL_Renderer: %s", SDL_GetRendererName(ren));
 
     last_frame = SDL_GetTicksNS();
+    SDL_AddTimer(1000, update_fps, NULL);
 
     return 0;
 }
@@ -93,6 +106,8 @@ size_t ps_graphics_timestep_us()
     uint64_t now = SDL_GetTicksNS();
     uint64_t diff = now - last_frame;
     last_frame = now;
+    ++frame_count;
+
     return SDL_NS_TO_US(diff);
 }
 
@@ -202,6 +217,10 @@ int ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* data)
 
 int ps_graphics_present()
 {
+    char new_window_title[512];
+    snprintf(new_window_title, sizeof new_window_title, "%s (FPS %d)", window_title, (int) fps);
+    SDL_SetWindowTitle(window, new_window_title);
+
     return SDL_RenderPresent(ren) ? 0 : -1;
 }
 

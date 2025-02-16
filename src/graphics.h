@@ -28,7 +28,7 @@ int    ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* da
 int    ps_graphics_present();
 
 bool          ps_graphics_running();
-size_t        ps_graphics_timestep_us();
+size_t        ps_graphics_timestep_us();   // call only once per frame
 SDL_Window*   ps_graphics_window();
 SDL_Renderer* ps_graphics_renderer();
 
