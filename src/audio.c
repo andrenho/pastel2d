@@ -12,7 +12,6 @@ extern char last_error[LAST_ERROR_SZ];
 static SDL_AudioStream* music_stream = NULL;
 static SDL_AudioDeviceID device;
 static pocketmod_context const* mod_ctx = NULL;
-static bool playing_music = false;
 
 int ps_audio_init()
 {
@@ -62,12 +61,19 @@ int ps_audio_choose_music(resource_idx_t idx)
     if (music_stream == NULL)
         return -1;
 
+    SDL_ClearAudioStream(music_stream);
+
+    SDL_PauseAudioStreamDevice(music_stream);
+
     return 0;
 }
 
 int ps_audio_play_music(bool play)
 {
-    playing_music = play;
+    if (play)
+        SDL_ResumeAudioStreamDevice(music_stream);
+    else
+        SDL_PauseAudioStreamDevice(music_stream);
     return 0;
 }
 
@@ -87,10 +93,13 @@ int ps_audio_play_sound(resource_idx_t idx)
 
 int ps_audio_step()
 {
-    if (mod_ctx != NULL && playing_music) {
-        static float samples[8000];
-        size_t sz = pocketmod_render((pocketmod_context *) mod_ctx, samples, sizeof samples);
-        SDL_PutAudioStreamData(music_stream, samples, sz);
+    if (mod_ctx != NULL) {
+        // keep 200k in audio queue at all times
+        if (SDL_GetAudioStreamAvailable(music_stream) < 200000) {
+            static float samples[8000];
+            size_t sz = pocketmod_render((pocketmod_context *) mod_ctx, samples, sizeof samples);
+            SDL_PutAudioStreamData(music_stream, samples, sz);
+        }
     }
 
     return 0;
