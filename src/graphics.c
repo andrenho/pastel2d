@@ -151,25 +151,26 @@ int render_scene(Scene* scene)
         Artifact const* a = &scene->artifacts[j];
         switch (a->type) {
             case A_IMAGE:
-                switch (ps_res_get(a->image.res_id)->type) {
+                switch (ps_res_get_type(a->image.res_id)) {
                     case RT_TEXTURE:
-                        SDL_Texture* tx = ps_res_get(a->image.res_id)->texture;
+                        SDL_Texture* tx = ps_res_get(a->image.res_id, RT_TEXTURE)->texture;
                         render_texture(tx, NULL, &a->image.context);
                         break;
                     case RT_TILE:
-                        Tile const* tile = &ps_res_get(a->image.res_id)->tile;
+                        Tile const* tile = &ps_res_get(a->image.res_id, RT_TILE)->tile;
                         render_texture(tile->texture, &tile->rect, &a->image.context);
                         break;
                     case RT_FONT:
                     case RT_CURSOR:
                     case RT_MUSIC:
                     case RT_SOUND:
+                    case RT_ANY:
                         snprintf(last_error, sizeof last_error, "Invalid type for image resource %zu", a->image.res_id);
                         return -1;
                 }
                 break;
             case A_TEXT: {
-                stbtt_fontinfo const* font = ps_res_get(a->text.font_idx)->font;
+                stbtt_fontinfo const* font = ps_res_get(a->text.font_idx, RT_FONT)->font;
                 if (font == NULL)
                     return -1;
                 SDL_Texture* tx = text_cache_get_texture(font, a->text.text, a->text.font_size, a->text.color);

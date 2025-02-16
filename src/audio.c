@@ -45,7 +45,7 @@ int ps_audio_choose_music(resource_idx_t idx)
     if (idx == RES_ERROR)
         return -1;
 
-    mod_ctx = ps_res_get(idx)->music;
+    mod_ctx = ps_res_get(idx, RT_MUSIC)->music;
     return 0;
 }
 
@@ -60,7 +60,7 @@ int ps_audio_play_sound(resource_idx_t idx)
     if (idx == RES_ERROR)
         return -1;
 
-    SoundEffect sound = ps_res_get(idx)->sound;
+    SoundEffect sound = ps_res_get(idx, RT_SOUND)->sound;
     // TODO ...
     return 0;
 }

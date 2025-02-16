@@ -70,7 +70,7 @@ resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator 
 
 resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t tile_sz)
 {
-    SDL_Texture* tx = ps_res_get(parent)->texture;
+    SDL_Texture* tx = ps_res_get(parent, RT_TEXTURE)->texture;
     if (tx == NULL)
         return RES_ERROR;
 
@@ -221,9 +221,18 @@ resource_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
     return arrlen(resources) - 1;
 }
 
-Resource const* ps_res_get(resource_idx_t idx)
+Resource const* ps_res_get(resource_idx_t idx, ResourceType validate_resource_type)
 {
+    if (validate_resource_type != RT_ANY && resources[idx].type != validate_resource_type) {
+        snprintf(last_error, sizeof last_error, "Resource requested is not the correct type.");
+        return NULL;
+    }
     return &resources[idx];
+}
+
+ResourceType ps_res_get_type(resource_idx_t idx)
+{
+    return resources[idx].type;
 }
 
 int ps_res_set_name(const char* name, resource_idx_t idx)

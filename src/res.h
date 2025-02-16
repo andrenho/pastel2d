@@ -22,7 +22,7 @@ typedef struct {
     SDL_FRect       rect;
 } TileDef;
 
-typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_MUSIC, RT_SOUND } ResourceType;
+typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_MUSIC, RT_SOUND, RT_ANY } ResourceType;
 
 typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
@@ -67,7 +67,8 @@ typedef struct {
     };
 } Resource;
 
-Resource const* ps_res_get(resource_idx_t idx);
+Resource const* ps_res_get(resource_idx_t idx, ResourceType validate_resource_type);
+ResourceType    ps_res_get_type(resource_idx_t idx);
 
 #define NAME ps_res_set_name
 #define IDX ps_res_idx
