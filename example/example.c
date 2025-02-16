@@ -10,6 +10,7 @@
 #include "example-shadow.tileset.lua.h"
 #include "OpenSans-Medium.ttf.h"
 #include "Born2bSportyFS.otf.h"
+#include "nemesis.mod.h"
 
 static void init_resources()
 {
@@ -21,8 +22,10 @@ static void init_resources()
     ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
     ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz);
 
-    SDL_assert(NAME("font1", ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz)) >= 0);
-    SDL_assert(NAME("font2", ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)) >= 0);
+    SDL_assert(NAME("font1", ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz)) != RES_ERROR);
+    SDL_assert(NAME("font2", ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)) != RES_ERROR);
+
+    SDL_assert(NAME("music", ps_res_add_audio_mod(example_nemesis_mod, example_nemesis_mod_sz, 44100)) != RES_ERROR);
 }
 
 static void event_manager(SDL_Event* e, bool* running)

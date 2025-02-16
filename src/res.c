@@ -15,19 +15,12 @@
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
 
+#define POCKETMOD_IMPLEMENTATION
+#include <pocketmod.h>
+
 #include "error.h"
 #include "graphics.h"
 extern char last_error[LAST_ERROR_SZ];
-
-typedef struct {
-    ResourceType type;
-    union {
-        SDL_Texture*   texture;
-        Tile           tile;
-        stbtt_fontinfo font;
-        SDL_Cursor*    cursor;
-    };
-} Resource;
 
 static Resource* resources;
 
@@ -77,7 +70,7 @@ resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator 
 
 resource_idx_t ps_res_add_tile(resource_idx_t parent, SDL_FRect rect, size_t tile_sz)
 {
-    SDL_Texture* tx = ps_res_get_texture(parent);
+    SDL_Texture* tx = ps_res_get(parent)->texture;
     if (tx == NULL)
         return RES_ERROR;
 
@@ -180,8 +173,9 @@ resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
 {
     Resource resource = {
         .type = RT_FONT,
+        .font = malloc(sizeof(stbtt_fontinfo)),
     };
-    if (!stbtt_InitFont(&resource.font, data, 0)) {
+    if (!stbtt_InitFont(resource.font, data, 0)) {
         snprintf(last_error, sizeof last_error, "Could not load TTF file.");
         return RES_ERROR;
     }
@@ -197,6 +191,25 @@ resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
     };
     arrpush(resources, resource);
     return arrlen(resources) - 1;
+}
+
+resource_idx_t ps_res_add_audio_mod(uint8_t const* data, size_t sz, int rate)
+{
+    Resource res = {
+        .type = RT_AUDIO_MOD,
+        .mod = malloc(sizeof(pocketmod_context))
+    };
+    if (pocketmod_init(res.mod, data, sz, rate) == 0) {
+        snprintf(last_error, sizeof last_error, "Could not load MOD file.");
+        return RES_ERROR;
+    }
+    arrpush(resources, res);
+    return arrlen(resources) - 1;
+}
+
+Resource const* ps_res_get(resource_idx_t idx)
+{
+    return &resources[idx];
 }
 
 int ps_res_set_name(const char* name, resource_idx_t idx)
@@ -223,47 +236,6 @@ resource_idx_t ps_res_idx(const char* name)
     return resource_names[i].value;
 }
 
-ResourceType ps_res_get_type(resource_idx_t idx)
-{
-    return resources[idx].type;
-}
-
-SDL_Texture* ps_res_get_texture(resource_idx_t idx)
-{
-    if (resources[idx].type != RT_TEXTURE) {
-        snprintf(last_error, sizeof last_error, "Invalid resource (not a texture)");
-        return NULL;
-    }
-    return resources[idx].texture;
-}
-
-Tile const* ps_res_get_tile(resource_idx_t idx)
-{
-    if (resources[idx].type != RT_TILE) {
-        snprintf(last_error, sizeof last_error, "Invalid resource (not a tile)");
-        return NULL;
-    }
-    return &resources[idx].tile;
-}
-
-stbtt_fontinfo const* ps_res_get_font(resource_idx_t idx)
-{
-    if (resources[idx].type != RT_FONT) {
-        snprintf(last_error, sizeof last_error, "Invalid resource (not a font)");
-        return NULL;
-    }
-    return &resources[idx].font;
-}
-
-SDL_Cursor* ps_res_get_cursor(resource_idx_t idx)
-{
-    if (resources[idx].type != RT_CURSOR) {
-        snprintf(last_error, sizeof last_error, "Invalid resource (not a cursor)");
-        return NULL;
-    }
-    return resources[idx].cursor;
-}
-
 void ps_res_finalize()
 {
     for (int i = 0; i < arrlen(resources); ++i) {
@@ -275,7 +247,12 @@ void ps_res_finalize()
                 SDL_DestroyCursor(resources[i].cursor);
                 break;
             case RT_TILE:
+                break;
             case RT_FONT:
+                free(resources[i].font);
+                break;
+            case RT_AUDIO_MOD:
+                free(resources[i].mod);
                 break;
         }
     }

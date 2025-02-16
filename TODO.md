@@ -29,3 +29,8 @@ Supports:
   - [ ] Resource management: by id / by string
     - [ ] Texture, tile, sound, cursors, fonts
     - [ ] Text texture caching
+
+
+- https://github.com/RandyGaul/cute_headers
+- https://github.com/p-ranav/awesome-hpp?tab=readme-ov-file
+- https://github.com/nothings/stb

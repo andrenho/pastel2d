@@ -22,11 +22,12 @@ typedef struct {
     SDL_FRect       rect;
 } TileDef;
 
-typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR } ResourceType;
+typedef enum { RT_TEXTURE, RT_TILE, RT_FONT, RT_CURSOR, RT_AUDIO_MOD } ResourceType;
 
 typedef int (*Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
 typedef struct stbtt_fontinfo stbtt_fontinfo;
+typedef struct pocketmod_context pocketmod_context;
 
 resource_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
 resource_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, Manipulator manupulator, void* manip_data);
@@ -39,16 +40,25 @@ resource_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz);
 
 resource_idx_t ps_res_add_cursor(SDL_Cursor* cursor);
 
+resource_idx_t ps_res_add_audio_mod(uint8_t const* data, size_t sz, int rate);
+
 int            ps_res_set_name(const char* name, resource_idx_t idx);
 resource_idx_t ps_res_idx(const char* name);
 
-ResourceType          ps_res_get_type(resource_idx_t idx);
-SDL_Texture*          ps_res_get_texture(resource_idx_t idx);
-Tile const*           ps_res_get_tile(resource_idx_t idx);
-stbtt_fontinfo const* ps_res_get_font(resource_idx_t idx);
-SDL_Cursor*           ps_res_get_cursor(resource_idx_t idx);
-
 void ps_res_finalize();
+
+typedef struct {
+    ResourceType type;
+    union {
+        SDL_Texture*       texture;
+        Tile               tile;
+        stbtt_fontinfo*    font;
+        SDL_Cursor*        cursor;
+        pocketmod_context* mod;
+    };
+} Resource;
+
+Resource const* ps_res_get(resource_idx_t idx);
 
 #define NAME ps_res_set_name
 #define IDX ps_res_idx

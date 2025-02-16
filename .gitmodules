@@ -7,3 +7,6 @@
 [submodule "contrib/luajit-cmake"]
 	path = contrib/luajit-cmake
 	url = https://github.com/zhaozg/luajit-cmake.git
+[submodule "contrib/pocketmod"]
+	path = contrib/pocketmod
+	url = https://github.com/rombankzero/pocketmod.git

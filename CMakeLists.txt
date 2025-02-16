@@ -87,6 +87,8 @@ add_library(${PROJECT_NAME} STATIC
         src/manip.h
         src/textcache.c
         src/textcache.h
+        src/audio.c
+        src/audio.h
 )
 target_include_directories(${PROJECT_NAME}
         PUBLIC
@@ -94,6 +96,7 @@ target_include_directories(${PROJECT_NAME}
             ${CMAKE_CURRENT_BINARY_DIR}/generated
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
+            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pocketmod
 )
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
@@ -121,6 +124,7 @@ embed(pastel2d-example example/example.tileset.lua lua-strip)
 embed(pastel2d-example example/example-shadow.tileset.lua lua-strip)
 embed(pastel2d-example example/OpenSans-Medium.ttf)
 embed(pastel2d-example example/Born2bSportyFS.otf)
+embed(pastel2d-example example/nemesis.mod)
 
 # check for leaks
 
