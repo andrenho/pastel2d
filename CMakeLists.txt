@@ -14,6 +14,8 @@ project(pastel2d
 # configuration
 #
 
+include(ExternalProject)
+
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -48,8 +50,27 @@ add_compile_definitions(
 #
 
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
-set(LUAJIT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT)
-add_subdirectory(contrib/luajit-cmake)
+
+# LuaJIT
+
+if (APPLE)
+    execute_process(
+            COMMAND sw_vers -productVersion
+            OUTPUT_VARIABLE MACOS_VERSION
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    string(REGEX REPLACE "^([0-9]+\\.[0-9]+).*$" "\\1" MACOS_MAJOR_MINOR_VERSION "${MACOS_VERSION}")
+endif()
+
+ExternalProject_Add(luajit
+        SOURCE_DIR ${PROJECT_SOURCE_DIR}/contrib/LuaJIT/src
+        INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND MACOSX_DEPLOYMENT_TARGET=${MACOS_MAJOR_MINOR_VERSION} make -j8 libluajit.a
+        BUILD_IN_SOURCE 1
+        INSTALL_COMMAND cp <SOURCE_DIR>/libluajit.a <INSTALL_DIR>
+        INSTALL_BYPRODUCTS <INSTALL_DIR>/libluajit.a
+)
 
 #
 # function to generate embedded file
@@ -78,7 +99,7 @@ endfunction()
 # C library
 #
 
-add_library(${PROJECT_NAME} STATIC
+add_library(pastel2d-temp STATIC EXCLUDE_FROM_ALL
         src/graphics.h
         src/graphics.c
         src/pastel2d.h
@@ -107,23 +128,47 @@ add_library(${PROJECT_NAME} STATIC
         src/pastel2d.cc
 )
 
-target_include_directories(${PROJECT_NAME}
+target_include_directories(pastel2d-temp
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
             ${CMAKE_CURRENT_BINARY_DIR}/generated
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pocketmod
 )
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(pastel2d-temp
         PRIVATE
-            luajit::lib luajit::header
             SDL3::SDL3
         PUBLIC
             m
 )
-target_compile_options(${PROJECT_NAME}
+target_compile_options(pastel2d-temp
         PRIVATE ${warnings})
+
+#
+# join libraries
+#
+
+add_custom_target(combined
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMAND ar -M <${CMAKE_CURRENT_SOURCE_DIR}/libpastel2d.mri
+        DEPENDS pastel2d-temp luajit)
+
+add_library(pastel2d STATIC IMPORTED GLOBAL)
+add_dependencies(pastel2d combined)
+
+set_target_properties(pastel2d
+        PROPERTIES
+        IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/libpastel2d.a
+)
+
+#target_include_directories(${PROJECT_NAME}
+#        PUBLIC
+#            ${CMAKE_CURRENT_SOURCE_DIR}/src
+#            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
+#            ${CMAKE_CURRENT_BINARY_DIR}/generated
+#)
 
 #
 # sample executable - C
