@@ -157,7 +157,9 @@ target_compile_options(pastel2d-temp
 
 add_custom_target(combined
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMAND ar -M <${CMAKE_CURRENT_SOURCE_DIR}/libpastel2d.mri
+        # COMMAND ar -M <${CMAKE_CURRENT_SOURCE_DIR}/libpastel2d.mri
+        COMMAND libtool -static -o libpastel2d.a libpastel2d-temp.a libluajit.a
+        BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/libpastel2d.a
         DEPENDS pastel2d-temp luajit)
 
 add_library(pastel2d STATIC IMPORTED GLOBAL)
