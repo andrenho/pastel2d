@@ -163,12 +163,14 @@ set_target_properties(pastel2d
         IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/libpastel2d.a
 )
 
-#target_include_directories(${PROJECT_NAME}
-#        PUBLIC
-#            ${CMAKE_CURRENT_SOURCE_DIR}/src
-#            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
-#            ${CMAKE_CURRENT_BINARY_DIR}/generated
-#)
+target_include_directories(pastel2d
+    INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
+        ${CMAKE_CURRENT_BINARY_DIR}/generated
+)
+
+target_link_libraries(pastel2d INTERFACE m)
 
 #
 # sample executable - C
