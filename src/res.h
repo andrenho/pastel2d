@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include <SDL3/SDL.h>
+#include <sys/types.h>
 
 #define RES_ERROR 0
 
