@@ -12,4 +12,6 @@ Features:
  - C and C++ library versions
 
 How to use:
- - Example in C: 
+ - Example in C: [example.c](https://github.com/andrenho/pastel2d/blob/master/example/example.c)
+ - Example in C++: [example.cc](https://github.com/andrenho/pastel2d/blob/master/example/example.cc)
+ - How to embed binaries and use the library: [CMakeLists.txt](https://github.com/andrenho/pastel2d/blob/de8d75955d64305763db24ad35a28c36a2c552ef/CMakeLists.txt#L154)
