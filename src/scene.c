@@ -7,11 +7,11 @@ extern char last_error[LAST_ERROR_SZ];
 
 static int ps_scene_init(ps_Scene* scene)
 {
-    scene->artifacts = NULL;
     scene->context_stack = NULL;
-    scene->initialized = true;
-
     arrpush(scene->context_stack, ps_create_context());
+
+    scene->artifacts = NULL;
+    scene->initialized = true;
 
     return 0;
 }

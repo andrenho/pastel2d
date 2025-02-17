@@ -84,7 +84,7 @@ int main()
         update(ps_graphics_timestep_us());
         PS_ASRT(ps_audio_step());
 
-        ps_Scene scenes[1];
+        ps_Scene scenes[1] = {};
         create_scene(&scenes[0]);
         PS_ASRT(ps_graphics_render_scenes(scenes, 1));
 
