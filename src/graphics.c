@@ -9,7 +9,7 @@
 #include "audio.h"
 #include "error.h"
 #include "scene.h"
-#include "textcache.h"
+#include "private/textcache.h"
 
 #include "private/res_priv.h"
 

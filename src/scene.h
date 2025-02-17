@@ -32,11 +32,11 @@ typedef struct {
     ps_Context*  context_stack;
 } ps_Scene;
 
-ps_Scene*      ps_create_scenes(size_t n_scenes);
+ps_Scene*         ps_create_scenes(size_t n_scenes);
 
 ps_Context const* ps_scene_current_context(ps_Scene const* scene);
-int            ps_scene_push_context(ps_Scene* scene, ps_Context context);
-int            ps_scene_pop_context(ps_Scene* scene);
+int               ps_scene_push_context(ps_Scene* scene, ps_Context context);
+int               ps_scene_pop_context(ps_Scene* scene);
 
 int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx);
 int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_ContextProperty props, ...);

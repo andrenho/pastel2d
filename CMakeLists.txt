@@ -93,8 +93,8 @@ set(PASTEL2D_C_SRC
         src/context.c
         src/manip.c
         src/manip.h
-        src/textcache.c
-        src/textcache.h
+        src/private/textcache.c
+        src/private/textcache.h
         src/audio.c
         src/audio.h
         src/passert.h
