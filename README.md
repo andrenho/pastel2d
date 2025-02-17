@@ -5,6 +5,9 @@
 **pastel2d** is 2D very thin static game library built on top of SDL3 and LuaJIT. Its main focus is its ability to embed
 graphics, audio and libraries into it, making it possible to distribute a single executable containing the whole game.
 
+(for example, the sample application that contains graphics, music, sound effects and all libraries except SDL3 embedded
+is generated with only 1.4 Mb in release mode).
+
 Features:
  - binary resource embedding (graphics, fonts, audios, Lua scripts)
  - 2D scene construction
