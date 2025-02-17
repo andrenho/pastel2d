@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "private/scene_priv.h"
 
 #include <stb_ds.h>
 #include <stdio.h>

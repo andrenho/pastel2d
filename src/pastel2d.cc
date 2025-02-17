@@ -33,6 +33,15 @@ std::tuple<uint8_t, uint8_t, uint8_t> version_number()
 }
 
 //
+// scene
+//
+
+Scene::Scene()
+{
+    ps_scene_init(&scene_);
+}
+
+//
 // graphics
 //
 
@@ -46,9 +55,12 @@ void          quit() { ps_graphics_quit(); }
 SDL_Window*   window() { return ps_graphics_window(); }
 SDL_Renderer* renderer() { return ps_graphics_renderer(); }
 
-void render_scenes(std::vector<Scene> const& scene)
+void render_scenes(std::vector<Scene> const& scenes)
 {
-    ps_Scene* scenes;
+    std::vector<ps_Scene> scenes_cptr(scenes.size());
+    for (size_t i = 0; i < scenes.size(); ++i)
+        memcpy(&scenes_cptr[i], &scenes.at(i).scene(), sizeof(ps_Scene));
+    ps_graphics_render_scenes(scenes_cptr.data(), scenes_cptr.size());
 }
 
 }
@@ -115,6 +127,9 @@ void  idx(std::string const& name) { CHECK(ps_res_idx(name.c_str())); }
 
 }
 
+//
+// manip
+//
 
 namespace manip {
 
@@ -125,6 +140,9 @@ int shadow(uint8_t* pixels, int w, int h, int pitch, void* data)
 
 }
 
+//
+// audio
+//
 
 namespace audio {
 

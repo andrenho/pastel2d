@@ -41,6 +41,7 @@ static void update(std::chrono::microseconds duration)
 
 std::vector<ps::Scene> create_scenes()
 {
+    return {};
 }
 
 int main()

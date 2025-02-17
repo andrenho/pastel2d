@@ -35,7 +35,7 @@ std::tuple<uint8_t, uint8_t, uint8_t> version_number();
 class Scene {
 public:
     Scene();
-    ps_Scene scene() const { return scene_; }
+    ps_Scene const& scene() const { return scene_; }
 private:
     ps_Scene scene_;
 };

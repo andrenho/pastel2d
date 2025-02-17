@@ -12,6 +12,7 @@
 
 #include "private/textcache.h"
 #include "private/res_priv.h"
+#include "private/scene_priv.h"
 
 static bool          running_ = true;
 static SDL_Window*   window = NULL;
