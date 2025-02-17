@@ -33,13 +33,6 @@ std::tuple<uint8_t, uint8_t, uint8_t> version_number()
 }
 
 //
-// scene
-//
-
-class Scene {
-};
-
-//
 // graphics
 //
 
@@ -52,7 +45,11 @@ microseconds  timestep() { return microseconds(ps_graphics_timestep_us()); }
 void          quit() { ps_graphics_quit(); }
 SDL_Window*   window() { return ps_graphics_window(); }
 SDL_Renderer* renderer() { return ps_graphics_renderer(); }
-// TODO - render scene
+
+void render_scenes(std::vector<Scene> const& scene)
+{
+    ps_Scene* scenes;
+}
 
 }
 

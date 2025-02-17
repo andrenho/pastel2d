@@ -19,7 +19,7 @@ typedef struct {
 
 int           ps_graphics_set_bg(uint8_t r, uint8_t g, uint8_t b);
 
-int           ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* data);
+int           ps_graphics_render_scenes(ps_Scene* scenes, size_t n_scenes);
 int           ps_graphics_present();
 
 bool          ps_graphics_running();

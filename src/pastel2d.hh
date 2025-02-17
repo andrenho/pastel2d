@@ -30,6 +30,16 @@ void                                  finalize();
 std::string                           version();
 std::tuple<uint8_t, uint8_t, uint8_t> version_number();
 
+// scene
+
+class Scene {
+public:
+    Scene();
+    ps_Scene scene() const { return scene_; }
+private:
+    ps_Scene scene_;
+};
+
 // graphics
 
 namespace graphics {
@@ -40,6 +50,8 @@ namespace graphics {
     microseconds  timestep();
     void          present();
     void          quit();
+
+    void          render_scenes(std::vector<Scene> const& scene);
 
     SDL_Window*   window();
     SDL_Renderer* renderer();

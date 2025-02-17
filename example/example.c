@@ -29,31 +29,6 @@ static void init_resources()
     PS_NAME("sound", PS_ASRT_RES(ps_red_add_sound(example_shotgun_wav, example_shotgun_wav_sz)));
 }
 
-static ps_Scene* scene_creator(void*)
-{
-    ps_Scene* scenes = ps_create_scenes(1);
-
-    PS_ASRT(ps_scene_push_context(&scenes[0], ps_create_context_with(CTX_ZOOM, 2.f, NULL)));
-
-    PS_ASRT(ps_scene_add_image_with(&scenes[0], PS_IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 },
-        CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL));
-
-    PS_ASRT(ps_scene_add_text_with(&scenes[0], PS_IDX("font1"), "Hello world to ALL!", POS(10, 10), 32, (SDL_Color) { 0, 0, 0, 255 },
-        CTX_ZOOM, .5f, NULL));
-
-    PS_ASRT(ps_scene_add_text(&scenes[0], PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL));
-
-    return scenes;
-}
-
-static void post_scene()
-{
-    SDL_Renderer* r = ps_graphics_renderer();
-    SDL_SetRenderDrawColorFloat(r, 0, 0, 0, 255);
-    SDL_SetRenderScale(r, 2.f, 2.f);
-    SDL_RenderRect(r, &(SDL_FRect) { 100, 100, 58, 78 });
-}
-
 static void update(size_t timestep_us)
 {
     SDL_Event e;
@@ -63,6 +38,27 @@ static void update(size_t timestep_us)
         if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_SPACE)
             PS_ASRT(ps_audio_play_sound(PS_IDX("sound")));
     }
+}
+
+static void create_scene(ps_Scene* scene)
+{
+    PS_ASRT(ps_scene_push_context(scene, ps_create_context_with(CTX_ZOOM, 2.f, NULL)));
+
+    PS_ASRT(ps_scene_add_image_with(scene, PS_IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 },
+        CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL));
+
+    PS_ASRT(ps_scene_add_text_with(scene, PS_IDX("font1"), "Hello world to ALL!", POS(10, 10), 32, (SDL_Color) { 0, 0, 0, 255 },
+        CTX_ZOOM, .5f, NULL));
+
+    PS_ASRT(ps_scene_add_text(scene, PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL));
+}
+
+static void post_scene()
+{
+    SDL_Renderer* r = ps_graphics_renderer();
+    SDL_SetRenderDrawColorFloat(r, 0, 0, 0, 255);
+    SDL_SetRenderScale(r, 2.f, 2.f);
+    SDL_RenderRect(r, &(SDL_FRect) { 100, 100, 58, 78 });
 }
 
 int main()
@@ -87,7 +83,11 @@ int main()
     while (ps_graphics_running()) {
         update(ps_graphics_timestep_us());
         PS_ASRT(ps_audio_step());
-        PS_ASRT(ps_graphics_render_scene(scene_creator, NULL));
+
+        ps_Scene scenes[1];
+        create_scene(&scenes[0]);
+        PS_ASRT(ps_graphics_render_scenes(scenes, 1));
+
         post_scene();
         PS_ASRT(ps_graphics_present());
     }

@@ -101,7 +101,8 @@ set(PASTEL2D_C_SRC
         src/passert.c
         src/private/graphics_priv.h
         src/private/res_priv.h
-        src/private/audio_priv.h)
+        src/private/audio_priv.h
+)
 
 add_library(${PROJECT_NAME} STATIC
         ${PASTEL2D_C_SRC}

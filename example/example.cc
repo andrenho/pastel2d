@@ -39,6 +39,10 @@ static void update(std::chrono::microseconds duration)
     }
 }
 
+std::vector<ps::Scene> create_scenes()
+{
+}
+
 int main()
 {
     SDL_Log("pastel2d version %s", ps::version().c_str());
@@ -60,6 +64,8 @@ int main()
 
     while (ps::graphics::running()) {
         ps::audio::step();
+        std::vector<ps::Scene> scenes = create_scenes();
+        ps::graphics::render_scenes(scenes);
         update(ps::graphics::timestep());
         ps::graphics::present();
     }

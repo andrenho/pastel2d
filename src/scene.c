@@ -2,29 +2,31 @@
 
 #include <stb_ds.h>
 
+#include "error.h"
+extern char last_error[LAST_ERROR_SZ];
+
 static int ps_scene_init(ps_Scene* scene)
 {
     scene->artifacts = NULL;
     scene->context_stack = NULL;
+    scene->initialized = true;
 
     arrpush(scene->context_stack, ps_create_context());
 
     return 0;
 }
 
-ps_Scene* ps_create_scenes(size_t n_scenes)
+static ps_Context const* ps_scene_current_context(ps_Scene const* scene)
 {
-    ps_Scene* scenes = NULL;
-    for (size_t i = 0; i < n_scenes; ++i) {
-        ps_Scene scene;
-        ps_scene_init(&scene);
-        arrpush(scenes, scene);
-    }
-    return scenes;
+    return &scene->context_stack[arrlen(scene->context_stack) - 1];
 }
+
+#define CHECK_INIT(scene) if (!scene->initialized) { ps_scene_init(scene); }
 
 int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx)
 {
+    CHECK_INIT(scene)
+
     if (idx == RES_ERROR)
         return -1;
 
@@ -50,6 +52,8 @@ int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context
 
 int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_ContextProperty props, ...)
 {
+    CHECK_INIT(scene)
+
     va_list ap;
 
     va_start(ap, props);
@@ -61,6 +65,8 @@ int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Co
 
 int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_Context const* ctx)
 {
+    CHECK_INIT(scene)
+
     if (idx == RES_ERROR)
         return -1;
 
@@ -89,6 +95,8 @@ int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_R
 
 int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_ContextProperty props, ...)
 {
+    CHECK_INIT(scene)
+
     va_list ap;
 
     va_start(ap, props);
@@ -98,13 +106,10 @@ int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, 
     return ps_scene_add_text(scene, idx, text, rect, font_size, color, &ctx);
 }
 
-ps_Context const* ps_scene_current_context(ps_Scene const* scene)
-{
-    return &scene->context_stack[arrlen(scene->context_stack) - 1];
-}
-
 int ps_scene_push_context(ps_Scene* scene, ps_Context context)
 {
+    CHECK_INIT(scene)
+
     ps_Context new_context = ps_context_sum(ps_scene_current_context(scene), &context);
     arrpush(scene->context_stack, new_context);
     return 0;
@@ -112,6 +117,8 @@ int ps_scene_push_context(ps_Scene* scene, ps_Context context)
 
 int ps_scene_pop_context(ps_Scene* scene)
 {
+    CHECK_INIT(scene)
+
     arrpop(scene->context_stack);
     return 0;
 }

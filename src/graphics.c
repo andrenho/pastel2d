@@ -9,8 +9,8 @@
 #include "audio.h"
 #include "error.h"
 #include "scene.h"
-#include "private/textcache.h"
 
+#include "private/textcache.h"
 #include "private/res_priv.h"
 
 static bool          running_ = true;
@@ -194,20 +194,16 @@ int render_scene(ps_Scene* scene)
     return 0;
 }
 
-int ps_graphics_render_scene(ps_Scene* (*scene_creator)(void* data), void* data)
+int ps_graphics_render_scenes(ps_Scene* scenes, size_t n_scenes)
 {
-    ps_Scene* scenes = scene_creator(data);
-
     SDL_SetRenderDrawColor(ren, bg_r, bg_g, bg_b, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(ren);
 
-    for (size_t i = 0; i < (size_t) arrlen(scenes); ++i) {
+    for (size_t i = 0; i < n_scenes; ++i) {
         if (render_scene(&scenes[i]) != 0)
             return -1;
         ps_scene_finalize(&scenes[i]);
     }
-
-    arrfree(scenes);
 
     return 0;
 }
