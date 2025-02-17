@@ -1,5 +1,7 @@
 #include "pastel2d.h"
 
+#include "private/graphics_priv.h"
+
 int ps_init(ps_GraphicsInit const* graphics)
 {
     if (ps_res_init() != 0)

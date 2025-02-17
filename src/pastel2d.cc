@@ -33,16 +33,26 @@ std::tuple<uint8_t, uint8_t, uint8_t> version_number()
 }
 
 //
+// scene
+//
+
+class Scene {
+};
+
+//
 // graphics
 //
 
 namespace graphics {
 
-void         set_bg(uint8_t r, uint8_t g, uint8_t b) { CHECK(ps_graphics_set_bg(r, g, b)); }
-bool         running() { return ps_graphics_running(); }
-void         present() { CHECK(ps_graphics_present()); }
-microseconds timestep() { return microseconds(ps_graphics_timestep_us()); }
-void         quit() { ps_graphics_quit(); }
+void          set_bg(uint8_t r, uint8_t g, uint8_t b) { CHECK(ps_graphics_set_bg(r, g, b)); }
+bool          running() { return ps_graphics_running(); }
+void          present() { CHECK(ps_graphics_present()); }
+microseconds  timestep() { return microseconds(ps_graphics_timestep_us()); }
+void          quit() { ps_graphics_quit(); }
+SDL_Window*   window() { return ps_graphics_window(); }
+SDL_Renderer* renderer() { return ps_graphics_renderer(); }
+// TODO - render scene
 
 }
 
@@ -60,10 +70,33 @@ static idx_t get_res(ResourceId const& id)
         return ps_res_idx(std::get<std::string>(id).c_str());
 }
 
-idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator) { return CHECK_RES(ps_res_add_png(data, sz)); }
-idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator) { return ps_res_set_name(name.c_str(), add_png(data, sz)); }
+idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
+{
+    if (manipulator)
+        return CHECK_RES(ps_res_add_png_manip(data, sz, manipulator, manip_data));
+    else
+        return CHECK_RES(ps_res_add_png(data, sz));
+}
 
-void add_tiles_from_lua(ResourceId const& id, uint8_t const* data, size_t sz) { ps_res_add_tiles_from_lua(get_res(id), data, sz); }
+idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
+{
+    return ps_res_set_name(name.c_str(), add_png(data, sz, manipulator, manip_data));
+}
+
+void add_tiles_from_lua(ResourceId const& id, uint8_t const* data, size_t sz)
+{
+    ps_res_add_tiles_from_lua(get_res(id), data, sz);
+}
+
+}
+
+
+namespace manip {
+
+int shadow(uint8_t* pixels, int w, int h, int pitch, void* data)
+{
+    return ps_manip_shadow(pixels, w, h, pitch, data);
+}
 
 }
 
