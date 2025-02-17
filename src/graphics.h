@@ -10,10 +10,10 @@
 
 typedef struct {
     const char*     appname;
+    const char*     appidentifier;
+    const char*     appversion;
     size_t          window_w;
     size_t          window_h;
-    const char*     appversion;
-    const char*     appidentifier;
     SDL_WindowFlags flags;
 } ps_GraphicsInit;
 

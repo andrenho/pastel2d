@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.28)
 project(pastel2d
         VERSION 0.1.0
         DESCRIPTION "A 2D thin static game library built on top of SDL2, Lua and ImGui."
-        LANGUAGES C
+        LANGUAGES C CXX
 )
 
 #
@@ -15,6 +15,7 @@ project(pastel2d
 #
 
 set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fms-extensions")
 
@@ -62,14 +63,14 @@ function(embed target source)
 
     get_filename_component(FILENAME "${source}" NAME)
 
-    add_custom_target(${TARGET_NAME}
+    add_custom_target(${TARGET_NAME}_${target}
             COMMAND ${PROJECT_SOURCE_DIR}/bin/genheader ${source} ${ARGV2} > ${CMAKE_CURRENT_BINARY_DIR}/generated/${FILENAME}.h
             DEPENDS ${PROJECT_SOURCE_DIR}/bin/genheader ${PROJECT_SOURCE_DIR}/${source}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
             COMMENT "Generating header file for ${source}..."
     )
 
-    add_dependencies(${target} ${TARGET_NAME})
+    add_dependencies(${target} ${TARGET_NAME}_${target})
 endfunction()
 
 
@@ -77,7 +78,7 @@ endfunction()
 # C library
 #
 
-add_library(${PROJECT_NAME} STATIC
+set(PASTEL2D_C_SRC
         src/graphics.h
         src/graphics.c
         src/pastel2d.h
@@ -97,8 +98,12 @@ add_library(${PROJECT_NAME} STATIC
         src/audio.c
         src/audio.h
         src/passert.h
-        src/passert.c
+        src/passert.c)
+
+add_library(${PROJECT_NAME} STATIC
+        ${PASTEL2D_C_SRC}
 )
+
 target_include_directories(${PROJECT_NAME}
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -118,7 +123,31 @@ target_compile_options(${PROJECT_NAME}
         PRIVATE ${warnings})
 
 #
-# sample executable
+# C++ library
+#
+
+add_library(pastel2d-cc STATIC
+        src/pastel2d.hh
+        src/pastel2d.cc)
+
+target_include_directories(pastel2d-cc
+        PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}/src
+            ${CMAKE_CURRENT_BINARY_DIR}/generated
+)
+target_link_libraries(pastel2d-cc
+        PRIVATE
+            pastel2d
+            luajit::lib luajit::header
+            SDL3::SDL3
+        PUBLIC
+            m
+)
+target_compile_options(${PROJECT_NAME}
+        PRIVATE ${warnings})
+
+#
+# sample executable - C
 #
 
 add_executable(pastel2d-example EXCLUDE_FROM_ALL
@@ -135,6 +164,25 @@ embed(pastel2d-example example/OpenSans-Medium.ttf)
 embed(pastel2d-example example/Born2bSportyFS.otf)
 embed(pastel2d-example example/nemesis.mod)
 embed(pastel2d-example example/shotgun.wav)
+
+#
+# sample executable - C++
+#
+
+add_executable(pastel2d-cc-example EXCLUDE_FROM_ALL
+        example/example.cc
+)
+target_compile_options(pastel2d-cc-example
+        PRIVATE ${warnings})
+target_link_libraries(pastel2d-cc-example PRIVATE pastel2d-cc SDL3::SDL3)
+
+embed(pastel2d-cc-example example/example.png)
+embed(pastel2d-cc-example example/example.tileset.lua lua-strip)
+embed(pastel2d-cc-example example/example-shadow.tileset.lua lua-strip)
+embed(pastel2d-cc-example example/OpenSans-Medium.ttf)
+embed(pastel2d-cc-example example/Born2bSportyFS.otf)
+embed(pastel2d-cc-example example/nemesis.mod)
+embed(pastel2d-cc-example example/shotgun.wav)
 
 # check for leaks
 

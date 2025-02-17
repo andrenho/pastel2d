@@ -1,8 +1,6 @@
 #include <stdlib.h>
 
 #include "pastel2d.h"
-#include "manip.h"
-#include "scene.h"
 
 // embedded files
 #include "example.png.h"

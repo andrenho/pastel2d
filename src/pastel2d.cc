@@ -1,0 +1,70 @@
+#include "pastel2d.hh"
+
+namespace ps {
+
+static int CHECK(int f)
+{
+    if (f != 0)
+        throw std::runtime_error(ps_last_error());
+    return f;
+}
+
+static ps_res_idx_t CHECK_RES(ps_res_idx_t f)
+{
+    if (f == RES_ERROR)
+        throw std::runtime_error(ps_last_error());
+    return f;
+}
+
+//
+// init
+//
+
+void init(graphics::Init const& graphics_init) { CHECK(ps_init(&graphics_init)); }
+void finalize() { ps_finalize(); }
+
+std::string version() { return ps_version(NULL, NULL, NULL); }
+
+std::tuple<uint8_t, uint8_t, uint8_t> version_number()
+{
+    uint8_t major, minor, patch;
+    ps_version(&major, &minor, &patch);
+    return { major, minor, patch };
+}
+
+//
+// graphics
+//
+
+namespace graphics {
+
+void         set_bg(uint8_t r, uint8_t g, uint8_t b) { CHECK(ps_graphics_set_bg(r, g, b)); }
+bool         running() { return ps_graphics_running(); }
+void         present() { CHECK(ps_graphics_present()); }
+microseconds timestep() { return microseconds(ps_graphics_timestep_us()); }
+void         quit() { ps_graphics_quit(); }
+
+}
+
+//
+// res
+//
+
+namespace res {
+
+static idx_t get_res(ResourceId const& id)
+{
+    if (auto idx = std::get_if<ps_res_idx_t>(&id))
+        return *idx;
+    else
+        return ps_res_idx(std::get<std::string>(id).c_str());
+}
+
+idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator) { return CHECK_RES(ps_res_add_png(data, sz)); }
+idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator) { return ps_res_set_name(name.c_str(), add_png(data, sz)); }
+
+void add_tiles_from_lua(ResourceId const& id, uint8_t const* data, size_t sz) { ps_res_add_tiles_from_lua(get_res(id), data, sz); }
+
+}
+
+}
