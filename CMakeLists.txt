@@ -155,10 +155,15 @@ target_compile_options(pastel2d-temp
 # join libraries
 #
 
+if (APPLE)
+    set(JOIN_AR libtool -static -o libpastel2d.a libpastel2d-temp.a libluajit.a)
+else()
+    set(JOIN_AR ar -M <${CMAKE_CURRENT_SOURCE_DIR}/libpastel2d.mri)
+endif()
+
 add_custom_target(combined
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        # COMMAND ar -M <${CMAKE_CURRENT_SOURCE_DIR}/libpastel2d.mri
-        COMMAND libtool -static -o libpastel2d.a libpastel2d-temp.a libluajit.a
+        COMMAND ${JOIN_AR}
         BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/libpastel2d.a
         DEPENDS pastel2d-temp luajit)
 
