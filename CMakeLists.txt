@@ -78,7 +78,7 @@ endfunction()
 # C library
 #
 
-set(PASTEL2D_C_SRC
+add_library(${PROJECT_NAME} STATIC
         src/graphics.h
         src/graphics.c
         src/pastel2d.h
@@ -103,10 +103,8 @@ set(PASTEL2D_C_SRC
         src/private/res_priv.h
         src/private/audio_priv.h
         src/private/scene_priv.h
-)
-
-add_library(${PROJECT_NAME} STATIC
-        ${PASTEL2D_C_SRC}
+        src/pastel2d.hh
+        src/pastel2d.cc
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -119,30 +117,6 @@ target_include_directories(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
-            luajit::lib luajit::header
-            SDL3::SDL3
-        PUBLIC
-            m
-)
-target_compile_options(${PROJECT_NAME}
-        PRIVATE ${warnings})
-
-#
-# C++ library
-#
-
-add_library(pastel2d-cc STATIC
-        src/pastel2d.hh
-        src/pastel2d.cc)
-
-target_include_directories(pastel2d-cc
-        PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/src
-            ${CMAKE_CURRENT_BINARY_DIR}/generated
-)
-target_link_libraries(pastel2d-cc
-        PRIVATE
-            pastel2d
             luajit::lib luajit::header
             SDL3::SDL3
         PUBLIC
@@ -179,7 +153,7 @@ add_executable(pastel2d-cc-example EXCLUDE_FROM_ALL
 )
 target_compile_options(pastel2d-cc-example
         PRIVATE ${warnings})
-target_link_libraries(pastel2d-cc-example PRIVATE pastel2d-cc SDL3::SDL3)
+target_link_libraries(pastel2d-cc-example PRIVATE pastel2d SDL3::SDL3)
 
 embed(pastel2d-cc-example example/example.png)
 embed(pastel2d-cc-example example/example.tileset.lua lua-strip)
