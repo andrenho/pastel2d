@@ -1,5 +1,7 @@
 # pastel2d
 
+![image](https://github.com/user-attachments/assets/8b784810-1b6f-4b8a-95e9-2cb9f267fd27)
+
 **pastel2d** is 2D very thin static game library built on top of SDL3 and LuaJIT. Its main focus is its ability to embed
 graphics, audio and libraries into it, making it possible to distribute a single executable containing the whole game.
 
