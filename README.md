@@ -14,6 +14,7 @@ Features:
  - TTF support
  - MOD music support
  - WAV sound effect support
+ - Compatible with Linux and MacOSX
  - C and C++ library versions
 
 How to use:
