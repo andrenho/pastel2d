@@ -1,6 +1,7 @@
 #include "scene.h"
 
 #include <stb_ds.h>
+#include <stdio.h>
 
 #include "error.h"
 extern char last_error[LAST_ERROR_SZ];
