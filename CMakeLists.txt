@@ -62,7 +62,7 @@ if (APPLE)
     string(REGEX REPLACE "^([0-9]+\\.[0-9]+).*$" "\\1" MACOS_MAJOR_MINOR_VERSION "${MACOS_VERSION}")
 endif()
 
-ExternalProject_Add(luajit
+ExternalProject_Add(luajit-ep
         SOURCE_DIR ${PROJECT_SOURCE_DIR}/contrib/LuaJIT/src
         INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
         CONFIGURE_COMMAND ""
@@ -70,6 +70,11 @@ ExternalProject_Add(luajit
         BUILD_IN_SOURCE 1
         INSTALL_COMMAND cp <SOURCE_DIR>/libluajit.a <INSTALL_DIR>
         INSTALL_BYPRODUCTS <INSTALL_DIR>/libluajit.a
+)
+add_library(luajit SHARED IMPORTED)
+add_dependencies(luajit luajit-ep)
+set_target_properties(luajit
+        PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/libluajit.a
 )
 
 #
