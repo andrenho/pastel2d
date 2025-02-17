@@ -42,6 +42,8 @@ static void update(size_t timestep_us)
 
 static void create_scene(ps_Scene* scene)
 {
+    ps_scene_init(scene);
+
     PS_ASRT(ps_scene_push_context(scene, ps_create_context_with(CTX_ZOOM, 2.f, NULL)));
 
     PS_ASRT(ps_scene_add_image_with(scene, PS_IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 },
@@ -84,7 +86,7 @@ int main()
         update(ps_graphics_timestep_us());
         PS_ASRT(ps_audio_step());
 
-        ps_Scene scenes[1] = {};
+        ps_Scene scenes[1];
         create_scene(&scenes[0]);
         PS_ASRT(ps_graphics_render_scenes(scenes, 1));
 

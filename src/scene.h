@@ -33,7 +33,7 @@ typedef struct {
     bool         initialized;
 } ps_Scene;
 
-// int               ps_scene_init(ps_Scene* scene);
+int               ps_scene_init(ps_Scene* scene);
 int               ps_scene_finalize(ps_Scene* scene);
 
 int               ps_scene_push_context(ps_Scene* scene, ps_Context context);

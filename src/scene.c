@@ -5,13 +5,13 @@
 #include "error.h"
 extern char last_error[LAST_ERROR_SZ];
 
-static int ps_scene_init(ps_Scene* scene)
+int ps_scene_init(ps_Scene* scene)
 {
-    scene->context_stack = NULL;
-    arrpush(scene->context_stack, ps_create_context());
-
     scene->artifacts = NULL;
+    scene->context_stack = NULL;
     scene->initialized = true;
+
+    arrpush(scene->context_stack, ps_create_context());
 
     return 0;
 }
@@ -21,7 +21,7 @@ static ps_Context const* ps_scene_current_context(ps_Scene const* scene)
     return &scene->context_stack[arrlen(scene->context_stack) - 1];
 }
 
-#define CHECK_INIT(scene) if (!scene->initialized) { ps_scene_init(scene); }
+#define CHECK_INIT(scene) if (!scene->initialized) { snprintf(last_error, sizeof last_error, "Scene not initialized"); return -1; }
 
 int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx)
 {
