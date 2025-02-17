@@ -1,9 +1,15 @@
-[submodule "contrib/imgui"]
-	path = contrib/imgui
-	url = https://github.com/ocornut/imgui.git
-[submodule "contrib/ImGuiFileDialog"]
-	path = contrib/ImGuiFileDialog
-	url = https://github.com/aiekick/ImGuiFileDialog.git
-[submodule "contrib/embed"]
-	path = contrib/embed
-	url = https://github.com/batterycenter/embed
+[submodule "contrib/stb"]
+	path = contrib/stb
+	url = https://github.com/nothings/stb.git
+[submodule "contrib/LuaJIT"]
+	path = contrib/LuaJIT
+	url = https://github.com/LuaJIT/LuaJIT.git
+[submodule "contrib/luajit-cmake"]
+	path = contrib/luajit-cmake
+	url = https://github.com/zhaozg/luajit-cmake.git
+[submodule "contrib/pocketmod"]
+	path = contrib/pocketmod
+	url = https://github.com/rombankzero/pocketmod.git
+[submodule "contrib/SDL"]
+	path = contrib/SDL
+	url = https://github.com/libsdl-org/SDL.git

@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-Isrc, -Icontrib/stb, -Icontrib/LuaJIT/src, -std=c23, -Wall]

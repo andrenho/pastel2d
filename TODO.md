@@ -1,0 +1,44 @@
+- [x] Lua tiles
+  - [x] Build luajit
+  - [x] Lua file as object, string
+- [x] Manipulate image (shadow)
+- [x] Rotation + rotation center
+- [x] Alignment
+- [x] Opacity
+- [x] Draw only what's visible
+- [x] Text
+  - [x] Font resource
+  - [x] Draw text (cache management)
+- [x] Context improvement
+- [x] Cursors
+- [x] Audio
+  - [x] MOD
+  - [x] WAV
+- [x] What about return values?
+  - [x] Create assertion function
+  - [x] Rename everything (structs) to use ps_
+  - [x] Return version
+- [x] FPS on title
+- [x] C++ interface
+  - [x] New library
+  - [x] Write code
+- [ ] Write README.md
+
+Supports:
+  - [ ] Ideally self-contained (for libraries)
+    - SDL (?), Lua, imgui
+  - [ ] Multiple scenes with multiple layers
+  - [ ] Scene includes: image, audio, text
+    - [ ] Positioning (position, alignment, rotation [rotation center])
+    - [ ] Zoom per layers
+    - [ ] Opacity
+    - [ ] Full screen image
+    - [ ] Draw only what's visible
+  - [ ] Resource management: by id / by string
+    - [ ] Texture, tile, sound, cursors, fonts
+    - [ ] Text texture caching
+
+
+- https://github.com/RandyGaul/cute_headers
+- https://github.com/p-ranav/awesome-hpp?tab=readme-ov-file
+- https://github.com/nothings/stb

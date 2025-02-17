@@ -29,7 +29,7 @@ public:
 
     struct Image {
         ResourceId  resource;
-        int         x, y;
+        SDL_Rect    rect;
         Pen         pen;
     };
 
@@ -48,7 +48,14 @@ public:
         pen.zoom *= current_zoom_;
         x = x * current_zoom_ + relative_x_;
         y = y * current_zoom_ + relative_y_;
-        artifacts_.emplace_back(Image { resource, x, y, std::move(pen) });
+        artifacts_.emplace_back(Image { resource, { x, y, 0, 0 }, std::move(pen) });
+    }
+
+    void add(ResourceId const& resource, SDL_Rect rect, Pen pen={}) {
+        pen.zoom *= current_zoom_;
+        rect.x = rect.x * current_zoom_ + relative_x_;
+        rect.y = rect.y * current_zoom_ + relative_y_;
+        artifacts_.emplace_back(Image { resource, rect, std::move(pen) });
     }
 
     void add_text(ResourceId const& font, std::string const& text, int x, int y, SDL_Color const& color, Pen pen={}, Duration cache_duration=15s)
