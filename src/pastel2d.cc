@@ -33,6 +33,50 @@ std::tuple<uint8_t, uint8_t, uint8_t> version_number()
 }
 
 //
+// context
+//
+
+ps_Context Context::context_c() const
+{
+    return ps_Context {
+        .position = position,
+        .rotation = rotation,
+        .zoom = zoom,
+        .opacity = opacity,
+        .rotation_center = rotation_center ? *rotation_center : SDL_FPoint { DEFAULT_ROT_CENTER, DEFAULT_ROT_CENTER },
+    };
+}
+
+void Scene::push_context(Context const& ctx)  { CHECK(ps_scene_push_context(&scene_, ctx.context_c())); }
+void Scene::pop_context() { ps_scene_pop_context(&scene_); }
+
+namespace res { static idx_t get_res(ResourceId const& id); }
+
+
+void Scene::add_image(res::ResourceId const& id, SDL_Rect const& r)
+{
+    CHECK(ps_scene_add_image(&scene_, res::get_res(id), r, nullptr));
+}
+
+void Scene::add_image(res::ResourceId const& id, SDL_Rect const& r, Context const& ctx)
+{
+    ps_Context context = ctx.context_c();
+    CHECK(ps_scene_add_image(&scene_, res::get_res(id), r, &context));
+}
+
+void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color)
+{
+    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, nullptr));
+}
+
+void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, Context const& ctx)
+{
+    ps_Context context = ctx.context_c();
+    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, &context));
+}
+
+
+//
 // scene
 //
 

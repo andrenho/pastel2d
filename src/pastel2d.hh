@@ -30,32 +30,18 @@ void                                  finalize();
 std::string                           version();
 std::tuple<uint8_t, uint8_t, uint8_t> version_number();
 
-// scene
+// context
 
-class Scene {
+class Context {
 public:
-    Scene();
-    ps_Scene const& scene() const { return scene_; }
-private:
-    ps_Scene scene_;
+    SDL_Rect                  position { 0, 0, 0, 0 };
+    float                     rotation = 0.f;
+    float                     zoom = 1.f;
+    float                     opacity = 1.f;
+    std::optional<SDL_FPoint> rotation_center {};
+
+    ps_Context context_c() const;
 };
-
-// graphics
-
-namespace graphics {
-    using namespace std::chrono;
-
-    void          set_bg(uint8_t r, uint8_t g, uint8_t b);
-    bool          running();
-    microseconds  timestep();
-    void          present();
-    void          quit();
-
-    void          render_scenes(std::vector<Scene> const& scene);
-
-    SDL_Window*   window();
-    SDL_Renderer* renderer();
-}
 
 // res
 
@@ -84,6 +70,43 @@ namespace res {
 
     void set_name(std::string const& name, idx_t idx);
     void idx(std::string const& name);
+}
+
+// scene
+
+class Scene {
+public:
+    Scene();
+    ps_Scene const& scene() const { return scene_; }
+
+    void push_context(Context const& ctx);
+    void pop_context();
+
+    void add_image(res::ResourceId const& id, SDL_Rect const& r);
+    void add_image(res::ResourceId const& id, SDL_Rect const& r, Context const& ctx);
+
+    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color);
+    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, Context const& ctx);
+
+private:
+    ps_Scene scene_;
+};
+
+// graphics
+
+namespace graphics {
+    using namespace std::chrono;
+
+    void          set_bg(uint8_t r, uint8_t g, uint8_t b);
+    bool          running();
+    microseconds  timestep();
+    void          present();
+    void          quit();
+
+    void          render_scenes(std::vector<Scene> const& scene);
+
+    SDL_Window*   window();
+    SDL_Renderer* renderer();
 }
 
 // manip

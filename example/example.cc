@@ -39,9 +39,16 @@ static void update(std::chrono::microseconds duration)
     }
 }
 
-std::vector<ps::Scene> create_scenes()
+ps::Scene create_scenes()
 {
-    return {};
+    ps::Scene scene;
+
+    scene.push_context({ .zoom = 2.f });
+    scene.add_image("happy", { 100, 100, 58, 78 }, { .rotation = 80.f, .opacity = .5f });
+    scene.add_text("font1", "Hello world to ALL!", POS(10, 10), 32, { 0, 0, 0, 255 }, { .zoom = .5f });
+    scene.add_text("font2", "Press SPACE to fire shotgun", POS(10, 30), 18, { 0, 0, 0, 255 });
+
+    return scene;
 }
 
 int main()
@@ -65,8 +72,7 @@ int main()
 
     while (ps::graphics::running()) {
         ps::audio::step();
-        std::vector<ps::Scene> scenes = create_scenes();
-        ps::graphics::render_scenes(scenes);
+        ps::graphics::render_scenes({ create_scenes() });
         update(ps::graphics::timestep());
         ps::graphics::present();
     }
