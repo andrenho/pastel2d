@@ -6,6 +6,8 @@
 #include <pocketmod.h>
 #include <stdlib.h>
 
+#include "private/res_priv.h"
+
 #include "error.h"
 extern char last_error[LAST_ERROR_SZ];
 

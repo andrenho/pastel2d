@@ -11,6 +11,8 @@
 #include "scene.h"
 #include "textcache.h"
 
+#include "private/res_priv.h"
+
 static bool          running_ = true;
 static SDL_Window*   window = NULL;
 static SDL_Renderer* ren = NULL;

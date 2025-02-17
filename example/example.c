@@ -24,7 +24,7 @@ static void init_resources()
     PS_NAME("font1", PS_ASRT_RES(ps_res_add_ttf(example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz)));
     PS_NAME("font2", PS_ASRT_RES(ps_res_add_ttf(example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz)));
 
-    PS_NAME("music", PS_ASRT_RES(ps_res_add_music(example_nemesis_mod, example_nemesis_mod_sz, 44100)));
+    PS_NAME("music", PS_ASRT_RES(ps_res_add_music(example_nemesis_mod, example_nemesis_mod_sz)));
 
     PS_NAME("sound", PS_ASRT_RES(ps_red_add_sound(example_shotgun_wav, example_shotgun_wav_sz)));
 }

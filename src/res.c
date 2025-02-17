@@ -18,6 +18,8 @@
 #define POCKETMOD_IMPLEMENTATION
 #include <pocketmod.h>
 
+#include "private/res_priv.h"
+
 #include "error.h"
 #include "graphics.h"
 extern char last_error[LAST_ERROR_SZ];
@@ -199,13 +201,13 @@ ps_res_idx_t ps_res_add_cursor(SDL_Cursor* cursor)
     return arrlen(resources) - 1;
 }
 
-ps_res_idx_t ps_res_add_music(uint8_t const* data, size_t sz, int rate)
+ps_res_idx_t ps_res_add_music(uint8_t const* data, size_t sz)
 {
     ps_Resource res = {
         .type = RT_MUSIC,
         .music = malloc(sizeof(pocketmod_context))
     };
-    if (pocketmod_init(res.music, data, sz, rate) == 0) {
+    if (pocketmod_init(res.music, data, sz, 44100) == 0) {
         snprintf(last_error, sizeof last_error, "Could not load MOD file.");
         return RES_ERROR;
     }

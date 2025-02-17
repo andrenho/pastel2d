@@ -83,10 +83,38 @@ idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulat
     return ps_res_set_name(name.c_str(), add_png(data, sz, manipulator, manip_data));
 }
 
+idx_t add_tile(ResourceId const& parent, SDL_FRect const& rect, size_t tile_sz)
+{
+    return CHECK_RES(ps_res_add_tile(get_res(parent), rect, tile_sz));
+}
+
+idx_t add_tile(std::string const& name, ResourceId const& parent, SDL_FRect const& rect, size_t tile_sz)
+{
+    return ps_res_set_name(name.c_str(), add_tile(parent, rect, tile_sz));
+}
+
+void add_tiles(ResourceId const& parent, std::vector<TileDef>& tiles, size_t tile_sz)
+{
+    CHECK(ps_res_add_tiles(get_res(parent), tiles.data(), tiles.size(), tile_sz));
+}
+
 void add_tiles_from_lua(ResourceId const& id, uint8_t const* data, size_t sz)
 {
-    ps_res_add_tiles_from_lua(get_res(id), data, sz);
+    CHECK(ps_res_add_tiles_from_lua(get_res(id), data, sz));
 }
+
+idx_t add_ttf(uint8_t const* data, size_t sz) { return CHECK_RES(ps_res_add_ttf(data, sz)); }
+idx_t add_cursor(SDL_Cursor* cursor) { return CHECK_RES(ps_res_add_cursor(cursor)); }
+idx_t add_music(uint8_t const* data, size_t sz) { return CHECK_RES(ps_res_add_music(data, sz)); }
+idx_t add_sound(uint8_t const* data, size_t sz) { return CHECK_RES(ps_red_add_sound(data, sz)); }
+
+idx_t add_ttf(std::string const& name, uint8_t const* data, size_t sz) { return ps_res_set_name(name.c_str(), add_ttf(data, sz)); }
+idx_t add_cursor(std::string const& name, SDL_Cursor* cursor) { return ps_res_set_name(name.c_str(), add_cursor(cursor)); }
+idx_t add_music(std::string const& name, uint8_t const* data, size_t sz) { return ps_res_set_name(name.c_str(), add_music(data, sz)); }
+idx_t add_sound(std::string const& name, uint8_t const* data, size_t sz) { return ps_res_set_name(name.c_str(), add_sound(data, sz)); }
+
+void  set_name(std::string const& name, idx_t idx) { CHECK(ps_res_set_name(name.c_str(), idx)); }
+void  idx(std::string const& name) { CHECK(ps_res_idx(name.c_str())); }
 
 }
 
@@ -99,5 +127,16 @@ int shadow(uint8_t* pixels, int w, int h, int pitch, void* data)
 }
 
 }
+
+
+namespace audio {
+
+void step() { CHECK(ps_audio_step()); }
+void choose_music(res::ResourceId const& id) { CHECK(ps_audio_choose_music(res::get_res(id))); }
+void play_music(bool play) { CHECK(ps_audio_play_music(play)); }
+void play_sound(res::ResourceId const& id) { CHECK(ps_audio_play_sound(res::get_res(id))); }
+
+}
+
 
 }

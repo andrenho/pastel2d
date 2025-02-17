@@ -1,6 +1,8 @@
 #include "pastel2d.h"
 
 #include "private/graphics_priv.h"
+#include "private/audio_priv.h"
+#include "private/res_priv.h"
 
 int ps_init(ps_GraphicsInit const* graphics)
 {

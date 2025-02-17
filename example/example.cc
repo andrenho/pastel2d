@@ -19,6 +19,13 @@ static void init_resources()
     auto example_shadow = ps::res::add_png(example_example_png, example_example_png_sz, ps::manip::shadow, &shadow_color);
 
     ps::res::add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
+
+    ps::res::add_ttf("font1", example_OpenSans_Medium_ttf, example_OpenSans_Medium_ttf_sz);
+    ps::res::add_ttf("font2", example_Born2bSportyFS_otf, example_Born2bSportyFS_otf_sz);
+
+    ps::res::add_music("music", example_nemesis_mod, example_nemesis_mod_sz);
+
+    ps::res::add_sound("sound", example_shotgun_wav, example_shotgun_wav_sz);
 }
 
 static void update(std::chrono::microseconds duration)
@@ -27,8 +34,8 @@ static void update(std::chrono::microseconds duration)
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_EVENT_QUIT || (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_Q))
             ps::graphics::quit();
-        // if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_SPACE)
-        //    PS_ASRT(ps_audio_play_sound(PS_IDX("sound")));
+        if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_SPACE)
+            ps::audio::play_sound("sound");
     }
 }
 
@@ -48,9 +55,11 @@ int main()
 
     init_resources();
 
-    // TODO
+    ps::audio::choose_music("music");
+    ps::audio::play_music(true);
 
     while (ps::graphics::running()) {
+        ps::audio::step();
         update(ps::graphics::timestep());
         ps::graphics::present();
     }

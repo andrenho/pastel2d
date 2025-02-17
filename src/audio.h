@@ -3,9 +3,6 @@
 
 #include "res.h"
 
-int ps_audio_init();
-int ps_audio_finalize();
-
 int ps_audio_step();
 
 int ps_audio_choose_music(ps_res_idx_t idx);
