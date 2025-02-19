@@ -224,8 +224,8 @@ embed(pastel2d-cc-example example/shotgun.wav)
 
 # check for leaks
 
-add_custom_target(leaks)
-add_custom_command(TARGET leaks
+add_custom_target(pastel2d-leaks)
+add_custom_command(TARGET pastel2d-leaks
         POST_BUILD
         COMMENT "Check for leaks using valgrind."
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
