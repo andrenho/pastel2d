@@ -3,8 +3,8 @@
 #include <math.h>
 #include <stddef.h>
 
-#include <../../contrib/stb/stb_ds.h>
-#include <../../contrib/stb/stb_truetype.h>
+#include <stb_ds.h>
+#include <stb_truetype.h>
 
 #include "../graphics.h"
 #include "SDL3/SDL.h"
