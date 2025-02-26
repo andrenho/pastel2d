@@ -139,7 +139,7 @@ target_include_directories(pastel2d-temp
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
             ${CMAKE_CURRENT_BINARY_DIR}/generated
         PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
+        ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pocketmod
 )
 target_link_libraries(pastel2d-temp
@@ -179,6 +179,7 @@ target_include_directories(pastel2d
     INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
         ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 

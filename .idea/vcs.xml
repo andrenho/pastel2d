@@ -3,7 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/contrib/LuaJIT" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/contrib/luajit-cmake" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/contrib/pocketmod" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/contrib/stb" vcs="Git" />
   </component>
