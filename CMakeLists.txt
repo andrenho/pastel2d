@@ -59,7 +59,7 @@ if (APPLE)
             OUTPUT_VARIABLE MACOS_VERSION
             OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    string(REGEX REPLACE "^([0-9]+\\.[0-9]+).*$" "\\1" MACOS_MAJOR_MINOR_VERSION "${MACOS_VERSION}")
+    string(REGEX REPLACE "^([0-9]+).*$" "\\1" MACOS_MAJOR_MINOR_VERSION "${MACOS_VERSION}.0")
 endif()
 
 ExternalProject_Add(luajit-ep
