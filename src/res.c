@@ -175,6 +175,28 @@ int ps_res_add_tiles_from_lua(ps_res_idx_t parent, uint8_t const* data, size_t s
     return 0;
 }
 
+int ps_res_image_size(ps_res_idx_t idx, int* w, int* h)
+{
+    switch (resources[idx].type) {
+        case RT_TEXTURE: {
+            float fw, fh;
+            SDL_GetTextureSize(resources[idx].texture, &fw, &fh);
+            *w = (int) fw;
+            *h = (int) fh;
+            break;
+        }
+        case RT_TILE:
+            *w = (int) resources[idx].tile.rect.w;
+            *h = (int) resources[idx].tile.rect.h;
+            break;
+        default:
+            snprintf(last_error, sizeof last_error, "Not a valid image.");
+            return -1;
+    }
+
+    return 0;
+}
+
 ps_res_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
 {
     ps_Resource resource = {

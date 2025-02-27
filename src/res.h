@@ -31,6 +31,8 @@ ps_res_idx_t ps_res_add_tile(ps_res_idx_t parent, SDL_FRect rect, size_t tile_sz
 int          ps_res_add_tiles(ps_res_idx_t parent, ps_TileDef* tiles, size_t n_tiles, size_t tile_sz);
 int          ps_res_add_tiles_from_lua(ps_res_idx_t parent, uint8_t const* data, size_t sz);
 
+int          ps_res_image_size(ps_res_idx_t idx, int* w, int *h);
+
 ps_res_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz);
 
 ps_res_idx_t ps_res_add_cursor(SDL_Cursor* cursor);
