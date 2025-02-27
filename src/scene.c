@@ -12,6 +12,7 @@ int ps_scene_init(ps_Scene* scene)
     scene->artifacts = NULL;
     scene->context_stack = NULL;
     scene->initialized = true;
+    scene->z_order = 100;
 
     arrpush(scene->context_stack, ps_create_context());
 

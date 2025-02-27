@@ -9,6 +9,7 @@ typedef struct ps_Artifact ps_Artifact;
 typedef struct ps_Scene {
     ps_Artifact* artifacts;
     ps_Context*  context_stack;
+    int          z_order;
     bool         initialized;
 } ps_Scene;
 

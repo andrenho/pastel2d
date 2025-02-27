@@ -195,11 +195,22 @@ int render_scene(ps_Scene* scene)
     return 0;
 }
 
+static int comp_scene(void const* scene_a, void const* scene_b)
+{
+    ps_Scene const* scene1 = scene_a;
+    ps_Scene const* scene2 = scene_b;
+    return scene1->z_order - scene2->z_order;
+}
+
 int ps_graphics_render_scenes(ps_Scene* scenes, size_t n_scenes)
 {
     SDL_SetRenderDrawColor(ren, bg_r, bg_g, bg_b, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(ren);
 
+    // reorder scenes
+    qsort(scenes, n_scenes, sizeof(ps_Scene), comp_scene);
+
+    // render scene
     for (size_t i = 0; i < n_scenes; ++i) {
         if (render_scene(&scenes[i]) != 0)
             return -1;
