@@ -3,6 +3,10 @@
 #define STB_DS_IMPLEMENTATION
 #include <stb_ds.h>
 
+#define STBI_ONLY_PNG
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include "pastel2d.h"
 
 // embedded files
@@ -16,10 +20,10 @@
 
 static void init_resources()
 {
-    ps_res_idx_t example = PS_ASSERT_RES(ps_res_add_png(example_example_png, example_example_png_sz));
+    ps_res_idx_t example = PS_ASSERT_RES(ps_res_add_image(example_example_png, example_example_png_sz));
 
     SDL_Color shadow = { 0, 0, 0, 255 };
-    ps_res_idx_t example_shadow = PS_ASSERT_RES(ps_res_add_png_manip(example_example_png, example_example_png_sz, ps_manip_shadow, &shadow));
+    ps_res_idx_t example_shadow = PS_ASSERT_RES(ps_res_add_image_manip(example_example_png, example_example_png_sz, ps_manip_shadow, &shadow));
 
     PS_ASSERT(ps_res_add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz));
     PS_ASSERT(ps_res_add_tiles_from_lua(example_shadow, example_example_shadow_tileset_lua, example_example_shadow_tileset_lua_sz));

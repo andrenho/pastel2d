@@ -7,9 +7,6 @@
 
 #include <stb_ds.h>
 
-#define STBI_ONLY_PNG
-#define STBI_ONLY_JPEG
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
@@ -37,30 +34,31 @@ int ps_res_init()
     return 0;
 }
 
-ps_res_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
+ps_res_idx_t ps_res_add_image(uint8_t const* data, size_t sz)
 {
-    return ps_res_add_png_manip(data, sz, NULL, NULL);
+    return ps_res_add_image_manip(data, sz, NULL, NULL);
 }
 
-ps_res_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data)
+ps_res_idx_t ps_res_add_image_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data)
 {
-    int w, h, bpp;
-    stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &bpp, STBI_rgb_alpha);
+    int w, h, channels;
+    stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &channels, 0);
     if (img == NULL) {
         snprintf(last_error, sizeof last_error, "Could not load image.");
         return RES_ERROR;
     }
-    if (bpp != 4) {
-        snprintf(last_error, sizeof last_error, "Only 4-bit images supported by now (sorry).");
+
+    if (channels != 3 && channels != 4) {
+        snprintf(last_error, sizeof last_error, "Only images with 3 or 4 channels are supported by now (sorry).");
         stbi_image_free(img);
         return RES_ERROR;
     }
 
-    if (manupulator && manupulator(img, w, h, w * 4, manip_data) != 0) {
+    if (manupulator && manupulator(img, w, h, w * channels, manip_data) != 0) {
         return RES_ERROR;
     }
 
-    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, img, w * 4);
+    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, channels == 3 ? SDL_PIXELFORMAT_RGB24 : SDL_PIXELFORMAT_RGBA32, img, w * channels);
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(ps_graphics_renderer(), sf);
     SDL_DestroySurface(sf);

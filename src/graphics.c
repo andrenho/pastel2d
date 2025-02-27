@@ -199,7 +199,7 @@ static int comp_scene(void const* scene_a, void const* scene_b)
 {
     ps_Scene const* scene1 = scene_a;
     ps_Scene const* scene2 = scene_b;
-    return scene1->z_order - scene2->z_order;
+    return scene2->z_order - scene1->z_order;
 }
 
 int ps_graphics_render_scenes(ps_Scene* scenes, size_t n_scenes)

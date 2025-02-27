@@ -24,8 +24,8 @@ typedef struct {
 
 typedef int (*ps_Manipulator)(uint8_t* pixels, int w, int h, int pitch, void* data);
 
-ps_res_idx_t ps_res_add_png(uint8_t const* data, size_t sz);
-ps_res_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data);
+ps_res_idx_t ps_res_add_image(uint8_t const* data, size_t sz);
+ps_res_idx_t ps_res_add_image_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data);
 
 ps_res_idx_t ps_res_add_tile(ps_res_idx_t parent, SDL_FRect rect, size_t tile_sz);
 int          ps_res_add_tiles(ps_res_idx_t parent, ps_TileDef* tiles, size_t n_tiles, size_t tile_sz);

@@ -126,9 +126,9 @@ static idx_t get_res(ResourceId const& id)
 idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
 {
     if (manipulator)
-        return CHECK_RES(ps_res_add_png_manip(data, sz, manipulator, manip_data));
+        return CHECK_RES(ps_res_add_image_manip(data, sz, manipulator, manip_data));
     else
-        return CHECK_RES(ps_res_add_png(data, sz));
+        return CHECK_RES(ps_res_add_image(data, sz));
 }
 
 idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
