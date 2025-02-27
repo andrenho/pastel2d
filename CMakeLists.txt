@@ -81,6 +81,8 @@ set_target_properties(luajit
 # function to generate embedded file
 #
 
+set(GENHEADER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "genheader source dir")
+
 function(embed target source)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/generated)
 
@@ -90,8 +92,8 @@ function(embed target source)
     get_filename_component(FILENAME "${source}" NAME)
 
     add_custom_target(${TARGET_NAME}_${target}
-            COMMAND ${PROJECT_SOURCE_DIR}/bin/genheader ${source} ${ARGV2} > ${CMAKE_CURRENT_BINARY_DIR}/generated/${FILENAME}.h
-            DEPENDS ${PROJECT_SOURCE_DIR}/bin/genheader ${PROJECT_SOURCE_DIR}/${source}
+            COMMAND ${GENHEADER_SOURCE_DIR}/bin/genheader ${source} ${ARGV2} > ${CMAKE_CURRENT_BINARY_DIR}/generated/${FILENAME}.h
+            DEPENDS ${GENHEADER_SOURCE_DIR}/bin/genheader ${PROJECT_SOURCE_DIR}/${source}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
             COMMENT "Generating header file for ${source}..."
     )
@@ -180,7 +182,7 @@ target_include_directories(pastel2d
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
-        ${CMAKE_CURRENT_BINARY_DIR}/generated
+        ${CMAKE_BINARY_DIR}/generated
 )
 
 target_link_libraries(pastel2d INTERFACE m)
