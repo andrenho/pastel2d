@@ -23,7 +23,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fms-extensions")
 
 # warnings / flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(warnings -Wall -Wextra -Wformat-nonliteral -Wshadow -Wwrite-strings -Wmissing-format-attribute -Wswitch-enum -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
+    set(warnings -Wall -Wextra -Wformat-nonliteral -Wshadow -Wwrite-strings -Wmissing-format-attribute -Wswitch -Wmissing-noreturn -Wno-unused-parameter -Wno-unused)
     if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
         set(warnings ${warnings} -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wsuggest-attribute=format -Wsuggest-attribute=cold)
     endif()
@@ -140,8 +140,8 @@ target_include_directories(pastel2d-temp
             ${CMAKE_CURRENT_SOURCE_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
             ${CMAKE_CURRENT_BINARY_DIR}/generated
-        PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
+        PRIVATE SYSTEM
+            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pocketmod
 )
 target_link_libraries(pastel2d-temp
@@ -180,9 +180,13 @@ set_target_properties(pastel2d
 target_include_directories(pastel2d
     INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_BINARY_DIR}/generated
+)
+
+target_include_directories(pastel2d SYSTEM
+        INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
-        ${CMAKE_BINARY_DIR}/generated
 )
 
 target_link_libraries(pastel2d INTERFACE m)

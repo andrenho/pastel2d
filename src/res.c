@@ -12,8 +12,11 @@
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"   // prevent warning in library
 #define POCKETMOD_IMPLEMENTATION
 #include <pocketmod.h>
+#pragma GCC diagnostic pop
 
 #include "private/res_priv.h"
 
