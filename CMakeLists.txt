@@ -91,10 +91,15 @@ function(embed target source)
 
     get_filename_component(FILENAME "${source}" NAME)
 
-    add_custom_target(${TARGET_NAME}_${target}
+    add_custom_command(
+            OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/${FILENAME}.h
             COMMAND ${GENHEADER_SOURCE_DIR}/bin/genheader ${source} ${ARGV2} > ${CMAKE_CURRENT_BINARY_DIR}/generated/${FILENAME}.h
-            DEPENDS ${GENHEADER_SOURCE_DIR}/bin/genheader ${PROJECT_SOURCE_DIR}/${source}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+            DEPENDS ${source}
+    )
+
+    add_custom_target(${TARGET_NAME}_${target}
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/generated/${FILENAME}.h
             COMMENT "Generating header file for ${source}..."
     )
 
