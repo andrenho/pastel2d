@@ -37,7 +37,7 @@ for i = 1, #content do
    io.write(string.format("0x%02X, ", byte))
    if i % 16 == 0 then print() end
 end
-print("};")
+print("0x00 };")
 print("static const size_t " .. varname .. "_sz = " .. #content .. ";")
 
 print()
