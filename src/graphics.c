@@ -223,13 +223,21 @@ int ps_graphics_render_scenes(ps_Scene* scenes, size_t n_scenes)
 int ps_graphics_present()
 {
     text_cache_cleanup();
-
-    char new_window_title[512];
-    snprintf(new_window_title, sizeof new_window_title, "%s (FPS %d)", window_title, (int) fps);
-    SDL_SetWindowTitle(window, new_window_title);
-
     return SDL_RenderPresent(ren) ? 0 : -1;
 }
 
-SDL_Window* ps_graphics_window() { return window; }
+int  ps_graphics_set_window_title(const char* fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    int sz = vsnprintf(NULL, 0, fmt, ap);
+    char buf[sz + 1];
+    vsprintf(buf, fmt, ap);
+    bool success = SDL_SetWindowTitle(window, buf);
+    va_end(ap);
+    return success ? 0 : -1;
+}
+
+SDL_Window*   ps_graphics_window() { return window; }
 SDL_Renderer* ps_graphics_renderer() { return ren; }
+int           ps_graphics_fps() { return (int) fps; }
