@@ -7,15 +7,16 @@
 
 #include <stb_ds.h>
 
-#define STBI_ONLY_PNG
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"   // prevent warning in library
 #define POCKETMOD_IMPLEMENTATION
 #include <pocketmod.h>
+#pragma GCC diagnostic pop
 
 #include "private/res_priv.h"
 
@@ -36,30 +37,31 @@ int ps_res_init()
     return 0;
 }
 
-ps_res_idx_t ps_res_add_png(uint8_t const* data, size_t sz)
+ps_res_idx_t ps_res_add_image(uint8_t const* data, size_t sz)
 {
-    return ps_res_add_png_manip(data, sz, NULL, NULL);
+    return ps_res_add_image_manip(data, sz, NULL, NULL);
 }
 
-ps_res_idx_t ps_res_add_png_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data)
+ps_res_idx_t ps_res_add_image_manip(uint8_t const* data, size_t sz, ps_Manipulator manupulator, void* manip_data)
 {
-    int w, h, bpp;
-    stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &bpp, STBI_rgb_alpha);
+    int w, h, channels;
+    stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &channels, 0);
     if (img == NULL) {
         snprintf(last_error, sizeof last_error, "Could not load image.");
         return RES_ERROR;
     }
-    if (bpp != 4) {
-        snprintf(last_error, sizeof last_error, "Only 4-bit images supported by now (sorry).");
+
+    if (channels != 3 && channels != 4) {
+        snprintf(last_error, sizeof last_error, "Only images with 3 or 4 channels are supported by now (sorry).");
         stbi_image_free(img);
         return RES_ERROR;
     }
 
-    if (manupulator && manupulator(img, w, h, w * 4, manip_data) != 0) {
+    if (manupulator && manupulator(img, w, h, w * channels, manip_data) != 0) {
         return RES_ERROR;
     }
 
-    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, SDL_PIXELFORMAT_RGBA32, img, w * 4);
+    SDL_Surface* sf = SDL_CreateSurfaceFrom(w, h, channels == 3 ? SDL_PIXELFORMAT_RGB24 : SDL_PIXELFORMAT_RGBA32, img, w * channels);
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(ps_graphics_renderer(), sf);
     SDL_DestroySurface(sf);
@@ -172,6 +174,28 @@ int ps_res_add_tiles_from_lua(ps_res_idx_t parent, uint8_t const* data, size_t s
     for (size_t j = 0; j < (size_t) arrlen(tiles); ++j)
         free(tiles[j].name);
     arrfree(tiles);
+
+    return 0;
+}
+
+int ps_res_image_size(ps_res_idx_t idx, int* w, int* h)
+{
+    switch (resources[idx].type) {
+        case RT_TEXTURE: {
+            float fw, fh;
+            SDL_GetTextureSize(resources[idx].texture, &fw, &fh);
+            *w = (int) fw;
+            *h = (int) fh;
+            break;
+        }
+        case RT_TILE:
+            *w = (int) resources[idx].tile.rect.w;
+            *h = (int) resources[idx].tile.rect.h;
+            break;
+        default:
+            snprintf(last_error, sizeof last_error, "Not a valid image.");
+            return -1;
+    }
 
     return 0;
 }
