@@ -1,5 +1,6 @@
 #include "graphics.h"
 
+#include <pl_log.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -7,7 +8,6 @@
 #include <SDL3/SDL_timer.h>
 
 #include "audio.h"
-#include "error.h"
 #include "scene.h"
 
 #include "private/textcache.h"
@@ -26,8 +26,6 @@ static uint64_t      frame_count = 0;
 static double        fps = 0.0;
 static bool          show_fps = false;
 
-extern char last_error[LAST_ERROR_SZ];
-
 static uint32_t update_fps(void* userdata, SDL_TimerID timer_id, uint32_t interval)
 {
     fps = (double) frame_count / (double) interval * 1000.0;
@@ -45,18 +43,14 @@ int ps_graphics_init(ps_GraphicsInit const* init)
 
     SDL_SetAppMetadata(init->appname, init->appversion, init->appidentifier);
 
-    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
-        snprintf(last_error, sizeof last_error, "Could not initialize SDL: %s", SDL_GetError());
-        return -1;
-    }
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
+        PL_ERROR_RET(-1, "Could not initialize SDL: %s", SDL_GetError());
 
     SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 
     snprintf(window_title, sizeof window_title, "%s %s", init->appname, init->appversion);
-    if (!SDL_CreateWindowAndRenderer(init->appname, init->window_w, init->window_h, init->flags, &window, &ren)) {
-        snprintf(last_error, sizeof last_error, "Could not create window: %s", SDL_GetError());
-        return -1;
-    }
+    if (!SDL_CreateWindowAndRenderer(init->appname, init->window_w, init->window_h, init->flags, &window, &ren))
+        PL_ERROR_RET(-1, "Could not create window: %s", SDL_GetError());
 
     SDL_Log("Current SDL_Renderer: %s", SDL_GetRendererName(ren));
 
@@ -177,8 +171,7 @@ int render_scene(ps_Scene* scene)
                     case RT_CURSOR:
                     case RT_MUSIC:
                     case RT_SOUND:
-                        snprintf(last_error, sizeof last_error, "Invalid type for image resource %zu", a->image.res_id);
-                        return -1;
+                        PL_ERROR_RET(-1, "Invalid type for image resource %zu", a->image.res_id);
                 }
                 break;
             case A_TEXT: {

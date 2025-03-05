@@ -116,8 +116,6 @@ add_library(pastel2d-temp STATIC EXCLUDE_FROM_ALL
         src/graphics.c
         src/pastel2d.h
         src/pastel2d.c
-        src/error.c
-        src/error.h
         src/res.c
         src/res.h
         src/scene.c
@@ -130,8 +128,6 @@ add_library(pastel2d-temp STATIC EXCLUDE_FROM_ALL
         src/private/textcache.h
         src/audio.c
         src/audio.h
-        src/passert.h
-        src/passert.c
         src/private/graphics_priv.h
         src/private/res_priv.h
         src/private/audio_priv.h
@@ -145,6 +141,7 @@ target_include_directories(pastel2d-temp
             ${CMAKE_CURRENT_SOURCE_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
             ${CMAKE_CURRENT_BINARY_DIR}/generated
+            ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pastel-log
         PRIVATE SYSTEM
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
             ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pocketmod
@@ -192,6 +189,7 @@ target_include_directories(pastel2d SYSTEM
         INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/LuaJIT/src
         ${CMAKE_CURRENT_SOURCE_DIR}/contrib/stb
+        ${CMAKE_CURRENT_SOURCE_DIR}/contrib/pastel-log
 )
 
 target_link_libraries(pastel2d INTERFACE m)

@@ -18,11 +18,11 @@
 #include <pocketmod.h>
 #pragma GCC diagnostic pop
 
+#include <pl_log.h>
+
 #include "private/res_priv.h"
 
-#include "error.h"
 #include "graphics.h"
-extern char last_error[LAST_ERROR_SZ];
 
 static ps_Resource* resources;
 
@@ -46,16 +46,11 @@ ps_res_idx_t ps_res_add_image_manip(uint8_t const* data, size_t sz, ps_Manipulat
 {
     int w, h, channels;
     stbi_uc *img = stbi_load_from_memory(data, sz, &w, &h, &channels, 0);
-    if (img == NULL) {
-        snprintf(last_error, sizeof last_error, "Could not load image.");
-        return RES_ERROR;
-    }
+    if (img == NULL)
+        PL_ERROR_RET(RES_ERROR, "Could not load image.");
 
-    if (channels != 3 && channels != 4) {
-        snprintf(last_error, sizeof last_error, "Only images with 3 or 4 channels are supported by now (sorry).");
-        stbi_image_free(img);
-        return RES_ERROR;
-    }
+    if (channels != 3 && channels != 4)
+        PL_ERROR_RET(RES_ERROR, "Only images with 3 or 4 channels are supported by now (sorry).");
 
     if (manupulator && manupulator(img, w, h, w * channels, manip_data) != 0) {
         return RES_ERROR;
@@ -127,7 +122,7 @@ int ps_res_add_tiles_from_lua(ps_res_idx_t parent, uint8_t const* data, size_t s
     static const char* ERR_MSG = "Error loading Lua tileset:";
 #define CHECK(check, msg) \
     if (!(check)) { \
-        snprintf(last_error, sizeof last_error, "%s %s", ERR_MSG, msg ? msg : lua_tostring(L, -1)); \
+        PL_ERROR_RET(RES_ERROR, "%s %s", ERR_MSG, msg ? msg : lua_tostring(L, -1)); \
         lua_close(L); \
         return RES_ERROR; \
     }
@@ -193,8 +188,7 @@ int ps_res_image_size(ps_res_idx_t idx, int* w, int* h)
             *h = (int) resources[idx].tile.rect.h;
             break;
         default:
-            snprintf(last_error, sizeof last_error, "Not a valid image.");
-            return -1;
+            PL_ERROR_RET(-1, "Not a valid image.");
     }
 
     return 0;
@@ -206,10 +200,8 @@ ps_res_idx_t ps_res_add_ttf(uint8_t const* data, size_t sz)
         .type = RT_FONT,
         .font = malloc(sizeof(stbtt_fontinfo)),
     };
-    if (!stbtt_InitFont(resource.font, data, 0)) {
-        snprintf(last_error, sizeof last_error, "Could not load TTF file.");
-        return RES_ERROR;
-    }
+    if (!stbtt_InitFont(resource.font, data, 0))
+        PL_ERROR_RET(RES_ERROR, "Could not load TTF file.");
     arrpush(resources, resource);
     return arrlen(resources) - 1;
 }
@@ -230,10 +222,8 @@ ps_res_idx_t ps_res_add_music(uint8_t const* data, size_t sz)
         .type = RT_MUSIC,
         .music = malloc(sizeof(pocketmod_context))
     };
-    if (pocketmod_init(res.music, data, sz, 44100) == 0) {
-        snprintf(last_error, sizeof last_error, "Could not load MOD file.");
-        return RES_ERROR;
-    }
+    if (pocketmod_init(res.music, data, sz, 44100) == 0)
+        PL_ERROR_RET(RES_ERROR, "Could not load MOD file.");
     arrpush(resources, res);
     return arrlen(resources) - 1;
 }
@@ -244,10 +234,8 @@ ps_res_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
         .type = RT_SOUND,
     };
     SDL_IOStream* io = SDL_IOFromConstMem(data, sz);
-    if (!SDL_LoadWAV_IO(io, true, &res.sound.spec, &res.sound.data, &res.sound.sz)) {
-        snprintf(last_error, sizeof last_error, "Could not load WAV file.");
-        return RES_ERROR;
-    }
+    if (!SDL_LoadWAV_IO(io, true, &res.sound.spec, &res.sound.data, &res.sound.sz))
+        PL_ERROR_RET(RES_ERROR, "Could not load WAV file.");
 
     extern SDL_AudioStream* ps_audio_create_stream(SDL_AudioSpec* spec);
     res.sound.stream = ps_audio_create_stream(&res.sound.spec);
@@ -258,10 +246,8 @@ ps_res_idx_t ps_red_add_sound(uint8_t const* data, size_t sz)
 
 ps_Resource const* ps_res_get(ps_res_idx_t idx, ps_ResourceType validate_resource_type)
 {
-    if (resources[idx].type != validate_resource_type) {
-        snprintf(last_error, sizeof last_error, "Resource requested is not the correct type.");
-        return NULL;
-    }
+    if (resources[idx].type != validate_resource_type)
+        PL_ERROR_RET(RES_ERROR, "Resource requested is not the correct type.");
     return &resources[idx];
 }
 
@@ -276,10 +262,8 @@ int ps_res_set_name(const char* name, ps_res_idx_t idx)
         return RES_ERROR;
 
     ptrdiff_t i = shgeti(resource_names, name);
-    if (i != -1) {
-        snprintf(last_error, sizeof last_error, "Name '%s' already in use.", name);
-        return RES_ERROR;
-    }
+    if (i != -1)
+        PL_ERROR_RET(RES_ERROR, "Name '%s' already in use.", name);
     shput(resource_names, strdup(name), idx);
     return 0;
 }
@@ -287,10 +271,8 @@ int ps_res_set_name(const char* name, ps_res_idx_t idx)
 ps_res_idx_t ps_res_idx(const char* name)
 {
     ptrdiff_t i = shgeti(resource_names, name);
-    if (i == -1) {
-        snprintf(last_error, sizeof last_error, "Resource '%s' not found.", name);
-        return RES_ERROR;
-    }
+    if (i == -1)
+        PL_ERROR_RET(RES_ERROR, "Resource '%s' not found.", name);
     return resource_names[i].value;
 }
 

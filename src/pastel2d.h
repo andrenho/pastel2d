@@ -3,9 +3,7 @@
 
 #include "graphics.h"
 #include "res.h"
-#include "error.h"
 #include "audio.h"
-#include "passert.h"
 #include "manip.h"
 
 int ps_init(ps_GraphicsInit const* graphics);

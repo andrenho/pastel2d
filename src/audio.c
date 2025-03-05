@@ -4,12 +4,10 @@
 
 #include <SDL3/SDL_audio.h>
 #include <pocketmod.h>
+#include <pl_log.h>
 #include <stdlib.h>
 
 #include "private/res_priv.h"
-
-#include "error.h"
-extern char last_error[LAST_ERROR_SZ];
 
 static SDL_AudioStream* music_stream = NULL;
 static SDL_AudioDeviceID device;
@@ -18,10 +16,8 @@ static pocketmod_context const* mod_ctx = NULL;
 int ps_audio_init()
 {
     device = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
-    if (device == 0) {
-        snprintf(last_error, sizeof last_error, "Could not open audio device: %s", SDL_GetError());
-        return -1;
-    }
+    if (device == 0)
+        PL_ERROR_RET(-1, "Could not open audio device: %s", SDL_GetError());
 
     return 0;
 }
@@ -35,14 +31,10 @@ int ps_audio_finalize()
 SDL_AudioStream* ps_audio_create_stream(SDL_AudioSpec* spec)  // private in res.c: ps_res_add_sound
 {
     SDL_AudioStream* stream = SDL_CreateAudioStream(spec, NULL);
-    if (stream == NULL) {
-        snprintf(last_error, sizeof last_error, "Could not create audio stream: %s", SDL_GetError());
-        return NULL;
-    }
-    if (!SDL_BindAudioStream(device, stream)) {
-        snprintf(last_error, sizeof last_error, "Could not bind audio stream: %s", SDL_GetError());
-        return NULL;
-    }
+    if (stream == NULL)
+        PL_ERROR_RET(NULL, "Could not create audio stream: %s", SDL_GetError());
+    if (!SDL_BindAudioStream(device, stream))
+        PL_ERROR_RET(NULL, "Could not bind audio stream: %s", SDL_GetError());
     return stream;
 }
 

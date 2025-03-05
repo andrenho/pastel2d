@@ -1,18 +1,21 @@
 #include "pastel2d.hh"
 
+#include <pl_log.h>
+
+
 namespace ps {
 
 static int CHECK(int f)
 {
     if (f != 0)
-        throw std::runtime_error(ps_last_error());
+        throw std::runtime_error(pl_last_error());
     return f;
 }
 
 static ps_res_idx_t CHECK_RES(ps_res_idx_t f)
 {
     if (f == RES_ERROR)
-        throw std::runtime_error(ps_last_error());
+        throw std::runtime_error(pl_last_error());
     return f;
 }
 

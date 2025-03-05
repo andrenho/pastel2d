@@ -1,11 +1,11 @@
 #include "scene.h"
+
+#include <pl_log.h>
+
 #include "private/scene_priv.h"
 
 #include <stb_ds.h>
 #include <stdio.h>
-
-#include "error.h"
-extern char last_error[LAST_ERROR_SZ];
 
 int ps_scene_init(ps_Scene* scene)
 {
@@ -24,7 +24,7 @@ static ps_Context const* ps_scene_current_context(ps_Scene const* scene)
     return &scene->context_stack[arrlen(scene->context_stack) - 1];
 }
 
-#define CHECK_INIT(scene) if (!scene->initialized) { snprintf(last_error, sizeof last_error, "Scene not initialized"); return -1; }
+#define CHECK_INIT(scene) if (!scene->initialized) PL_ERROR_RET(-1, "Scene not initialized");
 
 int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx)
 {

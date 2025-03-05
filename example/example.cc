@@ -7,6 +7,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#define PL_LOG_IMPLEMENTATION
+#include <pl_log.h>
+
 #include "pastel2d.hh"
 
 // embedded files
