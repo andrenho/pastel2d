@@ -38,7 +38,7 @@ int ps_graphics_init(ps_GraphicsInit const* init)
     srand(time(NULL));
 
     const int linked = SDL_GetVersion();
-    SDL_Log("SDL version: %d.%d.%d\n",
+    PL_INFO("SDL version: %d.%d.%d",
         SDL_VERSIONNUM_MAJOR(linked), SDL_VERSIONNUM_MINOR(linked), SDL_VERSIONNUM_MICRO(linked));
 
     SDL_SetAppMetadata(init->appname, init->appversion, init->appidentifier);
@@ -52,7 +52,7 @@ int ps_graphics_init(ps_GraphicsInit const* init)
     if (!SDL_CreateWindowAndRenderer(init->appname, init->window_w, init->window_h, init->flags, &window, &ren))
         PL_ERROR_RET(-1, "Could not create window: %s", SDL_GetError());
 
-    SDL_Log("Current SDL_Renderer: %s", SDL_GetRendererName(ren));
+    PL_INFO("Current SDL_Renderer: %s", SDL_GetRendererName(ren));
 
     last_frame = SDL_GetTicksNS();
     SDL_AddTimer(1000, update_fps, NULL);
