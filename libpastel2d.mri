@@ -1,5 +1,0 @@
-create libpastel2d.a
-addlib libpastel2d-temp.a
-addlib libluajit.a
-save
-end
