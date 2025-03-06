@@ -28,7 +28,6 @@ namespace graphics { using Init = ps_GraphicsInit; }
 void                                  init(graphics::Init const& graphics_init);
 void                                  finalize();
 std::string                           version();
-std::tuple<uint8_t, uint8_t, uint8_t> version_number();
 
 // context
 

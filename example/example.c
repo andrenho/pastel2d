@@ -84,7 +84,7 @@ int main()
     pl_init();
     pl_set_error_callback(error_callback, NULL);
 
-    SDL_Log("pastel2d version %s", ps_version(NULL, NULL, NULL));
+    SDL_Log("pastel2d version %s", ps_version());
 
     ps_init(&(ps_GraphicsInit) {
         .appname = "pastel2d-example",

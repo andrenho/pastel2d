@@ -26,14 +26,7 @@ static ps_res_idx_t CHECK_RES(ps_res_idx_t f)
 void init(graphics::Init const& graphics_init) { CHECK(ps_init(&graphics_init)); }
 void finalize() { ps_finalize(); }
 
-std::string version() { return ps_version(NULL, NULL, NULL); }
-
-std::tuple<uint8_t, uint8_t, uint8_t> version_number()
-{
-    uint8_t major, minor, patch;
-    ps_version(&major, &minor, &patch);
-    return { major, minor, patch };
-}
+std::string version() { return ps_version(); }
 
 //
 // context

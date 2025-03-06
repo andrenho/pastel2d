@@ -133,7 +133,7 @@ add_library(pastel2d-temp STATIC EXCLUDE_FROM_ALL
         src/private/audio_priv.h
         src/private/scene_priv.h
         src/pastel2d.hh
-        src/pastel2d.cc
+        src/pastel2d-cc.cc
 )
 
 target_include_directories(pastel2d-temp
@@ -218,7 +218,7 @@ embed(pastel2d-example example/shotgun.wav)
 #
 
 add_executable(pastel2d-cc-example EXCLUDE_FROM_ALL
-        example/example.cc
+        example/example-cc.cc
 )
 target_compile_options(pastel2d-cc-example
         PRIVATE ${warnings})

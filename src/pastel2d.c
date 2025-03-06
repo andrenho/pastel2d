@@ -26,10 +26,7 @@ int ps_finalize()
     return 0;
 }
 
-const char* ps_version(uint8_t* major, uint8_t* minor, uint8_t* patch)
+const char* ps_version()
 {
-    if (major) *major = PROJECT_VERSION_MAJOR;
-    if (minor) *minor = PROJECT_VERSION_MINOR;
-    if (patch) *patch = PROJECT_VERSION_PATCH;
     return PROJECT_VERSION;
 }

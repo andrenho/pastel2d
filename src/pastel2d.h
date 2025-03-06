@@ -9,6 +9,6 @@
 int ps_init(ps_GraphicsInit const* graphics);
 int ps_finalize();
 
-const char* ps_version(uint8_t* major, uint8_t* minor, uint8_t* patch);
+const char* ps_version();
 
 #endif //PASTEL2D_HH

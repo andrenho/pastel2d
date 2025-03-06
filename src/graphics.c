@@ -159,14 +159,16 @@ int render_scene(ps_Scene* scene)
         switch (a->type) {
             case A_IMAGE:
                 switch (ps_res_get_type(a->image.res_id)) {
-                    case RT_TEXTURE:
+                    case RT_TEXTURE: {
                         SDL_Texture* tx = ps_res_get(a->image.res_id, RT_TEXTURE)->texture;
                         render_texture(tx, NULL, &a->image.context);
                         break;
-                    case RT_TILE:
+                    }
+                    case RT_TILE: {
                         ps_Tile const* tile = &ps_res_get(a->image.res_id, RT_TILE)->tile;
                         render_texture(tile->texture, &tile->rect, &a->image.context);
                         break;
+                    }
                     case RT_FONT:
                     case RT_CURSOR:
                     case RT_MUSIC:

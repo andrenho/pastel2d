@@ -28,3 +28,6 @@
 *.app
 cmake-build-*
 build/
+
+example-c
+example-cc
