@@ -22,7 +22,7 @@ int           ps_graphics_set_bg(uint8_t r, uint8_t g, uint8_t b);
 int           ps_graphics_render_scenes(ps_Scene* scenes, size_t n_scenes);
 int           ps_graphics_present();
 
-int           ps_graphics_set_window_title(const char* fmt, ...);
+int           ps_graphics_set_window_title(const char* fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
 bool          ps_graphics_running();
 void          ps_graphics_quit();
