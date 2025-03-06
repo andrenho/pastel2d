@@ -43,11 +43,11 @@ EMBED = \
 
 example/example.o: $(EMBED:=.h)
 
-example-c: $(LIB) example/example.o libluajit.a
-	$(CC) $^ -o $@ $(shell pkg-config --libs sdl3)
+example-c: example/example.o $(LIB) libluajit.a 
+	$(CC) -o $@ $^ $(shell pkg-config --libs sdl3) $(LDFLAGS) 
 
-example-cc: $(LIB_CC) example/example-cc.o libluajit.a
-	$(CXX) $^ -o $@ $(shell pkg-config --libs sdl3)
+example-cc: example/example-cc.o $(LIB_CC) libluajit.a 
+	$(CXX) -o $@ $^ $(shell pkg-config --libs sdl3) $(LDFLAGS) 
 
 .PHONY: clean
 clean:
