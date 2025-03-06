@@ -10,7 +10,7 @@
 [submodule "contrib/SDL"]
 	path = contrib/SDL
 	url = https://github.com/libsdl-org/SDL.git
-[submodule "contrib/pastel-log"]
-	path = contrib/pastel-log
-	url = https://github.com/andrenho/pastel-log.git
+[submodule "contrib/pastel-base"]
+	path = contrib/pastel-base
+	url = https://github.com/andrenho/pastel-base.git
 	branch = master
