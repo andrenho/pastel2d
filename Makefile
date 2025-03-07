@@ -12,8 +12,8 @@ include contrib/pastel-base/mk/config.mk
 # config
 #
 
-CPPFLAGS += -Isrc -Icontrib/pastel-base/pl_log -Icontrib/pocketmod -Icontrib/stb $(shell pkg-config --cflags sdl3)
-LDFLAGS += $(shell pkg-config --libs sdl3)
+CPPFLAGS += -Isrc -Icontrib/pastel-base/pl_log -Icontrib/pocketmod -Icontrib/stb $(shell pkg-config --cflags luajit sdl3)
+LDFLAGS += $(shell pkg-config --libs luajit sdl3)
 
 #
 # library
@@ -51,13 +51,14 @@ EMBED = \
 	example/shotgun.wav
 
 example/example.o: $(EMBED:=.h)
+example/example-cc.o: $(EMBED:=.h)
 
-example-c: example/example.o $(LIB) libluajit.a
-	$(CC) -o $@ $^ $(shell pkg-config --libs sdl3) $(LDFLAGS)
+example-c: example/example.o $(LIB)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-example-cc: example/example-cc.o $(LIB_CC) libluajit.a
-	$(CXX) -o $@ $^ $(shell pkg-config --libs sdl3) $(LDFLAGS)
+example-cc: example/example-cc.o $(LIB_CC)
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 .PHONY: clean
 clean:
-	rm -f $(LIB) $(OBJ) $(OBJ_CC) $(CLEANFILES) example-c example/*.o $(EMBED:=.h)
+	rm -f $(LIB) $(OBJ) $(OBJ_CC) $(CLEANFILES) example-c example-cc example/*.o $(EMBED:=.h)
