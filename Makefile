@@ -8,9 +8,16 @@ all: $(LIB) $(LIB_CC)
 
 include contrib/pastel-base/mk/config.mk
 
-CPPFLAGS += -Isrc -Icontrib/pastel-base/pl_log -Icontrib/pocketmod -Icontrib/stb $(shell pkg-config --cflags sdl3)
+#
+# config
+#
 
+CPPFLAGS += -Isrc -Icontrib/pastel-base/pl_log -Icontrib/pocketmod -Icontrib/stb $(shell pkg-config --cflags sdl3)
+LDFLAGS += $(shell pkg-config --libs sdl3)
+
+#
 # library
+#
 
 OBJ = \
 	src/graphics.o \
@@ -30,7 +37,9 @@ $(LIB): $(OBJ)
 $(LIB_CC): $(OBJ) $(OBJ_CC)
 	ar rcs $@ $^
 
+#
 # examples
+#
 
 EMBED = \
 	example/Born2bSportyFS.otf \
@@ -44,10 +53,10 @@ EMBED = \
 example/example.o: $(EMBED:=.h)
 
 example-c: $(LIB) example/example.o libluajit.a
-	$(CC) $^ -o $@ $(shell pkg-config --libs sdl3)
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 example-cc: $(LIB_CC) example/example-cc.o libluajit.a
-	$(CXX) $^ -o $@ $(shell pkg-config --libs sdl3)
+	$(CXX) $^ -o $@ $(LDFLAGS)
 
 .PHONY: clean
 clean:

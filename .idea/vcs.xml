@@ -2,7 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/contrib/LuaJIT" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/contrib/pastel-base" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/contrib/pastel-base/mk/LuaJIT" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/contrib/pastel-log" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/contrib/pocketmod" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/contrib/stb" vcs="Git" />
