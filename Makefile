@@ -31,10 +31,10 @@ OBJ = \
 
 OBJ_CC = src/pastel2d-cc.o
 
-$(LIB): $(OBJ)
+$(LIB): $(UI_OBJ)
 	ar rcs $@ $^
 
-$(LIB_CC): $(OBJ) $(OBJ_CC)
+$(LIB_CC): $(UI_OBJ) $(OBJ_CC)
 	ar rcs $@ $^
 
 #
@@ -61,4 +61,4 @@ example-cc: example/example-cc.o $(LIB_CC)
 
 .PHONY: clean
 clean:
-	rm -f $(LIB) $(OBJ) $(OBJ_CC) $(CLEANFILES) example-c example-cc example/*.o $(EMBED:=.h)
+	rm -f $(LIB) $(UI_OBJ) $(OBJ_CC) $(CLEANFILES) example-c example-cc example/*.o $(EMBED:=.h)
