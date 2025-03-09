@@ -226,7 +226,7 @@ int  ps_graphics_set_window_title(const char* fmt, ...)
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(window_title, sizeof window_title, fmt, ap);
-    bool success = SDL_SetWindowTitle(window, buf);
+    bool success = SDL_SetWindowTitle(window, window_title);
     va_end(ap);
     return success ? 0 : -1;
 }
