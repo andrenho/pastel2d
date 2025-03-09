@@ -19,7 +19,7 @@ static SDL_Window*   window = NULL;
 static SDL_Renderer* ren = NULL;
 static uint64_t      last_frame = 0;
 static uint8_t       bg_r = 0, bg_g = 0, bg_b = 0;
-static char          window_title[256];
+static char          window_title[1024];
 
 // FPS calculation
 static uint64_t      frame_count = 0;
@@ -225,9 +225,7 @@ int  ps_graphics_set_window_title(const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    int sz = vsnprintf(NULL, 0, fmt, ap);
-    char buf[sz + 1];
-    vsprintf(buf, fmt, ap);
+    vsnprintf(window_title, sizeof window_title, fmt, ap);
     bool success = SDL_SetWindowTitle(window, buf);
     va_end(ap);
     return success ? 0 : -1;
