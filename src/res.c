@@ -187,6 +187,10 @@ int ps_res_image_size(ps_res_idx_t idx, int* w, int* h)
             *w = (int) resources[idx].tile.rect.w;
             *h = (int) resources[idx].tile.rect.h;
             break;
+        case RT_FONT:
+        case RT_CURSOR:
+        case RT_MUSIC:
+        case RT_SOUND:
         default:
             PL_ERROR_RET(-1, "Not a valid image.");
     }
