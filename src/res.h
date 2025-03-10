@@ -44,6 +44,9 @@ ps_res_idx_t ps_red_add_sound(uint8_t const* data, size_t sz);
 int          ps_res_set_name(const char* name, ps_res_idx_t idx);
 ps_res_idx_t ps_res_idx(const char* name);
 
+SDL_Texture* ps_res_get_texture(ps_res_idx_t idx);
+ps_Tile      ps_res_get_tile(ps_res_idx_t idx);
+
 #define PS_NAME ps_res_set_name
 #define PS_IDX ps_res_idx
 

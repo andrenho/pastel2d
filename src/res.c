@@ -314,3 +314,18 @@ int ps_res_finalize()
     return 0;
 }
 
+SDL_Texture* ps_res_get_texture(ps_res_idx_t idx)
+{
+    if (resources[idx].type != RT_TEXTURE)
+        PL_ERROR_RET(NULL, "Resource '%zu' not a texture.", idx);
+    return resources[idx].texture;
+}
+
+ps_Tile ps_res_get_tile(ps_res_idx_t idx)
+{
+    if (resources[idx].type != RT_TILE) {
+        ps_Tile empty = { NULL, (SDL_FRect) { 0, 0, 0, 0 } };
+        PL_ERROR_RET(empty, "Resource '%zu' not a tile.", idx);
+    }
+    return resources[idx].tile;
+}
