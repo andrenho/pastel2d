@@ -119,7 +119,7 @@ static idx_t get_res(ResourceId const& id)
         return ps_res_idx(std::get<std::string>(id).c_str());
 }
 
-idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
+idx_t add_image(uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
 {
     if (manipulator)
         return CHECK_RES(ps_res_add_image_manip(data, sz, manipulator, manip_data));
@@ -127,9 +127,9 @@ idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator, void* man
         return CHECK_RES(ps_res_add_image(data, sz));
 }
 
-idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
+idx_t add_image(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator, void* manip_data)
 {
-    return ps_res_set_name(name.c_str(), add_png(data, sz, manipulator, manip_data));
+    return ps_res_set_name(name.c_str(), add_image(data, sz, manipulator, manip_data));
 }
 
 idx_t add_tile(ResourceId const& parent, SDL_FRect const& rect, size_t tile_sz)

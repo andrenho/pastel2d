@@ -50,8 +50,8 @@ namespace res {
     using ResourceId = std::variant<idx_t, std::string>;
     using Manipulator = ps_Manipulator;
 
-    idx_t add_png(uint8_t const* data, size_t sz, Manipulator manipulator=nullptr, void* manip_data=nullptr);
-    idx_t add_png(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator=nullptr, void* manip_data=nullptr);
+    idx_t add_image(uint8_t const* data, size_t sz, Manipulator manipulator=nullptr, void* manip_data=nullptr);
+    idx_t add_image(std::string const& name, uint8_t const* data, size_t sz, Manipulator manipulator=nullptr, void* manip_data=nullptr);
 
     idx_t add_tile(ResourceId const& parent, SDL_FRect const& rect, size_t tile_sz);
     idx_t add_tile(std::string const& name, ResourceId const& parent, SDL_FRect const& rect, size_t tile_sz);
