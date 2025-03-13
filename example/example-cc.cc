@@ -23,10 +23,10 @@
 
 static void init_resources()
 {
-    auto example = ps::res::add_png(example_example_png, example_example_png_sz);
+    auto example = ps::res::add_image(example_example_png, example_example_png_sz);
 
     SDL_Color shadow_color = { 0, 0, 0, 255 };
-    auto example_shadow = ps::res::add_png(example_example_png, example_example_png_sz, ps::manip::shadow, &shadow_color);
+    auto example_shadow = ps::res::add_image(example_example_png, example_example_png_sz, ps::manip::shadow, &shadow_color);
 
     ps::res::add_tiles_from_lua(example, example_example_tileset_lua, example_example_tileset_lua_sz);
 

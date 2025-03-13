@@ -69,6 +69,8 @@ namespace res {
 
     void set_name(std::string const& name, idx_t idx);
     void idx(std::string const& name);
+
+    std::pair<int, int> image_size(ResourceId res_id);
 }
 
 // scene
@@ -86,6 +88,8 @@ public:
 
     void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color);
     void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, Context const& ctx);
+
+    void set_z_order(int z);
 
 private:
     ps_Scene scene_;

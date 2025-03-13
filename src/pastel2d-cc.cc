@@ -71,6 +71,10 @@ void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rec
     CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, &context));
 }
 
+void Scene::set_z_order(int z)
+{
+    scene_.z_order = z;
+}
 
 //
 // scene
@@ -164,6 +168,12 @@ idx_t add_sound(std::string const& name, uint8_t const* data, size_t sz) { retur
 
 void  set_name(std::string const& name, idx_t idx) { CHECK(ps_res_set_name(name.c_str(), idx)); }
 void  idx(std::string const& name) { CHECK(ps_res_idx(name.c_str())); }
+
+std::pair<int, int> image_size(ResourceId res_id) {
+    int w, h;
+    ps_res_image_size(get_res(res_id), &w, &h);
+    return { w, h };
+}
 
 }
 
