@@ -67,8 +67,8 @@ namespace res {
     idx_t add_sound(uint8_t const* data, size_t sz);
     idx_t add_sound(std::string const& name, uint8_t const* data, size_t sz);
 
-    void set_name(std::string const& name, idx_t idx);
-    void idx(std::string const& name);
+    void  set_name(std::string const& name, idx_t idx);
+    idx_t idx(std::string const& name);
 
     std::pair<int, int> image_size(ResourceId res_id);
 }

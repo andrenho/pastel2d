@@ -69,7 +69,8 @@ ps_res_idx_t ps_res_add_image_manip(uint8_t const* data, size_t sz, ps_Manipulat
         .texture = texture,
     };
     arrpush(resources, res);
-    return arrlen(resources) - 1;
+    ps_res_idx_t id = arrlen(resources) - 1;
+    return id;
 }
 
 ps_res_idx_t ps_res_add_tile(ps_res_idx_t parent, SDL_FRect rect, size_t tile_sz)
@@ -104,8 +105,8 @@ int ps_res_add_tiles(ps_res_idx_t parent, ps_TileDef* tiles, size_t n_tiles, siz
 {
     for (size_t i = 0; i < n_tiles; ++i) {
         ps_res_idx_t idx = ps_res_add_tile(parent, tiles[i].rect, tile_sz);
-        if (idx == RES_ERROR)
-            return RES_ERROR;
+        if (idx == -1)
+            return -1;
         if (tiles[i].idx)
             *tiles[i].idx = idx;
         if (tiles[i].name)
@@ -164,7 +165,8 @@ int ps_res_add_tiles_from_lua(ps_res_idx_t parent, uint8_t const* data, size_t s
 
     lua_close(L);
 
-    ps_res_add_tiles(parent, tiles, arrlen(tiles), tile_size);
+    if (ps_res_add_tiles(parent, tiles, arrlen(tiles), tile_size) == -1)
+        return -1;
 
     for (size_t j = 0; j < (size_t) arrlen(tiles); ++j)
         free(tiles[j].name);
@@ -260,7 +262,7 @@ ps_ResourceType ps_res_get_type(ps_res_idx_t idx)
     return resources[idx].type;
 }
 
-int ps_res_set_name(const char* name, ps_res_idx_t idx)
+ps_res_idx_t ps_res_set_name(const char* name, ps_res_idx_t idx)
 {
     if (idx == RES_ERROR)
         return RES_ERROR;
@@ -269,7 +271,7 @@ int ps_res_set_name(const char* name, ps_res_idx_t idx)
     if (i != -1)
         PL_ERROR_RET(RES_ERROR, "Name '%s' already in use.", name);
     shput(resource_names, strdup(name), idx);
-    return 0;
+    return idx;
 }
 
 ps_res_idx_t ps_res_idx(const char* name)

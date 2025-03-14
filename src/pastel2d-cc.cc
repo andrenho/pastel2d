@@ -167,7 +167,7 @@ idx_t add_music(std::string const& name, uint8_t const* data, size_t sz) { retur
 idx_t add_sound(std::string const& name, uint8_t const* data, size_t sz) { return ps_res_set_name(name.c_str(), add_sound(data, sz)); }
 
 void  set_name(std::string const& name, idx_t idx) { CHECK(ps_res_set_name(name.c_str(), idx)); }
-void  idx(std::string const& name) { CHECK(ps_res_idx(name.c_str())); }
+idx_t idx(std::string const& name) { return CHECK_RES(ps_res_idx(name.c_str())); }
 
 std::pair<int, int> image_size(ResourceId res_id) {
     int w, h;
