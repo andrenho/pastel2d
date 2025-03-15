@@ -107,6 +107,18 @@ void render_scenes(std::vector<Scene> const& scenes)
     ps_graphics_render_scenes(scenes_cptr.data(), scenes_cptr.size());
 }
 
+void set_window_title(std::string const& title)
+{
+    static char buf[1024];
+    snprintf(buf, sizeof buf, "%s", title.c_str());
+    ps_graphics_set_window_title("%s", buf);
+}
+
+int fps()
+{
+    return ps_graphics_fps();
+}
+
 }
 
 //

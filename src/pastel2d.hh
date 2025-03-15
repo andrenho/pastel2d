@@ -110,6 +110,9 @@ namespace graphics {
 
     SDL_Window*   window();
     SDL_Renderer* renderer();
+
+    void          set_window_title(std::string const& title);
+    int           fps();
 }
 
 // manip
