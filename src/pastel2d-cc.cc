@@ -187,6 +187,15 @@ std::pair<int, int> image_size(ResourceId res_id) {
     return { w, h };
 }
 
+Tile tile(ResourceId res_id)
+{
+    ps_Tile tile = ps_res_get_tile(get_res(res_id));
+    if (tile.texture == nullptr)
+        throw std::runtime_error(pl_last_error());
+    return tile;
+}
+
+
 }
 
 //

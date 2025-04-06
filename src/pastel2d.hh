@@ -47,6 +47,7 @@ public:
 namespace res {
     using idx_t = ps_res_idx_t;
     using TileDef = ps_TileDef;
+    using Tile = ps_Tile;
     using ResourceId = std::variant<idx_t, std::string>;
     using Manipulator = ps_Manipulator;
 
@@ -71,6 +72,7 @@ namespace res {
     idx_t idx(std::string const& name);
 
     std::pair<int, int> image_size(ResourceId res_id);
+    Tile                tile(ResourceId res_id);
 }
 
 // scene
