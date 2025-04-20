@@ -38,6 +38,7 @@ public:
     float                     zoom = 1.f;
     float                     opacity = 1.f;
     std::optional<SDL_FPoint> rotation_center {};
+    bool                      draw_border = false;
 
     ps_Context context_c() const;
 };
