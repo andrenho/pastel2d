@@ -114,8 +114,8 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_Context 
     } else {  // full texture
         float tw, th;
         SDL_GetTextureSize(tx, &tw, &th);
-        dest.w = ctx->position.w != 0 ? ctx->position.w : tw;
-        dest.h = ctx->position.h != 0 ? ctx->position.h : th;
+        dest.w = tw;
+        dest.h = th;
     }
 
     // calculate position

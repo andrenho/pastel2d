@@ -65,7 +65,7 @@ static void create_scene(ps_Scene* scene)
     ps_scene_add_text(scene, PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
     ps_scene_add_text_with(scene, PS_IDX("font1"), "TEST", (SDL_Rect) { 200, 100, 58, 78 }, 32, (SDL_Color) { 0, 0, 0, 255 },
-        CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
+        CTX_ROTATION, 0.f, NULL);
 }
 
 static void post_scene()
