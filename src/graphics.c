@@ -134,11 +134,17 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_Context 
     if (!SDL_HasRectIntersectionFloat(&scr, &dest))
         return;
 
-    // opacity
-    SDL_SetTextureAlphaModFloat(tx, ctx->opacity);
-
     // zoom
     SDL_SetRenderScale(ren, ctx->zoom, ctx->zoom);
+
+    // draw surrounding border
+    if (ctx->draw_border) {
+        SDL_SetRenderDrawColor(ren, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderRect(ren, &dest);
+    }
+
+    // opacity
+    SDL_SetTextureAlphaModFloat(tx, ctx->opacity);
 
     // render with rotation/center
     SDL_RenderTextureRotated(ren, tx,

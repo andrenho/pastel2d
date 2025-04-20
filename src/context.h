@@ -12,10 +12,11 @@ typedef struct {
     float      zoom;
     float      opacity;
     SDL_FPoint rotation_center;
+    bool       draw_border;
 } ps_Context;
 
 typedef enum {
-    CTX_END = 0, CTX_POSITION = 1, CTX_ROTATION, CTX_ZOOM, CTX_OPACITY, CTX_ROT_CENTER,
+    CTX_END = 0, CTX_POSITION = 1, CTX_ROTATION, CTX_ZOOM, CTX_OPACITY, CTX_ROT_CENTER, CTX_DRAW_BORDER,
 } ps_ContextProperty;
 
 ps_Context ps_create_context();

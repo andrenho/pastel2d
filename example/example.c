@@ -60,7 +60,7 @@ static void create_scene(ps_Scene* scene)
         CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
 
     ps_scene_add_text_with(scene, PS_IDX("font1"), "Hello world to ALL!", POS(10, 10), 32, (SDL_Color) { 0, 0, 0, 255 },
-        CTX_ZOOM, .5f, NULL);
+        CTX_ZOOM, .5f, CTX_DRAW_BORDER, true, NULL);
 
     ps_scene_add_text(scene, PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 

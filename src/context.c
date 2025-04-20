@@ -10,6 +10,7 @@ ps_Context ps_create_context()
         .zoom = 1.f,
         .opacity = 1.f,
         .rotation_center = { DEFAULT_ROT_CENTER, DEFAULT_ROT_CENTER },
+        .draw_border = false,
     };
 }
 
@@ -22,11 +23,12 @@ ps_Context ps_create_context_with_v(ps_ContextProperty props, va_list ap)
         if (prop == CTX_END)
             break;
         switch (prop) {
-            case CTX_POSITION:   ctx.position = va_arg(ap, SDL_Rect); break;
-            case CTX_ROTATION:   ctx.rotation = va_arg(ap, double); break;
-            case CTX_ZOOM:       ctx.zoom = va_arg(ap, double); break;
-            case CTX_OPACITY:    ctx.opacity = va_arg(ap, double); break;
-            case CTX_ROT_CENTER: ctx.rotation_center = va_arg(ap, SDL_FPoint); break;
+            case CTX_POSITION:    ctx.position = va_arg(ap, SDL_Rect); break;
+            case CTX_ROTATION:    ctx.rotation = va_arg(ap, double); break;
+            case CTX_ZOOM:        ctx.zoom = va_arg(ap, double); break;
+            case CTX_OPACITY:     ctx.opacity = va_arg(ap, double); break;
+            case CTX_ROT_CENTER:  ctx.rotation_center = va_arg(ap, SDL_FPoint); break;
+            case CTX_DRAW_BORDER: ctx.draw_border = va_arg(ap, bool); break;
             case CTX_END: break;
         }
 
@@ -65,6 +67,9 @@ ps_Context ps_context_sum(ps_Context const* current, ps_Context const* sum)
 
     if (sum->rotation_center.x != DEFAULT_ROT_CENTER)
         context.rotation_center = sum->rotation_center;
+
+    if (sum->draw_border)
+        context.draw_border = true;
 
     return context;
 }
