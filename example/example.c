@@ -63,6 +63,9 @@ static void create_scene(ps_Scene* scene)
         CTX_ZOOM, .5f, NULL);
 
     ps_scene_add_text(scene, PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
+
+    ps_scene_add_text_with(scene, PS_IDX("font1"), "TEST", (SDL_Rect) { 200, 100, 58, 78 }, 32, (SDL_Color) { 0, 0, 0, 255 },
+        CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
 }
 
 static void post_scene()
@@ -71,6 +74,8 @@ static void post_scene()
     SDL_SetRenderDrawColorFloat(r, 0, 0, 0, 255);
     SDL_SetRenderScale(r, 2.f, 2.f);
     SDL_RenderRect(r, &(SDL_FRect) { 100, 100, 58, 78 });
+
+    SDL_RenderRect(r, &(SDL_FRect) { 200, 100, 58, 78 });
 }
 
 static void error_callback(void* data)
