@@ -40,7 +40,7 @@ ps_Context Context::context_c() const
         .zoom = zoom,
         .opacity = opacity,
         .rotation_center = rotation_center ? *rotation_center : SDL_FPoint { DEFAULT_ROT_CENTER, DEFAULT_ROT_CENTER },
-        .draw_border = false,
+        .draw_border = draw_border,
     };
 }
 
