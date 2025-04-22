@@ -53,6 +53,7 @@ static SDL_Texture* create_text_texture(stbtt_fontinfo const* font, const char* 
     stbtt_GetFontVMetrics(font, &ascent, &descent, &lineGap);
     ascent = roundf(ascent * scale);
     descent = roundf(descent * scale);
+    lineGap = roundf(lineGap * scale);
 
     // draw text
     int x = 0;
