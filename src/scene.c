@@ -66,7 +66,7 @@ int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Co
     return ps_scene_add_image(scene, idx, r, &ctx);
 }
 
-int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_Context const* ctx)
+int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_TextAlignment align, ps_Context const* ctx)
 {
     CHECK_INIT(scene)
 
@@ -96,7 +96,7 @@ int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_R
     return 0;
 }
 
-int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_ContextProperty props, ...)
+int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_TextAlignment align, ps_ContextProperty props, ...)
 {
     CHECK_INIT(scene)
 
