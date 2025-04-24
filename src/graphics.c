@@ -122,10 +122,17 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_TextAlig
     if (ctx->position.w == 0) {
         dest.x = ctx->position.x;
         dest.y = ctx->position.y;
-        if (align == PS_CENTER)
-            dest.x -= tx->w / 2;
-        else if (align == PS_RIGHT)
-            dest.x -= tx->w;
+        if ((ctx->rotation > 89 && ctx->rotation < 91) || (ctx->rotation > 269 && ctx->rotation < 271)) {
+            if (align == PS_CENTER)
+                dest.y -= tx->w / 2;
+            else if (align == PS_RIGHT)
+                dest.y -= tx->w;
+        } else {
+            if (align == PS_CENTER)
+                dest.x -= tx->w / 2;
+            else if (align == PS_RIGHT)
+                dest.x -= tx->w;
+        }
     } else {
         dest.x = ctx->position.x + ctx->position.w / 2 - dest.w / 2;
         dest.y = ctx->position.y + ctx->position.h / 2 - dest.h / 2;
