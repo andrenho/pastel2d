@@ -103,7 +103,7 @@ size_t ps_graphics_timestep_us()
     return SDL_NS_TO_US(diff);
 }
 
-static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_Context const* ctx)
+static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_TextAlignment align, ps_Context const* ctx)
 {
     SDL_FRect dest = {};
 
@@ -122,6 +122,10 @@ static void render_texture(SDL_Texture* tx, SDL_FRect const* origin, ps_Context 
     if (ctx->position.w == 0) {
         dest.x = ctx->position.x;
         dest.y = ctx->position.y;
+        if (align == PS_CENTER)
+            dest.x -= tx->w / 2;
+        else if (align == PS_RIGHT)
+            dest.x -= tx->w;
     } else {
         dest.x = ctx->position.x + ctx->position.w / 2 - dest.w / 2;
         dest.y = ctx->position.y + ctx->position.h / 2 - dest.h / 2;
@@ -167,12 +171,12 @@ int render_scene(ps_Scene* scene)
                 switch (ps_res_get_type(a->image.res_id)) {
                     case RT_TEXTURE: {
                         SDL_Texture* tx = ps_res_get(a->image.res_id, RT_TEXTURE)->texture;
-                        render_texture(tx, NULL, &a->image.context);
+                        render_texture(tx, NULL, PS_LEFT, &a->image.context);
                         break;
                     }
                     case RT_TILE: {
                         ps_Tile const* tile = &ps_res_get(a->image.res_id, RT_TILE)->tile;
-                        render_texture(tile->texture, &tile->rect, &a->image.context);
+                        render_texture(tile->texture, &tile->rect, PS_LEFT, &a->image.context);
                         break;
                     }
                     case RT_FONT:
@@ -187,7 +191,7 @@ int render_scene(ps_Scene* scene)
                 if (font == NULL)
                     return -1;
                 SDL_Texture* tx = text_cache_get_texture(font, a->text.text, a->text.font_size, a->text.color);
-                render_texture(tx, NULL, &a->text.context);
+                render_texture(tx, NULL, a->text.align, &a->text.context);
                 break;
             }
         }

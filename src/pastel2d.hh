@@ -25,9 +25,9 @@ class Exception : public std::runtime_error {
 // initialization
 
 namespace graphics { using Init = ps_GraphicsInit; }
-void                                  init(graphics::Init const& graphics_init);
-void                                  finalize();
-std::string                           version();
+void        init(graphics::Init const& graphics_init);
+void        finalize();
+std::string version();
 
 // context
 
@@ -78,6 +78,8 @@ namespace res {
 
 // scene
 
+enum class TextAlignment { Left = PS_LEFT, Center = PS_CENTER, Right = PS_RIGHT };
+
 class Scene {
 public:
     Scene();
@@ -89,8 +91,8 @@ public:
     void add_image(res::ResourceId const& id, SDL_Rect const& r);
     void add_image(res::ResourceId const& id, SDL_Rect const& r, Context const& ctx);
 
-    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color);
-    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, Context const& ctx);
+    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align=TextAlignment::Left);
+    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align, Context const& ctx);
 
     void set_z_order(int z);
 

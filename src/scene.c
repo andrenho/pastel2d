@@ -85,6 +85,7 @@ int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_R
             .text = strdup(text),
             .font_size = font_size,
             .color = color,
+            .align = align,
         },
     };
     arrpush(scene->artifacts, artifact);
@@ -106,7 +107,7 @@ int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, 
     ps_Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
-    return ps_scene_add_text(scene, idx, text, rect, font_size, color, &ctx);
+    return ps_scene_add_text(scene, idx, text, rect, font_size, color, align, &ctx);
 }
 
 int ps_scene_push_context(ps_Scene* scene, ps_Context context)

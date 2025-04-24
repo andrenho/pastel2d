@@ -14,7 +14,7 @@ typedef struct ps_Scene {
 } ps_Scene;
 
 typedef enum ps_TextAlignment {
-    PS_LEFT, PS_MIDDLE, PS_RIGHT,
+    PS_LEFT, PS_CENTER, PS_RIGHT,
 } ps_TextAlignment;
 
 int ps_scene_init(ps_Scene* scene);

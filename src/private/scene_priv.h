@@ -9,11 +9,12 @@ typedef struct {
 } ps_Image;
 
 typedef struct {
-    ps_res_idx_t font_idx;
-    ps_Context   context;
-    char*        text;
-    int          font_size;
-    SDL_Color    color;
+    ps_res_idx_t     font_idx;
+    ps_Context       context;
+    char*            text;
+    int              font_size;
+    SDL_Color        color;
+    ps_TextAlignment align;
 } ps_Text;
 
 typedef struct ps_Artifact {

@@ -61,15 +61,15 @@ void Scene::add_image(res::ResourceId const& id, SDL_Rect const& r, Context cons
     CHECK(ps_scene_add_image(&scene_, res::get_res(id), r, &context));
 }
 
-void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color)
+void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align)
 {
-    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, nullptr));
+    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, (ps_TextAlignment) align, nullptr));
 }
 
-void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, Context const& ctx)
+void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align, Context const& ctx)
 {
     ps_Context context = ctx.context_c();
-    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, &context));
+    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, (ps_TextAlignment) align, &context));
 }
 
 void Scene::set_z_order(int z)
