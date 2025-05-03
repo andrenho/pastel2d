@@ -4,7 +4,7 @@ PROJECT_VERSION = 0.1.0
 LIB = $(PROJECT_NAME).a
 LIB_CC = $(PROJECT_NAME)-cc.a
 
-all: $(LIB) $(LIB_CC)
+all: $(LIB) $(LIB_CC) example-c example-cc
 
 include contrib/pastel-base/mk/config.mk
 

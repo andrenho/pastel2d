@@ -4,19 +4,22 @@
 #include <float.h>
 #include <SDL3/SDL_rect.h>
 
+#include "align.h"
+
 #define DEFAULT_ROT_CENTER FLT_MIN
 
 typedef struct {
-    SDL_Rect   position;
-    float      rotation;
-    float      zoom;
-    float      opacity;
-    SDL_FPoint rotation_center;
-    bool       draw_border;
+    SDL_Point    position;
+    ps_Alignment align;
+    float        rotation;
+    float        zoom;
+    float        opacity;
+    SDL_FPoint   rotation_center;
+    bool         draw_border;
 } ps_Context;
 
 typedef enum {
-    CTX_END = 0, CTX_POSITION = 1, CTX_ROTATION, CTX_ZOOM, CTX_OPACITY, CTX_ROT_CENTER, CTX_DRAW_BORDER,
+    CTX_END = 0, CTX_POSITION = 1, CTX_ALIGNMENT, CTX_ROTATION, CTX_ZOOM, CTX_OPACITY, CTX_ROT_CENTER, CTX_DRAW_BORDER,
 } ps_ContextProperty;
 
 ps_Context ps_create_context();

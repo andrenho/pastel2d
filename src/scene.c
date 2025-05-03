@@ -26,14 +26,14 @@ static ps_Context const* ps_scene_current_context(ps_Scene const* scene)
 
 #define CHECK_INIT(scene) if (!scene->initialized) PL_ERROR_RET(-1, "Scene not initialized");
 
-int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context const* ctx)
+int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Point p, ps_Alignment align, ps_Context const* ctx)
 {
     CHECK_INIT(scene)
 
     if (idx == RES_ERROR)
         return -1;
 
-    ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, r, NULL));
+    ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, p, CTX_ALIGNMENT, align, NULL));
     if (ctx)
         ps_scene_push_context(scene, *ctx);
 
@@ -53,7 +53,7 @@ int ps_scene_add_image(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Context
     return 0;
 }
 
-int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_ContextProperty props, ...)
+int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Point p, ps_Alignment align, ps_ContextProperty props, ...)
 {
     CHECK_INIT(scene)
 
@@ -63,17 +63,17 @@ int ps_scene_add_image_with(ps_Scene* scene, ps_res_idx_t idx, SDL_Rect r, ps_Co
     ps_Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
-    return ps_scene_add_image(scene, idx, r, &ctx);
+    return ps_scene_add_image(scene, idx, p, align, &ctx);
 }
 
-int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_TextAlignment align, ps_Context const* ctx)
+int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Point p, ps_Alignment align, int font_size, SDL_Color color, ps_Context const* ctx)
 {
     CHECK_INIT(scene)
 
     if (idx == RES_ERROR)
         return -1;
 
-    ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, rect, NULL));
+    ps_scene_push_context(scene, ps_create_context_with(CTX_POSITION, p, CTX_ALIGNMENT, align, NULL));
     if (ctx)
         ps_scene_push_context(scene, *ctx);
 
@@ -85,7 +85,6 @@ int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_R
             .text = strdup(text),
             .font_size = font_size,
             .color = color,
-            .align = align,
         },
     };
     arrpush(scene->artifacts, artifact);
@@ -97,7 +96,7 @@ int ps_scene_add_text(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_R
     return 0;
 }
 
-int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Rect rect, int font_size, SDL_Color color, ps_TextAlignment align, ps_ContextProperty props, ...)
+int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, SDL_Point p, ps_Alignment align, int font_size, SDL_Color color, ps_ContextProperty props, ...)
 {
     CHECK_INIT(scene)
 
@@ -107,7 +106,7 @@ int ps_scene_add_text_with(ps_Scene* scene, ps_res_idx_t idx, const char* text, 
     ps_Context ctx = ps_create_context_with_v(props, ap);
     va_end(ap);
 
-    return ps_scene_add_text(scene, idx, text, rect, font_size, color, align, &ctx);
+    return ps_scene_add_text(scene, idx, text, p, align, font_size, color, &ctx);
 }
 
 int ps_scene_push_context(ps_Scene* scene, ps_Context context)

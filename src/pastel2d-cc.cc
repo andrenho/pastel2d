@@ -36,6 +36,7 @@ ps_Context Context::context_c() const
 {
     return ps_Context {
         .position = position,
+        .align = (ps_Alignment) align,
         .rotation = rotation,
         .zoom = zoom,
         .opacity = opacity,
@@ -50,26 +51,27 @@ void Scene::pop_context() { ps_scene_pop_context(&scene_); }
 namespace res { static idx_t get_res(ResourceId const& id); }
 
 
-void Scene::add_image(res::ResourceId const& id, SDL_Rect const& r)
+
+void Scene::add_image(res::ResourceId const& id, SDL_Point const& p, Alignment align)
 {
-    CHECK(ps_scene_add_image(&scene_, res::get_res(id), r, nullptr));
+    CHECK(ps_scene_add_image(&scene_, res::get_res(id), p, (ps_Alignment) align, nullptr));
 }
 
-void Scene::add_image(res::ResourceId const& id, SDL_Rect const& r, Context const& ctx)
+void Scene::add_image(res::ResourceId const& id, SDL_Point const& p, Alignment align, Context const& ctx)
 {
     ps_Context context = ctx.context_c();
-    CHECK(ps_scene_add_image(&scene_, res::get_res(id), r, &context));
+    CHECK(ps_scene_add_image(&scene_, res::get_res(id), p, (ps_Alignment) align, &context));
 }
 
-void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align)
+void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Point const& p, Alignment align, int font_size, SDL_Color const& color)
 {
-    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, (ps_TextAlignment) align, nullptr));
+    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), p, (ps_Alignment) align, font_size, color, nullptr));
 }
 
-void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align, Context const& ctx)
+void Scene::add_text(res::ResourceId const& id, std::string const& text, SDL_Point const& p, Alignment align, int font_size, SDL_Color const& color, Context const& ctx)
 {
     ps_Context context = ctx.context_c();
-    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), r, font_size, color, (ps_TextAlignment) align, &context));
+    CHECK(ps_scene_add_text(&scene_, res::get_res(id), text.c_str(), p, (ps_Alignment) align, font_size, color, &context));
 }
 
 void Scene::set_z_order(int z)

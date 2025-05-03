@@ -31,9 +31,12 @@ std::string version();
 
 // context
 
+enum class Alignment { TopLeft = PS_TOP_LEFT, Center = PS_CENTER, TopRight = PS_TOP_RIGHT, BottomLeft = PS_BOTTOM_LEFT, BottomRight = PS_BOTTOM_RIGHT };
+
 class Context {
 public:
-    SDL_Rect                  position { 0, 0, 0, 0 };
+    SDL_Point                 position { 0, 0 };
+    Alignment                 align = (Alignment) PS_ALIGN_DEFAULT;
     float                     rotation = 0.f;
     float                     zoom = 1.f;
     float                     opacity = 1.f;
@@ -78,8 +81,6 @@ namespace res {
 
 // scene
 
-enum class TextAlignment { Left = PS_LEFT, Center = PS_CENTER, Right = PS_RIGHT };
-
 class Scene {
 public:
     Scene();
@@ -88,11 +89,11 @@ public:
     void push_context(Context const& ctx);
     void pop_context();
 
-    void add_image(res::ResourceId const& id, SDL_Rect const& r);
-    void add_image(res::ResourceId const& id, SDL_Rect const& r, Context const& ctx);
+    void add_image(res::ResourceId const& id, SDL_Point const& p, Alignment align = Alignment::TopLeft);
+    void add_image(res::ResourceId const& id, SDL_Point const& p, Alignment align, Context const& ctx);
 
-    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align=TextAlignment::Left);
-    void add_text(res::ResourceId const& id, std::string const& text, SDL_Rect const& r, int font_size, SDL_Color const& color, TextAlignment align, Context const& ctx);
+    void add_text(res::ResourceId const& id, std::string const& text, SDL_Point const& p, Alignment align, int font_size, SDL_Color const& color);
+    void add_text(res::ResourceId const& id, std::string const& text, SDL_Point const& p, Alignment align, int font_size, SDL_Color const& color, Context const& ctx);
 
     void set_z_order(int z);
 
@@ -138,4 +139,4 @@ namespace audio {
 
 }
 
-#endif //PASTEL2D_HH
+#endif //PASTEL2D_CC_HH

@@ -14,7 +14,6 @@ typedef struct {
     char*            text;
     int              font_size;
     SDL_Color        color;
-    ps_TextAlignment align;
 } ps_Text;
 
 typedef struct ps_Artifact {

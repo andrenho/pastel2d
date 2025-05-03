@@ -5,7 +5,8 @@
 ps_Context ps_create_context()
 {
     return (ps_Context) {
-        .position = { 0, 0, 0, 0 },
+        .position = { 0, 0 },
+        .align = PS_ALIGN_DEFAULT,
         .rotation = 0.f,
         .zoom = 1.f,
         .opacity = 1.f,
@@ -23,12 +24,13 @@ ps_Context ps_create_context_with_v(ps_ContextProperty props, va_list ap)
         if (prop == CTX_END)
             break;
         switch (prop) {
-            case CTX_POSITION:    ctx.position = va_arg(ap, SDL_Rect); break;
+            case CTX_POSITION:    ctx.position = va_arg(ap, SDL_Point); break;
+            case CTX_ALIGNMENT:   ctx.align = va_arg(ap, ps_Alignment); break;
             case CTX_ROTATION:    ctx.rotation = va_arg(ap, double); break;
             case CTX_ZOOM:        ctx.zoom = va_arg(ap, double); break;
             case CTX_OPACITY:     ctx.opacity = va_arg(ap, double); break;
             case CTX_ROT_CENTER:  ctx.rotation_center = va_arg(ap, SDL_FPoint); break;
-            case CTX_DRAW_BORDER: ctx.draw_border = va_arg(ap, bool); break;
+            case CTX_DRAW_BORDER: ctx.draw_border = va_arg(ap, int); break;
             case CTX_END: break;
         }
 
@@ -55,10 +57,9 @@ ps_Context ps_context_sum(ps_Context const* current, ps_Context const* sum)
 
     context.position.x += sum->position.x;
     context.position.y += sum->position.y;
-    if (sum->position.w != 0) {
-        context.position.w = sum->position.w;
-        context.position.h = sum->position.h;
-    }
+
+    if (sum->align != PS_ALIGN_DEFAULT)
+        context.align = sum->align;
 
     context.rotation += sum->rotation;
 

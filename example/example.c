@@ -56,17 +56,17 @@ static void create_scene(ps_Scene* scene)
 
     ps_scene_push_context(scene, ps_create_context_with(CTX_ZOOM, 2.f, NULL));
 
-    ps_scene_add_image_with(scene, PS_IDX("happy"), (SDL_Rect) { 100, 100, 58, 78 },
+    ps_scene_add_image_with(scene, PS_IDX("happy"), (SDL_Point) { 100, 100 }, PS_TOP_LEFT,
         CTX_ROTATION, 90.f, CTX_OPACITY, .5f, NULL);
 
-    ps_scene_add_text_with(scene, PS_IDX("font1"), "Hello world to ALL!", (SDL_Rect) { 100, 10, 50, 50 }, 32, (SDL_Color) { 0, 0, 0, 255 },
-        PS_LEFT, CTX_ZOOM, .5f, CTX_DRAW_BORDER, true, CTX_ROTATION, 90.f, NULL);
+    ps_scene_add_text_with(scene, PS_IDX("font1"), "Hello world to ALL!", (SDL_Point) { 10, 10 }, PS_TOP_LEFT, 32, (SDL_Color) { 0, 0, 0, 255 },
+        PS_TOP_LEFT, CTX_ZOOM, .5f, CTX_DRAW_BORDER, true, CTX_ROTATION, 90.f, NULL);
 
-    ps_scene_add_text(scene, PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 30), 18, (SDL_Color) { 0, 0, 0, 255 }, PS_LEFT, NULL);
+    ps_scene_add_text(scene, PS_IDX("font2"), "Press SPACE to fire shotgun", POS(10, 40), PS_TOP_LEFT, 18, (SDL_Color) { 0, 0, 0, 255 }, NULL);
 
-    ps_scene_add_text_with(scene, PS_IDX("font1"), "TEST", (SDL_Rect) { 200, 100, 58, 78 }, 32, (SDL_Color) { 0, 0, 0, 255 }, PS_LEFT,
+    ps_scene_add_text_with(scene, PS_IDX("font1"), "TEST", (SDL_Point) { 200, 100 }, PS_TOP_LEFT, 32, (SDL_Color) { 0, 0, 0, 255 },
         CTX_ROTATION, 0.f, NULL);
-    ps_scene_add_text_with(scene, PS_IDX("font1"), "RIGHT", (SDL_Rect) { 200, 100 }, 32, (SDL_Color) { 0, 0, 0, 255 }, PS_RIGHT,
+    ps_scene_add_text_with(scene, PS_IDX("font1"), "RIGHT", (SDL_Point) { 200, 100 }, PS_TOP_RIGHT, 32, (SDL_Color) { 0, 0, 0, 255 },
         CTX_ROTATION, 0.f, NULL);
 }
 
